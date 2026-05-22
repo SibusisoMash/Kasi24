@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Kasi24 Admin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800;900&family=Nunito:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{
+  --teal:#0894A1;--teal-d:#06737d;--teal-l:#e0f6f8;--teal-xl:#f0fbfc;
+  --orange:#E07A2C;--orange-d:#c4661d;
+  --charcoal:#2D2D2A;--mid:#6b6b67;--muted:#9a9a96;
+  --light:#f6fafb;--white:#fff;--border:#e4ecee;
+  --r:14px;--r-lg:20px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Nunito',sans-serif;color:var(--charcoal);background:#f0f2f5;min-height:100vh}
+h1,h2,h3,h4{font-family:'Sora',sans-serif}
+
+/* ── LOGIN SCREEN ── */
+.login-screen{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
+.login-card{background:#fff;border-radius:var(--r-lg);padding:40px 36px;width:100%;max-width:400px;box-shadow:0 8px 40px rgba(0,0,0,.1)}
+.login-logo{display:flex;align-items:center;gap:10px;margin-bottom:28px;justify-content:center}
+.login-logo-badge{width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,var(--teal),var(--teal-d));display:flex;align-items:center;justify-content:center}
+.login-logo-badge i{color:#fff;font-size:1.1rem}
+.login-logo-text{font-family:'Sora',sans-serif;font-size:1.5rem;font-weight:900;color:var(--teal)}
+.login-logo-text span{color:var(--orange)}
+.login-card h2{text-align:center;font-size:1.1rem;font-weight:800;margin-bottom:6px}
+.login-card p{text-align:center;font-size:.86rem;color:var(--mid);margin-bottom:28px}
+.lf{display:flex;flex-direction:column;gap:14px}
+.lf label{font-size:.8rem;font-weight:700;color:var(--charcoal);margin-bottom:4px;display:block}
+.lf input{width:100%;border:1.5px solid var(--border);border-radius:10px;padding:12px 14px;font-size:.92rem;font-family:'Nunito',sans-serif;outline:none;transition:border-color .18s,box-shadow .18s}
+.lf input:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(8,148,161,.1)}
+.login-err{font-size:.82rem;color:#e74c3c;font-weight:600;min-height:18px;display:none;text-align:center}
+.login-err.show{display:block}
+.login-btn{width:100%;background:var(--teal);color:#fff;border:none;border-radius:11px;padding:14px;font-size:.97rem;font-weight:700;font-family:'Sora',sans-serif;cursor:pointer;box-shadow:0 3px 14px rgba(8,148,161,.3);transition:background .18s}
+.login-btn:hover{background:var(--teal-d)}
+.login-btn:disabled{opacity:.6;pointer-events:none}
+
+/* ── ADMIN LAYOUT ── */
+.admin-wrap{display:none;min-height:100vh}
+.admin-sidebar{width:240px;background:var(--charcoal);position:fixed;top:0;left:0;bottom:0;display:flex;flex-direction:column;z-index:100}
+.sb-logo{padding:22px 20px;border-bottom:1px solid rgba(255,255,255,.08);display:flex;align-items:center;gap:10px}
+.sb-logo-badge{width:34px;height:34px;border-radius:9px;background:var(--teal);display:flex;align-items:center;justify-content:center}
+.sb-logo-badge i{color:#fff;font-size:.9rem}
+.sb-logo-text{font-family:'Sora',sans-serif;font-size:1.2rem;font-weight:900;color:#fff}
+.sb-logo-text span{color:var(--orange)}
+.sb-nav{flex:1;padding:16px 0}
+.sb-item{display:flex;align-items:center;gap:12px;padding:12px 20px;color:rgba(255,255,255,.6);font-size:.88rem;font-weight:700;cursor:pointer;transition:background .18s,color .18s;border-left:3px solid transparent}
+.sb-item i{width:18px;text-align:center;font-size:.9rem}
+.sb-item:hover{background:rgba(255,255,255,.06);color:rgba(255,255,255,.9)}
+.sb-item.active{background:rgba(8,148,161,.15);color:var(--teal);border-left-color:var(--teal)}
+.sb-badge{margin-left:auto;background:var(--orange);color:#fff;font-size:.65rem;font-weight:800;padding:2px 8px;border-radius:100px}
+.sb-footer{padding:16px 20px;border-top:1px solid rgba(255,255,255,.08)}
+.sb-signout{display:flex;align-items:center;gap:9px;color:rgba(255,255,255,.45);font-size:.83rem;font-weight:600;cursor:pointer;transition:color .18s}
+.sb-signout:hover{color:#ff6b6b}
+
+.admin-main{margin-left:240px;padding:28px 32px;min-height:100vh}
+.admin-topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px}
+.admin-topbar h1{font-size:1.5rem;font-weight:900}
+.admin-topbar p{font-size:.85rem;color:var(--mid)}
+.last-refresh{font-size:.75rem;color:var(--muted);display:flex;align-items:center;gap:6px}
+.last-refresh i{color:var(--teal)}
+
+/* ── STATS ROW ── */
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:28px}
+.stat-card{background:#fff;border-radius:var(--r-lg);padding:20px;border:1.5px solid var(--border)}
+.stat-card .sv{font-family:'Sora',sans-serif;font-size:1.9rem;font-weight:900;color:var(--charcoal);line-height:1;margin-bottom:4px}
+.stat-card .sl{font-size:.78rem;color:var(--mid);font-weight:600;text-transform:uppercase;letter-spacing:.5px}
+.stat-card.pending .sv{color:var(--orange)}
+.stat-card.teal .sv{color:var(--teal)}
+
+/* ── SECTION ── */
+.admin-section{display:none}
+.admin-section.active{display:block}
+.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px}
+.section-header h2{font-size:1.1rem;font-weight:800}
+.refresh-btn{display:flex;align-items:center;gap:6px;background:var(--light);border:1.5px solid var(--border);color:var(--mid);padding:8px 14px;border-radius:9px;font-size:.8rem;font-weight:700;font-family:'Sora',sans-serif;cursor:pointer;transition:border-color .18s,color .18s}
+.refresh-btn:hover{border-color:var(--teal);color:var(--teal)}
+
+/* ── TABLE ── */
+.admin-table{width:100%;border-collapse:collapse;background:#fff;border-radius:var(--r-lg);overflow:hidden;border:1.5px solid var(--border)}
+.admin-table th{text-align:left;padding:12px 16px;font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);border-bottom:1.5px solid var(--border);background:var(--light)}
+.admin-table td{padding:14px 16px;font-size:.88rem;border-bottom:1px solid var(--border);vertical-align:middle}
+.admin-table tr:last-child td{border-bottom:none}
+.admin-table tr:hover td{background:var(--teal-xl)}
+
+/* ── STATUS BADGES ── */
+.badge{display:inline-flex;align-items:center;gap:5px;font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.4px;padding:3px 10px;border-radius:100px}
+.badge-pending{background:#fff8e0;color:#a06a00}
+.badge-live{background:#e0f8ec;color:#1a8c4a}
+.badge-taken{background:#f0f0f0;color:#888}
+.badge-rejected{background:#ffe5e5;color:#c0392b}
+
+/* ── ACTION BUTTONS ── */
+.act-btn{display:inline-flex;align-items:center;gap:5px;padding:6px 12px;border-radius:7px;font-size:.75rem;font-weight:700;font-family:'Sora',sans-serif;cursor:pointer;border:none;transition:background .18s,transform .12s;white-space:nowrap}
+.act-btn:hover{transform:translateY(-1px)}
+.btn-approve{background:#e0f8ec;color:#1a8c4a}
+.btn-approve:hover{background:#b8f0d0}
+.btn-reject{background:#ffe5e5;color:#c0392b}
+.btn-reject:hover{background:#ffc8c8}
+.btn-taken{background:#fff8e0;color:#a06a00}
+.btn-taken:hover{background:#ffedb0}
+.btn-available{background:var(--teal-xl);color:var(--teal)}
+.btn-available:hover{background:var(--teal-l)}
+.btn-delete{background:#ffe5e5;color:#c0392b}
+.btn-delete:hover{background:#ffc8c8}
+.btn-view{background:var(--light);color:var(--mid);border:1.5px solid var(--border)}
+.btn-view:hover{border-color:var(--teal);color:var(--teal);background:var(--teal-xl)}
+.actions-cell{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+
+/* ── LISTING PREVIEW ROW ── */
+.listing-thumb{width:44px;height:44px;border-radius:8px;object-fit:cover;flex-shrink:0}
+.listing-thumb-placeholder{width:44px;height:44px;border-radius:8px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:1rem}
+.listing-info strong{display:block;font-size:.88rem;font-weight:700;color:var(--charcoal)}
+.listing-info span{font-size:.78rem;color:var(--mid)}
+.listing-cell{display:flex;align-items:center;gap:10px}
+
+/* ── EMPTY STATE ── */
+.empty-state{text-align:center;padding:52px 24px;background:#fff;border-radius:var(--r-lg);border:1.5px solid var(--border)}
+.empty-state i{font-size:2rem;color:var(--border);margin-bottom:12px;display:block}
+.empty-state h3{font-size:.97rem;font-weight:700;margin-bottom:6px}
+.empty-state p{font-size:.84rem;color:var(--mid)}
+
+/* ── SKELETON ── */
+.sk{background:linear-gradient(90deg,#f0f0f0 25%,#e8e8e8 50%,#f0f0f0 75%);background-size:200% 100%;animation:shim 1.5s infinite;border-radius:6px;height:14px}
+@keyframes shim{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
+/* ── LANDLORD CARD ── */
+.landlord-card{background:#fff;border:1.5px solid var(--border);border-radius:var(--r);padding:16px;display:flex;align-items:center;gap:14px}
+.landlord-avatar{width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,var(--teal-l),var(--teal-xl));display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:'Sora',sans-serif;font-weight:900;font-size:1.1rem;color:var(--teal)}
+.landlord-info{flex:1;min-width:0}
+.landlord-info strong{display:block;font-size:.92rem;font-weight:700;color:var(--charcoal)}
+.landlord-info span{font-size:.8rem;color:var(--mid)}
+.landlord-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px}
+.landlord-meta{display:flex;gap:10px;margin-top:4px;flex-wrap:wrap}
+.landlord-meta span{font-size:.75rem;color:var(--muted);display:flex;align-items:center;gap:4px}
+.landlord-meta i{color:var(--teal);font-size:.7rem}
+
+/* ── TOAST ── */
+.toast{position:fixed;bottom:24px;left:50%;z-index:500;transform:translateX(-50%) translateY(20px);background:var(--charcoal);color:#fff;padding:10px 20px;border-radius:100px;font-size:.85rem;font-weight:600;display:flex;align-items:center;gap:8px;opacity:0;pointer-events:none;white-space:nowrap;box-shadow:0 4px 20px rgba(0,0,0,.25);transition:opacity .25s,transform .25s}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast i{color:#7fffb0}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  .admin-sidebar{width:200px}
+  .admin-main{margin-left:200px;padding:20px}
+  .stats-row{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:700px){
+  .admin-sidebar{display:none}
+  .admin-main{margin-left:0;padding:16px}
+  .stats-row{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+</head>
+<body>
+
+<div class="toast" id="toast"><i class="fa-solid fa-circle-check"></i><span id="toastMsg">Done</span></div>
+
+<!-- ═══ LOGIN SCREEN ═══ -->
+<div class="login-screen" id="loginScreen">
+  <div class="login-card">
+    <div class="login-logo">
+      <div class="login-logo-badge"><i class="fa-solid fa-house"></i></div>
+      <span class="login-logo-text">Kasi<span>24</span> Admin</span>
+    </div>
+    <h2>Admin Login</h2>
+    <p>This page is private. Kasi24 staff only.</p>
+    <div class="lf">
+      <div>
+        <label>Email</label>
+        <input type="email" id="adminEmail" placeholder="your@email.com">
+      </div>
+      <div>
+        <label>Password</label>
+        <input type="password" id="adminPassword" placeholder="Password" onkeydown="if(event.key==='Enter')doAdminLogin()">
+      </div>
+      <div class="login-err" id="loginErr"></div>
+      <button class="login-btn" id="loginBtn" onclick="doAdminLogin()">
+        <i class="fa-solid fa-right-to-bracket"></i> Sign In
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ ADMIN DASHBOARD ═══ -->
+<div class="admin-wrap" id="adminWrap">
+
+  <!-- SIDEBAR -->
+  <div class="admin-sidebar">
+    <div class="sb-logo">
+      <div class="sb-logo-badge"><i class="fa-solid fa-house"></i></div>
+      <span class="sb-logo-text">Kasi<span>24</span></span>
+    </div>
+    <nav class="sb-nav">
+      <div class="sb-item active" onclick="switchSection('pending')" id="nav-pending">
+        <i class="fa-solid fa-clock"></i> Pending
+        <span class="sb-badge" id="pendingBadge">0</span>
+      </div>
+      <div class="sb-item" onclick="switchSection('live')" id="nav-live">
+        <i class="fa-solid fa-circle-check"></i> Live Listings
+      </div>
+      <div class="sb-item" onclick="switchSection('landlords')" id="nav-landlords">
+        <i class="fa-solid fa-users"></i> Landlords
+      </div>
+      <div class="sb-item" onclick="switchSection('unlocks')" id="nav-unlocks">
+        <i class="fa-solid fa-lock-open"></i> Unlock History
+      </div>
+    </nav>
+    <div class="sb-footer">
+      <div class="sb-signout" onclick="doAdminSignOut()">
+        <i class="fa-solid fa-right-from-bracket"></i> Sign Out
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div class="admin-main">
+    <div class="admin-topbar">
+      <div>
+        <h1 id="sectionTitle">Pending Approvals</h1>
+        <p id="sectionSub">New listings waiting for your review</p>
+      </div>
+      <div class="last-refresh">
+        <i class="fa-solid fa-rotate"></i>
+        <span id="lastRefresh">–</span>
+      </div>
+    </div>
+
+    <!-- STATS -->
+    <div class="stats-row" id="statsRow">
+      <div class="stat-card pending"><div class="sv" id="statPending">–</div><div class="sl">Pending</div></div>
+      <div class="stat-card teal"><div class="sv" id="statLive">–</div><div class="sl">Live listings</div></div>
+      <div class="stat-card"><div class="sv" id="statLandlords">–</div><div class="sl">Landlords</div></div>
+      <div class="stat-card"><div class="sv" id="statUnlocks">–</div><div class="sl">Total unlocks</div></div>
+    </div>
+
+    <!-- PENDING SECTION -->
+    <div class="admin-section active" id="sec-pending">
+      <div class="section-header">
+        <h2>Pending Approvals</h2>
+        <button class="refresh-btn" onclick="loadPending()"><i class="fa-solid fa-rotate"></i> Refresh</button>
+      </div>
+      <div id="pendingContent"></div>
+    </div>
+
+    <!-- LIVE LISTINGS SECTION -->
+    <div class="admin-section" id="sec-live">
+      <div class="section-header">
+        <h2>Live Listings</h2>
+        <button class="refresh-btn" onclick="loadLive()"><i class="fa-solid fa-rotate"></i> Refresh</button>
+      </div>
+      <div id="liveContent"></div>
+    </div>
+
+    <!-- LANDLORDS SECTION -->
+    <div class="admin-section" id="sec-landlords">
+      <div class="section-header">
+        <h2>Registered Landlords</h2>
+        <button class="refresh-btn" onclick="loadLandlords()"><i class="fa-solid fa-rotate"></i> Refresh</button>
+      </div>
+      <div id="landlordsContent"></div>
+    </div>
+
+    <!-- UNLOCKS SECTION -->
+    <div class="admin-section" id="sec-unlocks">
+      <div class="section-header">
+        <h2>Unlock History</h2>
+        <button class="refresh-btn" onclick="loadUnlocks()"><i class="fa-solid fa-rotate"></i> Refresh</button>
+      </div>
+      <div id="unlocksContent"></div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════
+// SUPABASE — ADMIN USES SERVICE ROLE VIA RLS BYPASS
+// We use the anon key here. For full admin access
+// (bypassing RLS), you would use a server-side
+// Edge Function with the service_role key.
+// For now, admin must be a registered Supabase user.
+// ═══════════════════════════════════════════
+const SUPABASE_URL = 'https://fxoaqzclszjvkwupkdiv.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_I5JH_smIkSc7oEWN-gjjNQ_2Lv7onsm';
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+// ── ADMIN EMAILS — add yours here ──
+const ADMIN_EMAILS = ['admin@kasi24.co.za']; // replace with your real email
+
+// ═══════════════════════════════════════════
+// LOGIN
+// ═══════════════════════════════════════════
+async function doAdminLogin() {
+  var email = document.getElementById('adminEmail').value.trim();
+  var pass  = document.getElementById('adminPassword').value;
+  var err   = document.getElementById('loginErr');
+  var btn   = document.getElementById('loginBtn');
+  err.classList.remove('show');
+  if (!email || !pass) { err.textContent = 'Please fill in both fields.'; err.classList.add('show'); return; }
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Signing in…';
+  var { data, error } = await sb.auth.signInWithPassword({ email: email, password: pass });
+  btn.disabled = false;
+  btn.innerHTML = '<i class="fa-solid fa-right-to-bracket"></i> Sign In';
+  if (error) { err.textContent = error.message; err.classList.add('show'); return; }
+  if (!ADMIN_EMAILS.includes(data.user.email)) {
+    await sb.auth.signOut();
+    err.textContent = 'Access denied — not an admin account.';
+    err.classList.add('show');
+    return;
+  }
+  showAdmin();
+}
+
+async function doAdminSignOut() {
+  await sb.auth.signOut();
+  document.getElementById('adminWrap').style.display = 'none';
+  document.getElementById('loginScreen').style.display = 'flex';
+}
+
+async function checkSession() {
+  var { data: { session } } = await sb.auth.getSession();
+  if (session && ADMIN_EMAILS.includes(session.user.email)) {
+    showAdmin();
+  }
+}
+
+function showAdmin() {
+  document.getElementById('loginScreen').style.display = 'none';
+  document.getElementById('adminWrap').style.display = 'flex';
+  loadStats();
+  loadPending();
+}
+
+// ═══════════════════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════════════════
+const SECTIONS = {
+  pending:   { title:'Pending Approvals',     sub:'New listings waiting for your review',   load: loadPending },
+  live:      { title:'Live Listings',          sub:'All approved and active listings',        load: loadLive },
+  landlords: { title:'Registered Landlords',   sub:'Everyone who has listed on Kasi24',       load: loadLandlords },
+  unlocks:   { title:'Unlock History',         sub:'Record of all R10 contact unlocks',       load: loadUnlocks },
+};
+
+function switchSection(key) {
+  document.querySelectorAll('.admin-section').forEach(function(s) { s.classList.remove('active'); });
+  document.querySelectorAll('.sb-item').forEach(function(n) { n.classList.remove('active'); });
+  document.getElementById('sec-' + key).classList.add('active');
+  document.getElementById('nav-' + key).classList.add('active');
+  document.getElementById('sectionTitle').textContent = SECTIONS[key].title;
+  document.getElementById('sectionSub').textContent   = SECTIONS[key].sub;
+  SECTIONS[key].load();
+}
+
+// ═══════════════════════════════════════════
+// STATS
+// ═══════════════════════════════════════════
+async function loadStats() {
+  var [pending, live, landlords, unlocks] = await Promise.all([
+    sb.from('listings').select('id', { count:'exact', head:true }).eq('is_approved', false).eq('is_active', true),
+    sb.from('listings').select('id', { count:'exact', head:true }).eq('is_approved', true).eq('is_active', true),
+    sb.from('landlords').select('id', { count:'exact', head:true }),
+    sb.from('unlocks').select('id', { count:'exact', head:true }),
+  ]);
+  document.getElementById('statPending').textContent   = pending.count   || 0;
+  document.getElementById('statLive').textContent      = live.count      || 0;
+  document.getElementById('statLandlords').textContent = landlords.count || 0;
+  document.getElementById('statUnlocks').textContent   = unlocks.count   || 0;
+  document.getElementById('pendingBadge').textContent  = pending.count   || 0;
+  document.getElementById('lastRefresh').textContent   = 'Updated ' + new Date().toLocaleTimeString('en-ZA');
+}
+
+// ═══════════════════════════════════════════
+// PENDING LISTINGS
+// ═══════════════════════════════════════════
+async function loadPending() {
+  var el = document.getElementById('pendingContent');
+  el.innerHTML = skeletonTable(4);
+  var { data, error } = await sb
+    .from('listings')
+    .select('*, landlords(name, phone, email)')
+    .eq('is_approved', false)
+    .eq('is_active', true)
+    .order('created_at', { ascending: false });
+  if (error || !data || data.length === 0) {
+    el.innerHTML = emptyState('fa-clock', 'No pending listings', 'All caught up — nothing waiting for approval.');
+    return;
+  }
+  el.innerHTML = '<table class="admin-table"><thead><tr><th>Listing</th><th>Landlord</th><th>Rent</th><th>Submitted</th><th>Actions</th></tr></thead><tbody>'
+    + data.map(function(l) {
+      return '<tr>'
+        + '<td><div class="listing-cell">' + listingThumb(l) + '<div class="listing-info"><strong>' + l.title + '</strong><span>' + l.area + ' · ' + (l.type) + '</span></div></div></td>'
+        + '<td>' + (l.landlords ? l.landlords.name + '<br><small style="color:var(--muted)">' + l.landlords.phone + '</small>' : '—') + '</td>'
+        + '<td><strong>R' + parseInt(l.rent).toLocaleString() + '</strong>/mo</td>'
+        + '<td style="color:var(--muted);font-size:.8rem">' + fmtDate(l.created_at) + '</td>'
+        + '<td><div class="actions-cell">'
+        + '<a href="listing-detail.html?id=' + l.id + '" target="_blank" class="act-btn btn-view"><i class="fa-solid fa-eye"></i> View</a>'
+        + '<button class="act-btn btn-approve" onclick="approveListing(\'' + l.id + '\')"><i class="fa-solid fa-check"></i> Approve</button>'
+        + '<button class="act-btn btn-reject"  onclick="rejectListing(\'' + l.id + '\')"><i class="fa-solid fa-xmark"></i> Reject</button>'
+        + '</div></td>'
+        + '</tr>';
+    }).join('') + '</tbody></table>';
+}
+
+async function approveListing(id) {
+  var { error } = await sb.from('listings').update({ is_approved: true }).eq('id', id);
+  if (error) { showToast('Error approving listing'); return; }
+  showToast('Listing approved and now live!');
+  loadStats(); loadPending();
+}
+
+async function rejectListing(id) {
+  if (!confirm('Reject and remove this listing? This cannot be undone.')) return;
+  var { error } = await sb.from('listings').update({ is_active: false }).eq('id', id);
+  if (error) { showToast('Error rejecting listing'); return; }
+  showToast('Listing rejected and hidden.');
+  loadStats(); loadPending();
+}
+
+// ═══════════════════════════════════════════
+// LIVE LISTINGS
+// ═══════════════════════════════════════════
+async function loadLive() {
+  var el = document.getElementById('liveContent');
+  el.innerHTML = skeletonTable(5);
+  var { data, error } = await sb
+    .from('listings')
+    .select('*, landlords(name, phone), unlocks(count)')
+    .eq('is_approved', true)
+    .order('created_at', { ascending: false });
+  if (error || !data || data.length === 0) {
+    el.innerHTML = emptyState('fa-house-circle-xmark', 'No live listings', 'No approved listings yet.');
+    return;
+  }
+  el.innerHTML = '<table class="admin-table"><thead><tr><th>Listing</th><th>Landlord</th><th>Rent</th><th>Status</th><th>Unlocks</th><th>Actions</th></tr></thead><tbody>'
+    + data.map(function(l) {
+      var unlockCount = (l.unlocks && l.unlocks[0]) ? (l.unlocks[0].count || 0) : 0;
+      var statusBadge = l.is_active
+        ? '<span class="badge badge-live"><i class="fa-solid fa-circle" style="font-size:.45rem"></i> Live</span>'
+        : '<span class="badge badge-taken">Taken</span>';
+      var toggleBtn = l.is_active
+        ? '<button class="act-btn btn-taken"   onclick="toggleActive(\'' + l.id + '\',false)"><i class="fa-solid fa-circle-xmark"></i> Mark Taken</button>'
+        : '<button class="act-btn btn-available" onclick="toggleActive(\'' + l.id + '\',true)"><i class="fa-solid fa-circle-check"></i> Re-activate</button>';
+      return '<tr>'
+        + '<td><div class="listing-cell">' + listingThumb(l) + '<div class="listing-info"><strong>' + l.title + '</strong><span>' + l.area + '</span></div></div></td>'
+        + '<td>' + (l.landlords ? l.landlords.name : '—') + '</td>'
+        + '<td><strong>R' + parseInt(l.rent).toLocaleString() + '</strong>/mo</td>'
+        + '<td>' + statusBadge + '</td>'
+        + '<td style="text-align:center"><strong>' + unlockCount + '</strong></td>'
+        + '<td><div class="actions-cell">'
+        + '<a href="listing-detail.html?id=' + l.id + '" target="_blank" class="act-btn btn-view"><i class="fa-solid fa-eye"></i></a>'
+        + toggleBtn
+        + '<button class="act-btn btn-delete" onclick="deleteListing(\'' + l.id + '\')"><i class="fa-solid fa-trash"></i></button>'
+        + '</div></td>'
+        + '</tr>';
+    }).join('') + '</tbody></table>';
+}
+
+async function toggleActive(id, makeActive) {
+  var { error } = await sb.from('listings').update({ is_active: makeActive }).eq('id', id);
+  if (error) { showToast('Error updating listing'); return; }
+  showToast(makeActive ? 'Listing re-activated!' : 'Listing marked as taken.');
+  loadStats(); loadLive();
+}
+
+async function deleteListing(id) {
+  if (!confirm('Permanently delete this listing? This cannot be undone.')) return;
+  var { error } = await sb.from('listings').delete().eq('id', id);
+  if (error) { showToast('Error deleting listing'); return; }
+  showToast('Listing deleted permanently.');
+  loadStats(); loadLive();
+}
+
+// ═══════════════════════════════════════════
+// LANDLORDS
+// ═══════════════════════════════════════════
+async function loadLandlords() {
+  var el = document.getElementById('landlordsContent');
+  el.innerHTML = skeletonTable(3);
+  var { data, error } = await sb
+    .from('landlords')
+    .select('*, listings(count)')
+    .order('created_at', { ascending: false });
+  if (error || !data || data.length === 0) {
+    el.innerHTML = emptyState('fa-users', 'No landlords yet', 'No one has registered as a landlord yet.');
+    return;
+  }
+  el.innerHTML = '<div class="landlord-grid">' + data.map(function(l) {
+    var initials = l.name ? l.name.split(' ').map(function(n) { return n[0]; }).join('').slice(0,2).toUpperCase() : '?';
+    var listingCount = (l.listings && l.listings[0]) ? (l.listings[0].count || 0) : 0;
+    return '<div class="landlord-card">'
+      + '<div class="landlord-avatar">' + initials + '</div>'
+      + '<div class="landlord-info">'
+      + '<strong>' + l.name + '</strong>'
+      + '<div class="landlord-meta">'
+      + '<span><i class="fa-solid fa-phone"></i> ' + (l.phone || '—') + '</span>'
+      + '<span><i class="fa-solid fa-envelope"></i> ' + (l.email || '—') + '</span>'
+      + '<span><i class="fa-solid fa-house"></i> ' + listingCount + ' listing' + (listingCount !== 1 ? 's' : '') + '</span>'
+      + '<span><i class="fa-solid fa-calendar"></i> Joined ' + fmtDate(l.created_at) + '</span>'
+      + '</div></div></div>';
+  }).join('') + '</div>';
+}
+
+// ═══════════════════════════════════════════
+// UNLOCK HISTORY
+// ═══════════════════════════════════════════
+async function loadUnlocks() {
+  var el = document.getElementById('unlocksContent');
+  var { data, error } = await sb
+    .from('unlocks')
+    .select('*, listings(title, area), landlords(name)')
+    .eq('payment_status', 'confirmed')
+    .order('unlocked_at', { ascending: false })
+    .limit(100);
+  if (error || !data || data.length === 0) {
+    el.innerHTML = emptyState('fa-lock-open', 'No unlocks yet', 'Once tenants pay R10 to unlock contacts, they will appear here.');
+    return;
+  }
+  el.innerHTML = '<table class="admin-table"><thead><tr><th>Listing</th><th>Landlord</th><th>Tenant Phone</th><th>Amount</th><th>Date</th><th>Ref</th></tr></thead><tbody>'
+    + data.map(function(u) {
+      return '<tr>'
+        + '<td>' + (u.listings ? u.listings.title + '<br><small style="color:var(--muted)">' + u.listings.area + '</small>' : '—') + '</td>'
+        + '<td>' + (u.landlords ? u.landlords.name : '—') + '</td>'
+        + '<td>' + (u.tenant_phone || '—') + '</td>'
+        + '<td><strong style="color:var(--teal)">R' + (u.amount_paid || 10) + '</strong></td>'
+        + '<td style="color:var(--muted);font-size:.8rem">' + fmtDate(u.unlocked_at) + '</td>'
+        + '<td style="font-size:.75rem;color:var(--muted)">' + (u.payment_ref || '—') + '</td>'
+        + '</tr>';
+    }).join('') + '</tbody></table>';
+}
+
+// ═══════════════════════════════════════════
+// HELPERS
+// ═══════════════════════════════════════════
+function fmtDate(str) {
+  if (!str) return '—';
+  return new Date(str).toLocaleDateString('en-ZA', { day:'numeric', month:'short', year:'numeric' });
+}
+
+function listingThumb(l) {
+  var PC = {
+    room:'#d4eef0',backroom:'#dff5e0',flat:'#fdecd8',house:'#e8f4d0'
+  };
+  var TI = { room:'fa-door-open', backroom:'fa-tree', flat:'fa-building', house:'fa-house-chimney' };
+  var bg = PC[l.type] || '#e0f0f0';
+  return '<div class="listing-thumb-placeholder" style="background:' + bg + '">'
+    + '<i class="fa-solid ' + (TI[l.type]||'fa-house') + '" style="color:var(--teal);font-size:.9rem"></i></div>';
+}
+
+function skeletonTable(rows) {
+  var r = '';
+  for (var i = 0; i < rows; i++) {
+    r += '<div style="background:#fff;border:1.5px solid var(--border);border-radius:var(--r);padding:16px;margin-bottom:8px;display:flex;gap:12px;align-items:center">'
+      + '<div class="sk" style="width:44px;height:44px;border-radius:8px;flex-shrink:0"></div>'
+      + '<div style="flex:1"><div class="sk" style="width:60%;margin-bottom:8px"></div><div class="sk" style="width:40%"></div></div>'
+      + '<div class="sk" style="width:80px"></div>'
+      + '</div>';
+  }
+  return r;
+}
+
+function emptyState(icon, title, msg) {
+  return '<div class="empty-state"><i class="fa-solid ' + icon + '"></i><h3>' + title + '</h3><p>' + msg + '</p></div>';
+}
+
+var toastT;
+function showToast(msg) {
+  var e = document.getElementById('toast');
+  document.getElementById('toastMsg').textContent = msg;
+  e.classList.add('show');
+  clearTimeout(toastT);
+  toastT = setTimeout(function() { e.classList.remove('show'); }, 2800);
+}
+
+// ═══════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════
+checkSession();
+</script>
+</body>
+</html>

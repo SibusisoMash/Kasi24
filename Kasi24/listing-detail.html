@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Listing — Kasi24</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="dns-prefetch" href="https://fxoaqzclszjvkwupkdiv.supabase.co">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800;900&family=Nunito:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{
+  --teal:#0894A1;--teal-d:#06737d;--teal-l:#e0f6f8;--teal-xl:#f0fbfc;
+  --orange:#E07A2C;--orange-d:#c4661d;
+  --charcoal:#2D2D2A;--mid:#6b6b67;--muted:#9a9a96;
+  --light:#f6fafb;--white:#fff;--border:#e4ecee;
+  --r:16px;--r-lg:22px;
+  --sh:0 6px 28px rgba(8,148,161,0.13);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Nunito',sans-serif;color:var(--charcoal);background:var(--light);line-height:1.6;min-height:100vh}
+h1,h2,h3,h4{font-family:'Sora',sans-serif}
+
+/* HEADER */
+header{background:rgba(255,255,255,0.97);backdrop-filter:blur(14px);border-bottom:1.5px solid var(--border);padding:0 5vw;position:sticky;top:0;z-index:100}
+.hdr{max-width:860px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:62px;gap:12px}
+.back-btn{display:flex;align-items:center;gap:8px;color:var(--mid);font-size:.88rem;font-weight:700;text-decoration:none;padding:8px 14px;border-radius:9px;border:1.5px solid var(--border);background:#fff;transition:border-color .18s,color .18s;font-family:'Sora',sans-serif}
+.back-btn:hover{border-color:var(--teal);color:var(--teal)}
+.logo{display:flex;align-items:center;gap:8px;text-decoration:none}
+.logo-badge{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,var(--teal),var(--teal-d));display:flex;align-items:center;justify-content:center}
+.logo-badge i{color:#fff;font-size:15px}
+.logo-text{font-family:'Sora',sans-serif;font-size:1.35rem;font-weight:900;color:var(--teal)}
+.logo-text span{color:var(--orange)}
+
+/* PAGE LAYOUT */
+.page{max-width:860px;margin:0 auto;padding:28px 5vw 80px}
+
+/* HERO IMAGE */
+.detail-hero{border-radius:var(--r-lg);overflow:hidden;height:260px;display:flex;align-items:center;justify-content:center;position:relative;margin-bottom:24px}
+.detail-hero i.bg-icon{font-size:5rem;opacity:.22}
+.hero-type-chip{position:absolute;bottom:16px;left:16px;color:#fff;font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;padding:6px 14px;border-radius:100px;backdrop-filter:blur(4px)}
+.hero-new-badge{position:absolute;top:16px;left:16px;background:#ff4757;color:#fff;font-size:.68rem;font-weight:800;text-transform:uppercase;padding:4px 12px;border-radius:100px}
+
+/* MAIN CARD */
+.detail-card{background:#fff;border-radius:var(--r-lg);border:1.5px solid var(--border);padding:24px;margin-bottom:16px}
+
+/* PRICE + TITLE */
+.detail-price{font-family:'Sora',sans-serif;font-size:2rem;font-weight:900;color:var(--teal);line-height:1;margin-bottom:4px}
+.detail-price span{font-size:.85rem;color:var(--muted);font-family:'Nunito',sans-serif;font-weight:500}
+.detail-title{font-size:1.25rem;font-weight:800;color:var(--charcoal);margin-bottom:10px}
+.detail-meta{display:flex;flex-wrap:wrap;gap:14px;margin-bottom:20px;padding-bottom:20px;border-bottom:1.5px solid var(--border)}
+.dm{display:flex;align-items:center;gap:7px;font-size:.86rem;color:var(--mid);font-weight:600}
+.dm i{color:var(--teal);font-size:.82rem;width:16px;text-align:center}
+
+/* SECTION */
+.dsec{margin-bottom:20px;padding-bottom:20px;border-bottom:1.5px solid var(--border)}
+.dsec:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+.dsec-title{font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin-bottom:12px;display:flex;align-items:center;gap:7px}
+.dsec-title i{color:var(--teal)}
+
+/* INCLUDED / AMENITY CHIPS */
+.chip-grid{display:flex;flex-wrap:wrap;gap:8px}
+.dchip{display:flex;align-items:center;gap:7px;padding:8px 14px;border-radius:10px;font-size:.84rem;font-weight:600;background:var(--teal-xl);color:var(--teal-d);border:1.5px solid var(--teal-l)}
+.dchip i{font-size:.78rem}
+.dchip.grey{background:var(--light);color:var(--mid);border-color:var(--border)}
+
+/* DEPOSIT */
+.deposit-row{display:flex;align-items:center;justify-content:space-between;background:var(--light);border:1.5px solid var(--border);border-radius:12px;padding:14px 18px}
+.deposit-row span{font-size:.86rem;color:var(--mid);font-weight:600}
+.deposit-row strong{font-family:'Sora',sans-serif;font-size:1.1rem;font-weight:900;color:var(--charcoal)}
+
+/* NOTES */
+.detail-notes{background:var(--light);border-radius:12px;padding:14px 18px;font-size:.9rem;color:var(--mid);line-height:1.75;border:1.5px solid var(--border);font-style:italic}
+
+/* AVAILABILITY */
+.avail-row{display:flex;align-items:center;gap:10px;padding:12px 16px;border-radius:12px;background:#e0f8ec;border:1.5px solid #a0e8c0}
+.avail-row i{color:#1a8c4a;font-size:1rem}
+.avail-row span{font-size:.88rem;font-weight:700;color:#1a8c4a}
+
+/* UNLOCK SECTION */
+.unlock-card{background:#fff;border-radius:var(--r-lg);border:1.5px solid var(--border);padding:24px;margin-bottom:16px;text-align:center}
+.unlock-icon{width:64px;height:64px;border-radius:18px;background:linear-gradient(135deg,#fff8ee,#fdecd8);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-size:1.6rem}
+.unlock-icon i{color:var(--orange)}
+.unlock-card h3{font-size:1.1rem;font-weight:900;margin-bottom:8px}
+.unlock-card p{font-size:.88rem;color:var(--mid);line-height:1.65;margin-bottom:20px;max-width:360px;margin-left:auto;margin-right:auto}
+.btn-unlock-big{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;background:linear-gradient(135deg,var(--orange),var(--orange-d));color:#fff;border:none;border-radius:13px;padding:16px;font-size:1.05rem;font-weight:800;font-family:'Sora',sans-serif;cursor:pointer;box-shadow:0 6px 20px rgba(224,122,44,.4);transition:transform .15s,box-shadow .15s;text-decoration:none;margin-bottom:12px}
+.btn-unlock-big:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(224,122,44,.45)}
+.unlock-note{font-size:.78rem;color:var(--muted);display:flex;align-items:center;justify-content:center;gap:6px}
+.unlock-note i{color:var(--teal);font-size:.72rem}
+
+/* SHARE CARD */
+.share-card{background:#fff;border-radius:var(--r-lg);border:1.5px solid var(--border);padding:20px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:16px}
+.share-card-left h4{font-size:.95rem;font-weight:800;margin-bottom:3px}
+.share-card-left p{font-size:.82rem;color:var(--mid)}
+.btn-wa-share{display:flex;align-items:center;gap:8px;background:#25d366;color:#fff;border:none;border-radius:10px;padding:10px 20px;font-size:.88rem;font-weight:700;font-family:'Sora',sans-serif;cursor:pointer;white-space:nowrap;transition:background .18s,transform .15s;text-decoration:none}
+.btn-wa-share:hover{background:#1da851;transform:translateY(-1px)}
+
+/* SAFETY CARD */
+.safety-card{background:var(--light);border-radius:var(--r-lg);border:1.5px solid var(--border);padding:18px 20px}
+.safety-card h4{font-size:.85rem;font-weight:800;color:var(--charcoal);margin-bottom:10px;display:flex;align-items:center;gap:7px}
+.safety-card h4 i{color:var(--teal)}
+.safety-list{list-style:none;display:flex;flex-direction:column;gap:7px}
+.safety-list li{font-size:.82rem;color:var(--mid);display:flex;align-items:flex-start;gap:8px}
+.safety-list li i{color:var(--teal);font-size:.72rem;margin-top:3px;flex-shrink:0}
+
+/* SKELETON */
+.sk{background:linear-gradient(90deg,#f0f0f0 25%,#e8e8e8 50%,#f0f0f0 75%);background-size:200% 100%;animation:shim 1.5s infinite;border-radius:8px}
+@keyframes shim{0%{background-position:200% 0}100%{background-position:-200% 0}}
+.sk-hero{height:260px;border-radius:var(--r-lg);margin-bottom:24px}
+.sk-line{height:14px;margin-bottom:10px}
+.sk-title{height:22px;width:70%;margin-bottom:14px}
+.sk-price{height:36px;width:40%;margin-bottom:8px}
+
+/* NOT FOUND */
+.not-found{text-align:center;padding:72px 24px}
+.not-found i{font-size:3rem;color:var(--border);margin-bottom:16px;display:block}
+.not-found h2{font-size:1.3rem;font-weight:800;margin-bottom:10px}
+.not-found p{color:var(--mid);margin-bottom:24px}
+
+/* REPORT */
+.report-link{text-align:center;margin-top:8px}
+.report-link button{background:none;border:none;color:var(--muted);font-size:.78rem;cursor:pointer;font-family:'Nunito',sans-serif;text-decoration:underline;transition:color .18s}
+.report-link button:hover{color:#c0392b}
+
+/* RESPONSIVE */
+@media(max-width:600px){
+  .detail-hero{height:200px}
+  .detail-price{font-size:1.6rem}
+  .share-card{flex-direction:column;align-items:flex-start}
+  .btn-wa-share{width:100%;justify-content:center}
+}
+
+/* PHOTO GALLERY */
+.gallery-wrap{border-radius:var(--r-lg);overflow:hidden;margin-bottom:24px}
+.gallery-main{height:280px;background-size:cover;background-position:center;position:relative;display:flex;align-items:flex-end;padding:12px}
+.gallery-main .hero-type-chip{position:static}
+.gallery-main .hero-new-badge{position:absolute;top:12px;left:12px}
+.photo-count{position:absolute;top:12px;right:12px;background:rgba(0,0,0,.55);color:#fff;font-size:.75rem;font-weight:700;padding:4px 10px;border-radius:100px;display:flex;align-items:center;gap:5px}
+.gallery-thumbs{display:flex;gap:4px;background:#000;padding:4px}
+.gthumb{flex:1;height:60px;background-size:cover;background-position:center;border:none;cursor:pointer;opacity:.65;transition:opacity .18s;border-radius:3px}
+.gthumb.active{opacity:1;outline:2px solid var(--teal)}
+.gthumb:hover{opacity:.9}
+@media(max-width:600px){.gallery-main{height:220px}.gthumb{height:48px}}
+
+/* UNLOCK STATES */
+.unlock-card.unlocked{background:linear-gradient(135deg,#f0fff8,#e0faea);border-color:#25d366}
+.unlocked-number{display:flex;align-items:center;justify-content:center;gap:12px;background:#fff;border:2px solid #25d366;border-radius:13px;padding:18px;margin-bottom:12px}
+.unlocked-number i{color:#25d366;font-size:1.4rem}
+.unlocked-number a{font-family:'Sora',sans-serif;font-size:1.4rem;font-weight:900;color:var(--charcoal);text-decoration:none;letter-spacing:1px}
+.unlocked-number a:hover{color:var(--teal)}
+.unlock-wa-btn{display:flex;align-items:center;justify-content:center;gap:9px;width:100%;background:#25d366;color:#fff;border:none;border-radius:13px;padding:14px;font-size:.97rem;font-weight:700;font-family:'Sora',sans-serif;cursor:pointer;text-decoration:none;transition:background .18s,transform .15s;margin-bottom:8px}
+.unlock-wa-btn:hover{background:#1da851;transform:translateY(-1px)}
+.unlock-already{background:var(--teal-xl);border:1.5px solid var(--teal-l);border-radius:10px;padding:12px 16px;font-size:.82rem;color:var(--teal-d);display:flex;align-items:center;gap:8px;margin-bottom:12px;font-weight:600}
+.unlock-already i{color:var(--teal);flex-shrink:0}
+.payfast-badge{display:flex;align-items:center;justify-content:center;gap:6px;font-size:.72rem;color:var(--muted);margin-top:6px}
+.payfast-badge i{color:var(--teal);font-size:.68rem}
+
+/* PHONE MODAL */
+.pmodal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:999;display:none;align-items:center;justify-content:center;padding:20px}
+.pmodal-overlay.open{display:flex}
+.pmodal{background:#fff;border-radius:var(--r-lg);padding:28px 24px 24px;width:100%;max-width:400px;box-shadow:0 24px 64px rgba(0,0,0,.22);animation:pmIn .22s ease}
+@keyframes pmIn{from{transform:translateY(18px);opacity:0}to{transform:translateY(0);opacity:1}}
+.pmodal h3{font-family:'Sora',sans-serif;font-size:1.1rem;font-weight:900;color:var(--charcoal);margin-bottom:6px}
+.pmodal p{font-size:.85rem;color:var(--mid);margin-bottom:20px;line-height:1.6}
+.pmodal-label{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:6px;display:block}
+.pmodal-input-row{display:flex;align-items:center;border:1.5px solid var(--border);border-radius:11px;overflow:hidden;transition:border-color .18s,box-shadow .18s;margin-bottom:6px}
+.pmodal-input-row:focus-within{border-color:var(--teal);box-shadow:0 0 0 3px rgba(8,148,161,.12)}
+.pmodal-input-row.err{border-color:#e74c3c;box-shadow:0 0 0 3px rgba(231,76,60,.1)}
+.pmodal-prefix{padding:12px 12px 12px 16px;font-family:'Sora',sans-serif;font-size:.95rem;font-weight:700;color:var(--teal);background:var(--teal-xl);border-right:1.5px solid var(--teal-l);white-space:nowrap}
+.pmodal-input{border:none;outline:none;padding:12px 14px;font-size:.95rem;font-family:'Nunito',sans-serif;color:var(--charcoal);font-weight:600;width:100%;background:#fff}
+.pmodal-err{font-size:.78rem;color:#e74c3c;margin-bottom:14px;display:none;align-items:center;gap:6px}
+.pmodal-err.show{display:flex}
+.pmodal-actions{display:flex;gap:10px;margin-top:4px}
+.pmodal-cancel{flex:1;background:none;border:1.5px solid var(--border);border-radius:10px;padding:12px;font-size:.9rem;font-weight:700;font-family:'Sora',sans-serif;color:var(--mid);cursor:pointer;transition:border-color .18s,color .18s}
+.pmodal-cancel:hover{border-color:var(--teal);color:var(--teal)}
+.pmodal-confirm{flex:2;background:linear-gradient(135deg,var(--orange),var(--orange-d));color:#fff;border:none;border-radius:10px;padding:12px;font-size:.9rem;font-weight:800;font-family:'Sora',sans-serif;cursor:pointer;box-shadow:0 4px 14px rgba(224,122,44,.35);transition:transform .15s,box-shadow .15s}
+.pmodal-confirm:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(224,122,44,.42)}
+.pmodal-confirm:disabled{opacity:.7;transform:none;cursor:default}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="hdr">
+    <a href="index.html" class="back-btn"><i class="fa-solid fa-arrow-left"></i> Back to listings</a>
+    <a href="index.html" class="logo">
+      <div class="logo-badge"><i class="fa-solid fa-house"></i></div>
+      <span class="logo-text">Kasi<span>24</span></span>
+    </a>
+  </div>
+</header>
+
+<!-- PHONE NUMBER MODAL -->
+<div class="pmodal-overlay" id="phoneModalOverlay">
+  <div class="pmodal">
+    <h3><i class="fa-solid fa-phone" style="color:var(--teal);margin-right:8px"></i>Your contact number</h3>
+    <p>We'll send payment confirmation to this number. Enter your SA cellphone number below.</p>
+    <label class="pmodal-label">Cellphone number</label>
+    <div class="pmodal-input-row" id="phoneInputRow">
+      <span class="pmodal-prefix">+27</span>
+      <input class="pmodal-input" id="phoneModalInput" type="tel" placeholder="81 352 8749" maxlength="12"
+        oninput="formatModalPhone(this)" onkeydown="if(event.key==='Enter')confirmPhone()">
+    </div>
+    <div class="pmodal-err" id="phoneModalErr"><i class="fa-solid fa-circle-exclamation"></i> <span id="phoneModalErrMsg">Please enter a valid SA number</span></div>
+    <div class="pmodal-actions">
+      <button class="pmodal-cancel" onclick="closePhoneModal()">Cancel</button>
+      <button class="pmodal-confirm" id="phoneConfirmBtn" onclick="confirmPhone()">
+        <i class="fa-solid fa-lock-open"></i> Continue to payment
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="page" id="pageContent">
+  <!-- Skeleton while loading -->
+  <div id="skeleton">
+    <div class="sk sk-hero"></div>
+    <div class="detail-card">
+      <div class="sk sk-price"></div>
+      <div class="sk sk-title"></div>
+      <div class="sk sk-line" style="width:55%"></div>
+      <div class="sk sk-line" style="width:40%"></div>
+      <div class="sk sk-line" style="width:80%;margin-top:20px"></div>
+      <div class="sk sk-line" style="width:60%"></div>
+    </div>
+  </div>
+  <!-- Real content injected here -->
+  <div id="listingContent" style="display:none"></div>
+</div>
+
+<script>
+// ===========================================
+// SUPABASE
+// ===========================================
+const SUPABASE_URL = 'https://fxoaqzclszjvkwupkdiv.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_I5JH_smIkSc7oEWN-gjjNQ_2Lv7onsm';
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+// ===========================================
+// CONSTANTS
+// ===========================================
+const TL = { room:'Room To Let', backroom:'Back Room To Let', flat:'Flat To Let', house:'House To Let' };
+const TI = { room:'fa-door-open', backroom:'fa-tree', flat:'fa-building', house:'fa-house-chimney' };
+const PC = {
+  room:     { g1:'#d4eef0', g2:'#a0d8dc', ic:'var(--teal)',    bg:'rgba(6,115,125,0.85)' },
+  backroom: { g1:'#dff5e0', g2:'#b5e0b8', ic:'#28a060',        bg:'rgba(40,160,96,0.85)'  },
+  flat:     { g1:'#fdecd8', g2:'#f8d0aa', ic:'var(--orange)',   bg:'rgba(224,122,44,0.85)' },
+  house:    { g1:'#e8f4d0', g2:'#c0e090', ic:'#4a8c10',         bg:'rgba(74,140,16,0.85)'  },
+};
+const INCL_LABELS = { water:'Water included',    electricity:'Electricity included', wifi:'WiFi included',    refuse:'Refuse removal',  security:'Security',          dstv:'DStv signal' };
+const INCL_ICONS  = { water:'fa-droplet',        electricity:'fa-bolt',              wifi:'fa-wifi',          refuse:'fa-trash',        security:'fa-shield-halved',  dstv:'fa-satellite-dish' };
+const AMEN_LABELS = { parking:'Safe parking',    wifi:'Free WiFi',    laundry:'Laundry area', yard:'Yard / garden',  fence:'Fenced property', geyser:'Geyser / hot water', stove:'Stove / cooking', storage:'Storage space', prepaid:'Prepaid meter', solar:'Solar / no loadshedding', gate:'Security gate', cctv:'CCTV cameras' };
+const AMEN_ICONS  = { parking:'fa-car',          wifi:'fa-wifi',      laundry:'fa-shirt',     yard:'fa-tree',        fence:'fa-shield',       geyser:'fa-fire',            stove:'fa-utensils',     storage:'fa-box',        prepaid:'fa-bolt',      solar:'fa-sun',                  gate:'fa-lock',       cctv:'fa-camera' };
+const PREF_LABELS = { no_smokers:'No smokers',   no_pets:'No pets',   no_kids:'No small children', working:'Working professionals only', students:'Students welcome', couples:'Couples welcome', single:'Single person only', female:'Female tenants only' };
+const PREF_ICONS  = { no_smokers:'fa-ban',       no_pets:'fa-paw',    no_kids:'fa-baby',            working:'fa-briefcase',              students:'fa-graduation-cap',couples:'fa-heart',        single:'fa-user',            female:'fa-venus' };
+const BATH_LABELS = { private:'Private bathroom', shared:'Shared bathroom', ensuite:'En-suite bathroom', outside:'Outside bathroom' };
+const FURN_LABELS = { unfurnished:'Unfurnished', furnished:'Fully furnished', semi:'Semi-furnished' };
+
+// ===========================================
+// LOAD LISTING
+// ===========================================
+async function loadListing() {
+  const params = new URLSearchParams(window.location.search);
+  const id = params.get('id');
+
+  if (!id) { showNotFound('No listing ID provided.'); return; }
+
+  try {
+    // Step 1: fetch the listing (need landlord_id first)
+    const { data: l, error } = await sb
+      .from('listings')
+      .select('*')
+      .eq('id', id)
+      .eq('is_active', true)
+      .eq('is_approved', true)
+      .single();
+
+    if (error || !l) { showNotFound('This listing could not be found.'); return; }
+
+    // Step 2: fetch landlord + photos in parallel
+    const [{ data: landlord }, { data: photos }] = await Promise.all([
+      sb.from('landlords')
+        .select('name, phone, whatsapp')
+        .eq('id', l.landlord_id)
+        .single(),
+      sb.from('listing_photos')
+        .select('*')
+        .eq('listing_id', id)
+        .order('sort_order', { ascending: true })
+    ]);
+
+    renderListing(l, landlord, photos || []);
+    handlePayFastReturn();
+
+  } catch(err) {
+    showNotFound('Something went wrong. Please try again.');
+  }
+}
+
+function renderListing(l, landlord, photos) {
+  currentLandlordId = l.landlord_id;
+  const c   = PC[l.type] || PC.room;
+  const ico = TI[l.type] || 'fa-house';
+  const lbl = TL[l.type] || l.type;
+  const rentFmt = 'R' + parseInt(l.rent).toLocaleString();
+  const isNew = (new Date() - new Date(l.created_at)) < (3 * 24 * 60 * 60 * 1000);
+
+  // Update page title
+  document.title = l.title + ' - Kasi24';
+
+  // Format availability date
+  let availStr = 'Available now';
+  if (l.available_from) {
+    const d = new Date(l.available_from + 'T12:00');
+    const today = new Date();
+    today.setHours(0,0,0,0);
+    if (d > today) {
+      availStr = 'Available from ' + d.toLocaleDateString('en-ZA', { day:'numeric', month:'long', year:'numeric' });
+    }
+  }
+
+  // Included chips
+  const inclHtml = (l.included || []).length > 0
+    ? (l.included || []).map(v => `<span class="dchip"><i class="fa-solid ${INCL_ICONS[v]||'fa-check'}"></i>${INCL_LABELS[v]||v}</span>`).join('')
+    : '<span class="dchip grey">No utilities included - ask landlord</span>';
+
+  // Amenities chips
+  const amenHtml = (l.amenities || []).length > 0
+    ? (l.amenities || []).map(v => `<span class="dchip"><i class="fa-solid ${AMEN_ICONS[v]||'fa-star'}"></i>${AMEN_LABELS[v]||v}</span>`).join('')
+    : '<span class="dchip grey">No additional amenities listed</span>';
+
+  // Preferences chips
+  const prefHtml = (l.preferences || []).length > 0
+    ? (l.preferences || []).map(v => `<span class="dchip grey"><i class="fa-solid ${PREF_ICONS[v]||'fa-circle-info'}"></i>${PREF_LABELS[v]||v}</span>`).join('')
+    : '<span class="dchip grey">No specific preferences</span>';
+
+  // WhatsApp unlock link
+  const waNumber = (landlord && (landlord.whatsapp || landlord.phone) || '').replace(/\D/g,'');
+  const waFormatted = waNumber.startsWith('0') ? '27' + waNumber.slice(1) : waNumber;
+  const listingUrl = encodeURIComponent(window.location.href);
+  const waMsg = encodeURIComponent(`Hi, I found your listing on Kasi24: ${l.title} in ${l.area} for ${rentFmt}/month. Is it still available?`);
+  const waLink = waFormatted ? `https://wa.me/${waFormatted}?text=${waMsg}` : '#';
+
+  // WhatsApp share message
+  const shareMsg = encodeURIComponent(`🏠 ${l.title}\n📍 ${l.area}, Kwamhlanga\n💰 ${rentFmt}/month\n\nSee full details on Kasi24:\n${window.location.href}`);
+  const shareLink = `https://wa.me/?text=${shareMsg}`;
+
+  const html = `
+    <!-- HERO -->
+    ${photos && photos.length > 0 ? buildPhotoGallery(photos, c, lbl, isNew) : `
+    <div class="detail-hero" style="background:linear-gradient(135deg,${c.g1},${c.g2})">
+      <i class="fa-solid ${ico} bg-icon" style="color:${c.ic}"></i>
+      <span class="hero-type-chip" style="background:${c.bg}">${lbl}</span>
+      ${isNew ? '<span class="hero-new-badge">New listing</span>' : ''}
+    </div>`}
+
+    <!-- MAIN DETAILS -->
+    <div class="detail-card">
+      <div class="detail-price">${rentFmt} <span>/ month</span></div>
+      <div class="detail-title">${l.title}</div>
+      <div class="detail-meta">
+        <div class="dm"><i class="fa-solid fa-location-dot"></i> ${l.area}, Kwamhlanga</div>
+        <div class="dm"><i class="fa-solid fa-bed"></i> ${l.bedrooms || '1'} bedroom${l.bedrooms === '1' || !l.bedrooms ? '' : 's'}</div>
+        <div class="dm"><i class="fa-solid fa-shower"></i> ${BATH_LABELS[l.bathroom] || l.bathroom || 'Shared bathroom'}</div>
+        <div class="dm"><i class="fa-solid fa-couch"></i> ${FURN_LABELS[l.furnished] || l.furnished || 'Unfurnished'}</div>
+      </div>
+
+      <!-- AVAILABILITY -->
+      <div class="dsec">
+        <div class="dsec-title"><i class="fa-solid fa-calendar-check"></i> Availability</div>
+        <div class="avail-row">
+          <i class="fa-solid fa-circle-check"></i>
+          <span>${availStr}</span>
+        </div>
+      </div>
+
+      <!-- DEPOSIT -->
+      <div class="dsec">
+        <div class="dsec-title"><i class="fa-solid fa-coins"></i> Deposit</div>
+        <div class="deposit-row">
+          <span>Deposit required</span>
+          <strong>${l.deposit && l.deposit > 0 ? 'R' + parseInt(l.deposit).toLocaleString() : 'No deposit'}</strong>
+        </div>
+      </div>
+
+      <!-- INCLUDED -->
+      <div class="dsec">
+        <div class="dsec-title"><i class="fa-solid fa-circle-check"></i> What's included in rent</div>
+        <div class="chip-grid">${inclHtml}</div>
+      </div>
+
+      <!-- AMENITIES -->
+      <div class="dsec">
+        <div class="dsec-title"><i class="fa-solid fa-star"></i> Amenities</div>
+        <div class="chip-grid">${amenHtml}</div>
+      </div>
+
+      <!-- RULES -->
+      <div class="dsec">
+        <div class="dsec-title"><i class="fa-solid fa-list-check"></i> Tenant preferences</div>
+        <div class="chip-grid">${prefHtml}</div>
+      </div>
+
+      <!-- NOTES -->
+      ${l.notes ? `
+      <div class="dsec">
+        <div class="dsec-title"><i class="fa-solid fa-comment"></i> From the landlord</div>
+        <div class="detail-notes">"${l.notes}"</div>
+      </div>` : ''}
+    </div>
+
+    <!-- UNLOCK CARD -->
+    <div class="unlock-card" id="unlockCard">
+      <div id="unlockContent">
+        ${buildUnlockSection(l.id)}
+      </div>
+    </div>
+
+    <!-- SHARE CARD -->
+    <div class="share-card">
+      <div class="share-card-left">
+        <h4>Know someone looking?</h4>
+        <p>Share this listing on WhatsApp</p>
+      </div>
+      <a href="${shareLink}" target="_blank" class="btn-wa-share">
+        <i class="fa-brands fa-whatsapp"></i> Share listing
+      </a>
+    </div>
+
+    <!-- SAFETY CARD -->
+    <div class="safety-card">
+      <h4><i class="fa-solid fa-shield-halved"></i> Stay safe when viewing</h4>
+      <ul class="safety-list">
+        <li><i class="fa-solid fa-check"></i> Always view the property in person before paying any deposit</li>
+        <li><i class="fa-solid fa-check"></i> Bring someone you trust when going to view</li>
+        <li><i class="fa-solid fa-check"></i> Never pay a deposit to someone you haven't met</li>
+        <li><i class="fa-solid fa-check"></i> View during daylight hours, not late at night</li>
+        <li><i class="fa-solid fa-check"></i> If something feels wrong, trust your gut and leave</li>
+      </ul>
+    </div>
+
+    <!-- REPORT -->
+    <div class="report-link">
+      <button onclick="reportListing('${l.id}')">
+        <i class="fa-solid fa-flag"></i> Report this listing
+      </button>
+    </div>
+  `;
+
+  document.getElementById('skeleton').style.display = 'none';
+  const content = document.getElementById('listingContent');
+  content.innerHTML = html;
+  content.style.display = 'block';
+}
+
+function showNotFound(msg) {
+  document.getElementById('skeleton').style.display = 'none';
+  const content = document.getElementById('listingContent');
+  content.innerHTML = `
+    <div class="not-found">
+      <i class="fa-solid fa-house-circle-xmark"></i>
+      <h2>Listing not found</h2>
+      <p>${msg}</p>
+      <a href="index.html" class="back-btn" style="display:inline-flex">
+        <i class="fa-solid fa-arrow-left"></i> Back to all listings
+      </a>
+    </div>`;
+  content.style.display = 'block';
+}
+
+// ===========================================
+// PHOTO GALLERY
+// ===========================================
+function buildPhotoGallery(photos, c, lbl, isNew) {
+  var primary = photos.find(function(p) { return p.is_primary; }) || photos[0];
+  var thumbs  = photos.slice(0, 5);
+
+  var thumbsHtml = thumbs.map(function(p, i) {
+    return '<button class="gthumb ' + (p.is_primary || i === 0 ? 'active' : '') + '" onclick="setMainPhoto(this, \'' + p.storage_path + '\')" style="background-image:url(' + getPhotoUrl(p.storage_path) + ')"></button>';
+  }).join('');
+
+  return '<div class="gallery-wrap">'
+    + '<div class="gallery-main" id="galleryMain" style="background-image:url(' + getPhotoUrl(primary.storage_path) + ')">'
+    + '<span class="hero-type-chip" style="background:' + c.bg + '">' + lbl + '</span>'
+    + (isNew ? '<span class="hero-new-badge">New listing</span>' : '')
+    + (photos.length > 1 ? '<span class="photo-count"><i class="fa-solid fa-camera"></i> ' + photos.length + '</span>' : '')
+    + '</div>'
+    + (photos.length > 1 ? '<div class="gallery-thumbs">' + thumbsHtml + '</div>' : '')
+    + '</div>';
+}
+
+function getPhotoUrl(path) {
+  return SUPABASE_URL + '/storage/v1/object/public/listing-photos/' + path;
+}
+
+function setMainPhoto(btn, path) {
+  document.getElementById('galleryMain').style.backgroundImage = 'url(' + getPhotoUrl(path) + ')';
+  document.querySelectorAll('.gthumb').forEach(function(t) { t.classList.remove('active'); });
+  btn.classList.add('active');
+}
+
+
+// ===========================================
+// PAYFAST PAYMENT
+// ===========================================
+
+const PAYFAST_SANDBOX = true;
+
+const PAYFAST_MERCHANT_ID  = '10000100';
+const PAYFAST_MERCHANT_KEY = '46f0cd694581a';
+const PAYFAST_URL_SANDBOX  = 'https://sandbox.payfast.co.za/eng/process';
+const PAYFAST_URL_LIVE     = 'https://www.payfast.co.za/eng/process';
+const PAYFAST_URL          = PAYFAST_SANDBOX ? PAYFAST_URL_SANDBOX : PAYFAST_URL_LIVE;
+
+// Your Supabase Edge Function URL
+const WEBHOOK_URL = 'https://fxoaqzclszjvkwupkdiv.supabase.co/functions/v1/payfast-webhook';
+
+// Check if tenant already paid for this listing
+function getUnlockKey(listingId) {
+  return 'k24_unlock_' + listingId;
+}
+
+function hasAlreadyUnlocked(listingId) {
+  try {
+    var data = localStorage.getItem(getUnlockKey(listingId));
+    if (!data) return null;
+    return JSON.parse(data); // { phone, whatsapp, unlockedAt }
+  } catch(e) { return null; }
+}
+
+function saveUnlock(listingId, phone, whatsapp) {
+  try {
+    localStorage.setItem(getUnlockKey(listingId), JSON.stringify({
+      phone: phone,
+      whatsapp: whatsapp,
+      unlockedAt: new Date().toISOString()
+    }));
+  } catch(e) {}
+}
+
+// -- Build the unlock section HTML --
+function buildUnlockSection(listingId) {
+  var existing = hasAlreadyUnlocked(listingId);
+  if (existing) {
+    return buildUnlockedHTML(existing.phone, existing.whatsapp, listingId, true);
+  }
+  return buildLockedHTML(listingId);
+}
+
+function buildLockedHTML(listingId) {
+  return '<div class="unlock-icon"><i class="fa-solid fa-lock"></i></div>'
+    + "<h3>Get the landlord's number</h3>"
+    + "<p>Pay R10 to unlock the landlord's contact details. Once paid, the number is yours - no expiry, no repeat charges.</p>"
+    + '<button class="btn-unlock-big" onclick="startPayment(&#39;' + listingId + '&#39;)" id="payBtn">'
+    + '<i class="fa-solid fa-lock-open"></i> Unlock for R10'
+    + '</button>'
+    + '<div class="unlock-note"><i class="fa-solid fa-shield-halved"></i> Secure payment via PayFast · No card details stored</div>'
+    + '<div class="payfast-badge"><i class="fa-solid fa-circle-check"></i> Powered by PayFast - trusted by 80,000+ SA businesses</div>';
+}
+
+function buildUnlockedHTML(phone, whatsapp, listingId, fromCache) {
+  var digits = (whatsapp || phone || '').split('').filter(function(c){return c>='0'&&c<='9';}).join('');
+  var waNumber = digits;
+  var waFormatted = waNumber.startsWith('0') ? '27' + waNumber.slice(1) : waNumber;
+  var waMsg = encodeURIComponent('Hi, I unlocked your listing on Kasi24. Is it still available?');
+  var waLink = waFormatted ? 'https://wa.me/' + waFormatted + '?text=' + waMsg : '#';
+
+  return (fromCache ? '<div class="unlock-already"><i class="fa-solid fa-circle-check"></i> You already unlocked this listing - here is the number again, free of charge.</div>' : '')
+    + '<div class="unlock-icon" style="background:linear-gradient(135deg,#e0fff0,#b8f0d0)"><i class="fa-solid fa-lock-open" style="color:#1a8c4a"></i></div>'
+    + '<h3>Contact details unlocked!</h3>'
+    + '<div class="unlocked-number">'
+    + '<i class="fa-solid fa-phone"></i>'
+    + '<a href="tel:' + phone + '">' + phone + '</a>'
+    + '</div>'
+    + '<a href="' + waLink + '" target="_blank" class="unlock-wa-btn">'
+    + '<i class="fa-brands fa-whatsapp"></i> Message on WhatsApp'
+    + '</a>'
+    + '<div class="unlock-note"><i class="fa-solid fa-circle-info"></i> Call or WhatsApp to arrange a viewing. Always view in person before paying a deposit.</div>';
+}
+
+// -- Start PayFast payment --
+// -- Phone modal helpers --
+var _pendingListingId = null;
+
+function formatModalPhone(input) {
+  // Strip everything except digits
+  var digits = input.value.replace(/\D/g, '').slice(0, 9);
+  // Format as XX XXX XXXX
+  var fmt = digits;
+  if (digits.length > 6) fmt = digits.slice(0,2) + ' ' + digits.slice(2,5) + ' ' + digits.slice(5);
+  else if (digits.length > 2) fmt = digits.slice(0,2) + ' ' + digits.slice(2);
+  input.value = fmt;
+  // Clear error on type
+  document.getElementById('phoneInputRow').classList.remove('err');
+  document.getElementById('phoneModalErr').classList.remove('show');
+}
+
+function normalisePhone(raw) {
+  // Strip all non-digits
+  var digits = raw.replace(/\D/g, '');
+  // Handle +27XXXXXXXXX → already 11 digits starting with 27
+  if (digits.startsWith('27') && digits.length === 11) return digits;
+  // Handle 0XXXXXXXXX → 10 digits starting with 0
+  if (digits.startsWith('0') && digits.length === 10) return '27' + digits.slice(1);
+  // Handle 9 digits (entered without leading 0, after stripping +27 prefix shown in modal)
+  if (digits.length === 9) return '27' + digits;
+  return null; // invalid
+}
+
+function openPhoneModal(listingId) {
+  _pendingListingId = listingId;
+  document.getElementById('phoneModalInput').value = '';
+  document.getElementById('phoneInputRow').classList.remove('err');
+  document.getElementById('phoneModalErr').classList.remove('show');
+  document.getElementById('phoneModalOverlay').classList.add('open');
+  setTimeout(function() { document.getElementById('phoneModalInput').focus(); }, 100);
+}
+
+function closePhoneModal() {
+  document.getElementById('phoneModalOverlay').classList.remove('open');
+  _pendingListingId = null;
+  var btn = document.getElementById('payBtn');
+  if (btn) { btn.innerHTML = '<i class="fa-solid fa-lock-open"></i> Unlock for R10'; btn.disabled = false; }
+}
+
+function confirmPhone() {
+  var raw = document.getElementById('phoneModalInput').value;
+  var normalised = normalisePhone(raw);
+  if (!normalised) {
+    document.getElementById('phoneInputRow').classList.add('err');
+    document.getElementById('phoneModalErrMsg').textContent = 'Please enter a valid 10-digit SA number (e.g. 081 352 8749)';
+    document.getElementById('phoneModalErr').classList.add('show');
+    return;
+  }
+  document.getElementById('phoneModalOverlay').classList.remove('open');
+  proceedWithPayment(_pendingListingId, normalised);
+}
+
+// -- Start PayFast payment --
+async function startPayment(listingId) {
+  var btn = document.getElementById('payBtn');
+  if (btn) {
+    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Preparing…';
+    btn.disabled = true;
+  }
+  openPhoneModal(listingId);
+}
+
+async function proceedWithPayment(listingId, tenantPhone) {
+  var btn = document.getElementById('payBtn');
+  try {
+    // 1. Create a pending unlock record in Supabase
+    var insertPayload = {
+      listing_id:     listingId,
+      landlord_id:    currentLandlordId,
+      tenant_phone:   tenantPhone,
+      amount_paid:    10,
+      payment_status: 'pending',
+    };
+
+    var { data: unlock, error } = await sb
+      .from('unlocks')
+      .insert(insertPayload)
+      .select('id')
+      .single();
+
+    if (error) {
+      console.error('Supabase insert error:', JSON.stringify(error));
+      throw new Error(error.message || 'Could not create unlock record');
+    }
+    if (!unlock) throw new Error('No unlock record returned');
+
+    // 2. Build PayFast payment form and submit
+    var baseUrl   = window.location.href.split('?')[0];
+    var params    = new URLSearchParams(window.location.search);
+    var returnUrl = baseUrl + '?id=' + params.get('id') + '&unlockId=' + unlock.id + '&status=success';
+    var cancelUrl = baseUrl + '?id=' + params.get('id') + '&status=cancelled';
+
+    var pfData = {
+      merchant_id:      PAYFAST_MERCHANT_ID,
+      merchant_key:     PAYFAST_MERCHANT_KEY,
+      return_url:       returnUrl,
+      cancel_url:       cancelUrl,
+      notify_url:       WEBHOOK_URL,
+      m_payment_id:     unlock.id,
+      amount:           '10.00',
+      item_name:        'Kasi24 Contact Unlock',
+      item_description: 'Unlock landlord contact details',
+      email_confirmation: '1',
+    };
+
+    var form = document.createElement('form');
+    form.method = 'POST';
+    form.action = PAYFAST_URL;
+    Object.keys(pfData).forEach(function(key) {
+      var input = document.createElement('input');
+      input.type  = 'hidden';
+      input.name  = key;
+      input.value = pfData[key];
+      form.appendChild(input);
+    });
+    document.body.appendChild(form);
+    form.submit();
+
+  } catch(err) {
+    console.error('Payment error:', err);
+    if (btn) { btn.innerHTML = '<i class="fa-solid fa-lock-open"></i> Unlock for R10'; btn.disabled = false; }
+    alert('Payment setup failed: ' + err.message + '\n\nCheck the browser console for details.');
+  }
+}
+
+// -- Handle return from PayFast --
+async function handlePayFastReturn() {
+  var params    = new URLSearchParams(window.location.search);
+  var unlockId  = params.get('unlockId');
+  var status    = params.get('status');
+  var listingId = params.get('id');
+
+  if (!unlockId || status !== 'success') return;
+
+  // Show confirming state immediately
+  var card = document.getElementById('unlockContent');
+  if (card) card.innerHTML = '<div class="unlock-icon"><i class="fa-solid fa-spinner fa-spin" style="color:var(--teal)"></i></div>'
+    + '<h3 style="margin-top:12px">Confirming your payment…</h3>'
+    + '<p style="color:var(--mid);font-size:.9rem">This usually takes a few seconds.</p>';
+
+  var attempts    = 0;
+  var maxAttempts = 15;
+
+  var checkInterval = setInterval(async function() {
+    attempts++;
+
+    var { data: unlock } = await sb
+      .from('unlocks')
+      .select('payment_status, listing_id')
+      .eq('id', unlockId)
+      .single();
+
+    if (unlock && unlock.payment_status === 'complete') {
+      clearInterval(checkInterval);
+
+      // Fetch contact via secure RPC
+      var { data: contact, error: contactErr } = await sb
+        .rpc('get_landlord_contact', {
+          p_listing_id: listingId,
+          p_unlock_id:  unlockId
+        });
+
+      var phone    = contact && contact[0] ? contact[0].phone    : null;
+      var whatsapp = contact && contact[0] ? contact[0].whatsapp : null;
+
+      if (contactErr || !phone) {
+        console.error('Contact fetch error:', contactErr);
+        if (card) card.innerHTML = '<div class="unlock-icon"><i class="fa-solid fa-circle-exclamation" style="color:var(--orange)"></i></div>'
+          + '<h3>Payment confirmed!</h3>'
+          + '<p>Your payment went through but we had trouble loading the contact. Please refresh or WhatsApp us at <strong>+27 81 352 8749</strong>.</p>';
+        return;
+      }
+
+      if (listingId && phone) saveUnlock(listingId, phone, whatsapp);
+      if (card) card.innerHTML = buildUnlockedHTML(phone, whatsapp, listingId, false);
+      document.getElementById('unlockCard').classList.add('unlocked');
+
+    } else if (attempts >= maxAttempts) {
+      clearInterval(checkInterval);
+      if (card) card.innerHTML = '<div class="unlock-icon"><i class="fa-solid fa-clock" style="color:var(--orange)"></i></div>'
+        + '<h3>Payment received — still confirming</h3>'
+        + '<p style="color:var(--mid);font-size:.9rem">Your payment went through but confirmation is taking longer than usual. Please refresh this page in a minute. If the number still does not appear, WhatsApp us at <strong>+27 81 352 8749</strong>.</p>';
+    }
+  }, 2000);
+}
+
+// Store landlord ID globally for use in startPayment
+var currentLandlordId = null;
+
+
+// ===========================================
+// REPORT LISTING
+// ===========================================
+async function reportListing(listingId) {
+  const reason = prompt('Why are you reporting this listing?\n\n1. Fake listing\n2. Wrong information\n3. No longer available\n4. Other\n\nType a number (1-4):');
+  const reasonMap = { '1':'fake', '2':'wrong_info', '3':'no_longer_available', '4':'other' };
+  const reasonVal = reasonMap[reason ? reason.trim() : ''];
+  if (!reasonVal) return;
+  await sb.from('reports').insert({ listing_id: listingId, reason: reasonVal });
+  alert('Thank you - your report has been submitted. We will review it shortly.');
+}
+
+// ===========================================
+// INIT
+// ===========================================
+loadListing();
+</script>
+</body>
+</html>

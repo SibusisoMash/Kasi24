@@ -1,0 +1,2039 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Kasi24 – Find Your Room in Kwamhlanga</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="dns-prefetch" href="https://fxoaqzclszjvkwupkdiv.supabase.co">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800;900&family=Nunito:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{
+  --teal:#0894A1;--teal-d:#06737d;--teal-l:#e0f6f8;--teal-xl:#f0fbfc;
+  --orange:#E07A2C;--orange-d:#c4661d;
+  --charcoal:#2D2D2A;--mid:#6b6b67;--muted:#9a9a96;
+  --light:#f6fafb;--white:#fff;--border:#e4ecee;
+  --r:16px;--r-lg:22px;
+  --sh:0 6px 28px rgba(8,148,161,0.13);
+  --sh-lg:0 16px 56px rgba(8,148,161,0.18);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Nunito',sans-serif;color:var(--charcoal);background:var(--white);line-height:1.6;overflow-x:hidden;padding-bottom:80px}
+h1,h2,h3,h4{font-family:'Sora',sans-serif}
+
+/* HEADER */
+header{position:sticky;top:0;z-index:200;background:rgba(255,255,255,0.96);backdrop-filter:blur(14px);border-bottom:1.5px solid var(--border);padding:0 5vw}
+.hdr{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:66px;gap:16px}
+.logo{display:flex;align-items:center;gap:9px;text-decoration:none}
+.logo-badge{width:38px;height:38px;border-radius:11px;background:linear-gradient(135deg,var(--teal),var(--teal-d));display:flex;align-items:center;justify-content:center;box-shadow:0 3px 10px rgba(8,148,161,0.35)}
+.logo-badge i{color:#fff;font-size:17px}
+.logo-text{font-family:'Sora',sans-serif;font-size:1.45rem;font-weight:900;color:var(--teal);letter-spacing:-0.5px}
+.logo-text span{color:var(--orange)}
+.dnav{display:flex;align-items:center;gap:4px}
+.dnav a{text-decoration:none;color:var(--mid);font-size:.88rem;font-weight:600;padding:8px 14px;border-radius:8px;transition:background .18s,color .18s}
+.dnav a:hover{background:var(--teal-l);color:var(--teal)}
+.btn-login{background:var(--teal)!important;color:#fff!important;box-shadow:0 3px 12px rgba(8,148,161,.3)}
+.btn-login:hover{background:var(--teal-d)!important}
+.ham{display:none;background:none;border:none;cursor:pointer;font-size:1.3rem;color:var(--teal);padding:4px}
+.mdrawer{display:none;flex-direction:column;background:#fff;border-bottom:1.5px solid var(--border);padding:8px 5vw 16px;gap:2px}
+.mdrawer.open{display:flex}
+.mdrawer a{text-decoration:none;color:var(--charcoal);font-size:.95rem;font-weight:600;padding:13px 0;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px}
+.mdrawer a:last-child{border-bottom:none}
+.mdrawer a i{color:var(--teal);width:18px;text-align:center}
+
+/* HERO */
+.hero{background:linear-gradient(150deg,#074f56 0%,#0894A1 55%,#0aabb9 100%);padding:60px 5vw 72px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;pointer-events:none;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E")}
+.blob{position:absolute;border-radius:50%;pointer-events:none}
+.b1{top:-80px;right:-60px;width:320px;height:320px;background:rgba(255,255,255,.07)}
+.b2{bottom:-100px;left:-80px;width:360px;height:360px;background:rgba(224,122,44,.12)}
+.hero-in{max-width:780px;margin:0 auto;text-align:center;position:relative;z-index:2}
+.pill{display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);color:#fff;font-size:.75rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;border-radius:100px;padding:5px 16px;margin-bottom:22px}
+.ldot{width:7px;height:7px;border-radius:50%;background:#7fffb0;box-shadow:0 0 0 0 rgba(127,255,176,.6);animation:lp 2s ease infinite}
+@keyframes lp{0%,100%{box-shadow:0 0 0 0 rgba(127,255,176,.6)}50%{box-shadow:0 0 0 7px rgba(127,255,176,0)}}
+.hero h1{font-size:clamp(1.9rem,5.5vw,3.4rem);font-weight:900;color:#fff;line-height:1.1;margin-bottom:14px;letter-spacing:-1px}
+.hero h1 .acc{color:#ffd194}
+.hero-sub{font-size:clamp(.95rem,2.2vw,1.15rem);color:rgba(255,255,255,.85);margin-bottom:32px}
+.hero-sub strong{color:#ffd194}
+
+/* SEARCH CARD */
+.scard{background:#fff;border-radius:var(--r-lg);padding:22px;box-shadow:0 18px 60px rgba(0,0,0,.22)}
+.stop{display:grid;grid-template-columns:1fr 1fr auto;gap:12px;align-items:end;margin-bottom:16px}
+.sf{display:flex;flex-direction:column;gap:5px}
+.sf label{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted)}
+.sf select,.sf input[type=number]{border:1.5px solid var(--border);border-radius:10px;padding:11px 14px;font-size:.92rem;font-family:'Nunito',sans-serif;color:var(--charcoal);background:#fff;outline:none;transition:border-color .18s,box-shadow .18s;-webkit-appearance:none;appearance:none}
+.sf select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%230894A1' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 13px center;padding-right:34px}
+.sf select:focus,.sf input:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(8,148,161,.12)}
+.btn-search{background:linear-gradient(135deg,var(--orange),var(--orange-d));color:#fff;border:none;border-radius:11px;padding:12px 22px;font-size:.95rem;font-weight:700;font-family:'Sora',sans-serif;cursor:pointer;display:flex;align-items:center;gap:8px;white-space:nowrap;box-shadow:0 4px 16px rgba(224,122,44,.4);transition:transform .15s,box-shadow .15s;height:46px}
+.btn-search:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(224,122,44,.45)}
+
+/* PRICE RANGE */
+.prange{background:var(--light);border-radius:12px;padding:14px 16px 16px;border:1.5px solid var(--border)}
+.pr-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.pr-label{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted)}
+.pr-inputs{display:flex;align-items:center;gap:8px}
+.pf{display:flex;flex-direction:column;align-items:center;gap:3px}
+.pf-lbl{font-size:.65rem;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.5px}
+.piw{display:flex;align-items:center;border:1.5px solid var(--border);border-radius:8px;background:#fff;overflow:hidden;transition:border-color .18s,box-shadow .18s}
+.piw:focus-within{border-color:var(--teal);box-shadow:0 0 0 3px rgba(8,148,161,.1)}
+.ppfx{padding:7px 8px 7px 10px;font-size:.85rem;color:var(--teal);font-weight:700;font-family:'Sora',sans-serif}
+.piw input{border:none;outline:none;width:72px;padding:7px 10px 7px 0;font-size:.88rem;font-family:'Nunito',sans-serif;color:var(--charcoal);font-weight:600;background:transparent}
+.psep{font-size:.8rem;color:var(--muted);font-weight:600;padding:0 2px}
+.rwrap{position:relative;height:28px;margin-top:4px;padding:0 10px}
+.rtrack{position:absolute;top:50%;left:10px;right:10px;height:4px;background:var(--border);border-radius:4px;transform:translateY(-50%)}
+.rfill{position:absolute;top:50%;height:4px;background:linear-gradient(90deg,var(--teal),var(--teal-d));border-radius:4px;transform:translateY(-50%);transition:left .05s,width .05s}
+.ri{position:absolute;top:50%;left:0;right:0;width:100%;height:4px;-webkit-appearance:none;appearance:none;background:transparent;outline:none;cursor:pointer;transform:translateY(-50%);pointer-events:none}
+.ri::-webkit-slider-thumb{-webkit-appearance:none;width:24px;height:24px;border-radius:50%;background:#fff;border:2.5px solid var(--teal);box-shadow:0 2px 8px rgba(8,148,161,.3);cursor:pointer;pointer-events:all;transition:transform .15s,box-shadow .15s}
+.ri::-webkit-slider-thumb:hover{transform:scale(1.15);box-shadow:0 3px 12px rgba(8,148,161,.45)}
+.ri::-moz-range-thumb{width:24px;height:24px;border-radius:50%;background:#fff;border:2.5px solid var(--teal);box-shadow:0 2px 8px rgba(8,148,161,.3);cursor:pointer;pointer-events:all}
+
+/* HERO STATS */
+.hstats{display:flex;justify-content:center;gap:36px;margin-top:28px;flex-wrap:wrap}
+.hstat{text-align:center}
+.hstat strong{display:block;font-family:'Sora',sans-serif;font-size:1.6rem;font-weight:900;color:#fff;line-height:1}
+.hstat span{font-size:.78rem;color:rgba(255,255,255,.72);margin-top:2px;display:block}
+
+/* SECTION GLOBALS */
+.eyebrow{text-align:center;font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:2.5px;color:var(--teal);margin-bottom:8px}
+.sec-title{text-align:center;font-size:clamp(1.5rem,3vw,2.2rem);font-weight:800;color:var(--charcoal);margin-bottom:10px;letter-spacing:-.3px}
+.sec-sub{text-align:center;color:var(--mid);font-size:.97rem;max-width:500px;margin:0 auto 36px}
+
+/* LISTINGS */
+.listings-sec{padding:64px 5vw 72px;background:var(--white)}
+.tab-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;margin-bottom:36px}
+.tab-scroll::-webkit-scrollbar{display:none}
+.tab-bar{display:flex;gap:0;background:var(--light);border:1.5px solid var(--border);border-radius:var(--r);padding:5px;width:max-content;min-width:100%;margin:0 auto}
+.tab-btn{border:none;background:transparent;font-family:'Sora',sans-serif;font-size:.83rem;font-weight:700;color:var(--mid);padding:9px 16px;border-radius:11px;cursor:pointer;display:flex;align-items:center;gap:7px;transition:color .2s,background .2s;white-space:nowrap}
+.tab-btn i{font-size:.8rem}
+.tab-btn.active{background:var(--teal);color:#fff;box-shadow:0 3px 12px rgba(8,148,161,.3)}
+.tab-btn:hover:not(.active){background:var(--teal-l);color:var(--teal)}
+.cbadge{font-size:.65rem;font-weight:800;padding:1px 7px;border-radius:100px;line-height:1.5}
+.tab-btn.active .cbadge{background:rgba(255,255,255,.25);color:#fff}
+.tab-btn:not(.active) .cbadge{background:var(--teal-l);color:var(--teal)}
+.lgrid{max-width:1140px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+
+/* LISTING CARD */
+.lcard{border:1.5px solid var(--border);border-radius:var(--r-lg);overflow:hidden;background:#fff;position:relative;transition:box-shadow .22s,transform .22s,border-color .22s}
+.lcard:hover{box-shadow:var(--sh-lg);transform:translateY(-5px);border-color:rgba(8,148,161,.25)}
+.nbadge{position:absolute;top:14px;right:48px;z-index:3;background:#ff4757;color:#fff;font-size:.65rem;font-weight:800;text-transform:uppercase;letter-spacing:.5px;padding:3px 9px;border-radius:100px;display:flex;align-items:center;gap:4px}
+.nbadge::before{content:'';width:6px;height:6px;border-radius:50%;background:#fff;opacity:.8;animation:np 1.5s ease infinite}
+@keyframes np{0%,100%{opacity:.8}50%{opacity:.2}}
+.hbtn{position:absolute;top:12px;right:12px;z-index:3;width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.88);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(4px);box-shadow:0 2px 8px rgba(0,0,0,.12);transition:transform .18s}
+.hbtn i{color:var(--muted);font-size:.95rem;transition:color .18s}
+.hbtn.saved i{color:#e74c6a}
+.hbtn:hover{transform:scale(1.12)}
+.hbtn:hover i{color:#e74c6a}
+.hbtn.pop i{animation:hp .35s ease}
+@keyframes hp{0%{transform:scale(1)}40%{transform:scale(1.5)}70%{transform:scale(.88)}100%{transform:scale(1)}}
+.limg{height:178px;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.limg i.bgi{font-size:3.8rem;opacity:.28}
+.tchip{position:absolute;bottom:12px;left:12px;color:#fff;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.6px;padding:4px 11px;border-radius:100px;backdrop-filter:blur(4px)}
+.lbody{padding:17px 18px 20px}
+.lprice{font-family:'Sora',sans-serif;font-size:1.35rem;font-weight:900;color:var(--teal);margin-bottom:2px}
+.lprice span{font-size:.73rem;color:var(--muted);font-family:'Nunito',sans-serif;font-weight:500}
+.ltitle{font-size:.97rem;font-weight:700;color:var(--charcoal);margin-bottom:6px}
+.lloc{font-size:.82rem;color:var(--mid);display:flex;align-items:center;gap:5px;margin-bottom:13px}
+.lloc i{color:var(--teal);font-size:.75rem}
+.ltags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px}
+.tag{background:var(--teal-xl);border-radius:7px;padding:4px 10px;font-size:.75rem;color:var(--teal-d);display:flex;align-items:center;gap:4px;font-weight:600}
+.tag i{font-size:.7rem}
+.btn-unlock{display:flex;width:100%;align-items:center;justify-content:center;gap:9px;background:linear-gradient(135deg,var(--orange),#d4691a);color:#fff;border:none;border-radius:11px;padding:13px;font-size:.94rem;font-weight:700;font-family:'Sora',sans-serif;cursor:pointer;box-shadow:0 4px 14px rgba(224,122,44,.35);transition:transform .15s,box-shadow .15s}
+.btn-unlock:hover{transform:translateY(-2px);box-shadow:0 8px 22px rgba(224,122,44,.42)}
+.btn-unlock:disabled{opacity:.7;transform:none;cursor:default}
+.view-detail-hint{font-size:.82rem;font-weight:700;color:var(--teal);display:flex;align-items:center;gap:7px;justify-content:center;padding:11px;border:1.5px solid var(--teal-l);border-radius:11px;background:var(--teal-xl);transition:background .18s}
+.lcard:hover .view-detail-hint{background:var(--teal-l)}
+
+/* SKELETON */
+.skel-card{border:1.5px solid var(--border);border-radius:var(--r-lg);overflow:hidden;background:#fff}
+.sk{background:linear-gradient(90deg,#f0f0f0 25%,#e8e8e8 50%,#f0f0f0 75%);background-size:200% 100%;animation:shim 1.5s infinite}
+.sk-img{height:178px}
+.sk-body{padding:17px 18px 20px}
+.sk-line{height:13px;border-radius:6px;margin-bottom:10px}
+.w60{width:60%}.w80{width:80%}.w40{width:40%}
+.sk-btn{height:44px;border-radius:11px;margin-top:16px}
+@keyframes shim{0%{background-position:200% 0}100%{background-position:-200% 0}}
+.no-res{grid-column:1/-1;text-align:center;padding:48px 24px;color:var(--mid)}
+.no-res i{font-size:2.5rem;color:var(--border);margin-bottom:14px;display:block}
+.no-res h3{font-size:1rem;font-weight:700;color:var(--charcoal);margin-bottom:6px}
+.lf{text-align:center;margin-top:40px}
+.btn-outline{display:inline-flex;align-items:center;gap:9px;border:2px solid var(--teal);color:var(--teal);background:#fff;padding:13px 30px;border-radius:11px;font-size:.94rem;font-weight:700;font-family:'Sora',sans-serif;cursor:pointer;text-decoration:none;transition:background .18s,color .18s,transform .15s}
+.btn-outline:hover{background:var(--teal);color:#fff;transform:translateY(-1px)}
+
+/* HIW */
+.hiw{padding:64px 5vw;background:var(--light)}
+.hiw-grid{max-width:960px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr);gap:22px;position:relative}
+.hiw-con{position:absolute;top:46px;left:calc(16.66% + 16px);right:calc(16.66% + 16px);height:2px;z-index:0;background:linear-gradient(90deg,var(--teal) 0%,rgba(8,148,161,.2) 50%,var(--teal) 100%)}
+.hiw-card{background:#fff;border-radius:var(--r-lg);padding:32px 22px 28px;text-align:center;position:relative;z-index:1;border:1.5px solid var(--border);transition:box-shadow .2s,transform .2s,border-color .2s}
+.hiw-card:hover{box-shadow:var(--sh);transform:translateY(-4px);border-color:rgba(8,148,161,.3)}
+.hiw-ico{width:72px;height:72px;border-radius:50%;background:var(--teal-l);margin:0 auto 20px;display:flex;align-items:center;justify-content:center;position:relative}
+.hiw-ico i{font-size:1.7rem;color:var(--teal)}
+.snum{position:absolute;top:-5px;right:-5px;width:24px;height:24px;border-radius:50%;background:var(--orange);color:#fff;font-size:.68rem;font-weight:900;font-family:'Sora',sans-serif;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(224,122,44,.4)}
+.hiw-card h3{font-size:1.05rem;font-weight:800;margin-bottom:9px}
+.hiw-card p{font-size:.88rem;color:var(--mid);line-height:1.65}
+.hiw-note{margin:32px auto 0;width:fit-content;background:#fff;border:1.5px solid var(--border);border-radius:100px;padding:10px 24px;font-size:.87rem;color:var(--mid);display:flex;align-items:center;gap:8px}
+.hiw-note i{color:var(--teal)}
+
+/* LANDLORDS */
+.landlords{background:linear-gradient(150deg,#1a1a17 0%,var(--charcoal) 100%);padding:72px 5vw;position:relative;overflow:hidden}
+.landlords::before{content:'';position:absolute;top:-120px;right:-120px;width:480px;height:480px;border-radius:50%;background:rgba(8,148,161,.1);pointer-events:none}
+.ll-in{max-width:940px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:52px;align-items:center;position:relative;z-index:1}
+.l-ey{font-size:.72rem;font-weight:800;letter-spacing:2.5px;text-transform:uppercase;color:rgba(8,148,161,.9);margin-bottom:12px}
+.landlords h2{font-size:clamp(1.6rem,3vw,2.3rem);color:#fff;font-weight:900;margin-bottom:14px;letter-spacing:-.3px}
+.landlords h2 em{font-style:normal;color:var(--orange)}
+.l-copy{color:rgba(255,255,255,.65);margin-bottom:28px;line-height:1.75}
+.bens{list-style:none;margin-bottom:34px;display:flex;flex-direction:column;gap:13px}
+.bens li{display:flex;align-items:flex-start;gap:12px;color:rgba(255,255,255,.82);font-size:.93rem}
+.bchk{width:22px;height:22px;border-radius:50%;flex-shrink:0;margin-top:1px;background:rgba(8,148,161,.2);border:1.5px solid rgba(8,148,161,.5);display:flex;align-items:center;justify-content:center}
+.bchk i{color:var(--teal);font-size:.62rem}
+.btn-teal{display:inline-flex;align-items:center;gap:10px;background:var(--teal);color:#fff;border:none;border-radius:11px;padding:14px 28px;font-size:.97rem;font-weight:700;font-family:'Sora',sans-serif;cursor:pointer;text-decoration:none;box-shadow:0 4px 18px rgba(8,148,161,.4);transition:background .18s,transform .15s}
+.btn-teal:hover{background:var(--teal-d);transform:translateY(-2px)}
+.lcards{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.lcrd{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:18px 16px;display:flex;align-items:flex-start;gap:13px;transition:background .2s,border-color .2s}
+.lcrd:hover{background:rgba(255,255,255,.09);border-color:rgba(8,148,161,.3)}
+.lcrd-ico{width:44px;height:44px;border-radius:10px;flex-shrink:0;background:rgba(8,148,161,.2);display:flex;align-items:center;justify-content:center}
+.lcrd-ico i{color:var(--teal);font-size:1.1rem}
+.lcrd-lbl{font-size:.72rem;color:rgba(255,255,255,.45);margin-bottom:3px;text-transform:uppercase;letter-spacing:.5px}
+.lcrd-val{font-family:'Sora',sans-serif;font-size:1.05rem;font-weight:800;color:#fff}
+
+/* WHY */
+.why{padding:64px 5vw;background:var(--white)}
+.why-grid{max-width:1000px;margin:0 auto;display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+.why-card{background:var(--light);border-radius:var(--r-lg);padding:26px 22px;display:flex;gap:16px;align-items:flex-start;border:1.5px solid var(--border);transition:border-color .2s,box-shadow .2s,transform .2s}
+.why-card:hover{border-color:var(--teal);box-shadow:var(--sh);transform:translateY(-3px)}
+.why-ico{width:50px;height:50px;border-radius:13px;flex-shrink:0;background:var(--teal-l);display:flex;align-items:center;justify-content:center}
+.why-ico i{color:var(--teal);font-size:1.25rem}
+.why-card h3{font-size:.97rem;font-weight:800;color:var(--charcoal);margin-bottom:6px}
+.why-card p{font-size:.86rem;color:var(--mid);line-height:1.65}
+
+/* PAYMENT */
+.payment{padding:52px 5vw;background:linear-gradient(135deg,var(--teal-xl),var(--white));border-top:1.5px solid var(--border);text-align:center}
+.payment p{color:var(--mid);margin-bottom:24px}
+.pmrow{display:flex;justify-content:center;gap:16px;flex-wrap:wrap}
+.pmchip{background:#fff;border:1.5px solid var(--border);border-radius:13px;padding:14px 26px;display:flex;align-items:center;gap:10px;font-weight:700;font-size:.92rem;color:var(--charcoal);box-shadow:0 2px 12px rgba(8,148,161,.08);transition:border-color .2s,box-shadow .2s}
+.pmchip:hover{border-color:var(--teal);box-shadow:var(--sh)}
+.pmchip i{font-size:1.25rem;color:var(--teal)}
+
+/* FOOTER */
+footer{background:var(--charcoal);padding:52px 5vw 28px;color:rgba(255,255,255,.65)}
+.fi{max-width:1100px;margin:0 auto}
+.ft{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;padding-bottom:40px;border-bottom:1px solid rgba(255,255,255,.08);margin-bottom:28px}
+.fl{display:flex;align-items:center;gap:9px;margin-bottom:14px;text-decoration:none}
+.fl-b{width:34px;height:34px;background:var(--teal);border-radius:9px;display:flex;align-items:center;justify-content:center}
+.fl-b i{color:#fff;font-size:15px}
+.fl-t{font-family:'Sora',sans-serif;font-size:1.3rem;font-weight:900;color:#fff}
+.fl-t span{color:var(--orange)}
+.ftag{font-size:.85rem;line-height:1.65;max-width:250px;margin-bottom:20px}
+.socs{display:flex;gap:9px}
+.sb{width:34px;height:34px;border-radius:8px;background:rgba(255,255,255,.07);display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.55);font-size:.9rem;text-decoration:none;transition:background .18s,color .18s}
+.sb:hover{background:var(--teal);color:#fff}
+.fc h4{font-family:'Sora',sans-serif;font-size:.78rem;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:#fff;margin-bottom:16px}
+.fc a{display:block;color:rgba(255,255,255,.55);text-decoration:none;font-size:.86rem;margin-bottom:10px;transition:color .18s}
+.fc a:hover{color:var(--teal)}
+.fb{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;font-size:.8rem}
+.pride{display:flex;align-items:center;gap:7px;color:rgba(255,255,255,.5)}
+.pride i{color:var(--orange)}
+
+/* BOTTOM NAV */
+.bnav{display:none;position:fixed;bottom:0;left:0;right:0;z-index:300;background:rgba(255,255,255,.97);backdrop-filter:blur(14px);border-top:1.5px solid var(--border);padding-bottom:env(safe-area-inset-bottom,4px);box-shadow:0 -4px 24px rgba(0,0,0,.1)}
+.bnav-in{display:flex;justify-content:space-around;align-items:center;padding:8px 0 4px}
+.bb{display:flex;flex-direction:column;align-items:center;gap:3px;background:none;border:none;cursor:pointer;padding:4px 10px;border-radius:12px;color:var(--muted);min-width:52px;transition:color .18s}
+.bb i{font-size:1.2rem;transition:transform .2s}
+.bb span{font-size:.62rem;font-weight:700;font-family:'Sora',sans-serif;text-transform:uppercase;letter-spacing:.3px}
+.bb.active{color:var(--teal)}
+.bb.active i{transform:scale(1.12)}
+.bb-cta{background:var(--orange)!important;color:#fff!important;border-radius:16px!important;padding:7px 18px!important;box-shadow:0 4px 14px rgba(224,122,44,.4)}
+
+/* TOAST */
+.toast{position:fixed;bottom:88px;left:50%;z-index:500;transform:translateX(-50%) translateY(20px);background:var(--charcoal);color:#fff;padding:10px 20px;border-radius:100px;font-size:.85rem;font-weight:600;display:flex;align-items:center;gap:8px;opacity:0;pointer-events:none;white-space:nowrap;box-shadow:0 4px 20px rgba(0,0,0,.25);transition:opacity .25s,transform .25s}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast i{color:#7fffb0}
+
+/* ═══ WIZARD OVERLAY ═══ */
+.woverlay{position:fixed;inset:0;z-index:1000;background:rgba(20,28,30,.72);backdrop-filter:blur(6px);display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s}
+.woverlay.open{opacity:1;pointer-events:all}
+.wpanel{background:#fff;border-radius:24px 24px 0 0;width:100%;max-width:680px;max-height:92vh;display:flex;flex-direction:column;transform:translateY(60px);transition:transform .35s cubic-bezier(.22,.9,.42,1);overflow:hidden}
+.woverlay.open .wpanel{transform:translateY(0)}
+@media(min-width:700px){
+  .woverlay{align-items:center}
+  .wpanel{border-radius:24px;max-height:88vh;transform:translateY(40px) scale(.97);box-shadow:0 32px 80px rgba(0,0,0,.28)}
+  .woverlay.open .wpanel{transform:translateY(0) scale(1)}
+}
+.whdr{padding:20px 24px 0;border-bottom:1.5px solid var(--border);background:#fff;flex-shrink:0}
+.whdr-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.wlogo{font-family:'Sora',sans-serif;font-size:1.2rem;font-weight:900;color:var(--teal)}
+.wlogo span{color:var(--orange)}
+.wclose{width:34px;height:34px;border-radius:50%;border:none;background:var(--light);cursor:pointer;color:var(--mid);font-size:1rem;display:flex;align-items:center;justify-content:center;transition:background .18s,color .18s}
+.wclose:hover{background:#ffe5e5;color:#c0392b}
+.wstep-lbls{display:flex;gap:0;margin-bottom:10px}
+.wsl{flex:1;text-align:center;font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);padding-bottom:8px;border-bottom:2px solid transparent;transition:color .2s,border-color .2s}
+.wsl.active{color:var(--teal);border-bottom-color:var(--teal)}
+.wsl.done{color:var(--teal);opacity:.55}
+.wbar-track{height:3px;background:var(--border);border-radius:3px}
+.wbar-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--teal),var(--teal-d));transition:width .4s cubic-bezier(.4,0,.2,1)}
+.wbody{flex:1;overflow-y:auto;padding:24px 24px 8px;-webkit-overflow-scrolling:touch}
+.wstep{display:none}
+.wstep.active{display:block;animation:stin .3s ease both}
+@keyframes stin{from{opacity:0;transform:translateX(18px)}to{opacity:1;transform:translateX(0)}}
+.wstep.back{animation:stbk .3s ease both}
+@keyframes stbk{from{opacity:0;transform:translateX(-18px)}to{opacity:1;transform:translateX(0)}}
+.sintro{text-align:center;margin-bottom:28px}
+.sico{width:60px;height:60px;border-radius:18px;background:linear-gradient(135deg,var(--teal-xl),var(--teal-l));display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-size:1.5rem}
+.sico i{color:var(--teal)}
+.sintro h2{font-size:1.25rem;font-weight:800;color:var(--charcoal);margin-bottom:6px}
+.sintro p{font-size:.88rem;color:var(--mid);line-height:1.6}
+.fgrid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.ff{display:flex;flex-direction:column;gap:6px}
+.ff.full{grid-column:1/-1}
+.ff label{font-size:.8rem;font-weight:700;color:var(--charcoal)}
+.ff label .req{color:var(--orange)}
+.ff label .hint{color:var(--muted);font-weight:500;font-size:.75rem}
+.wi{border:1.5px solid var(--border);border-radius:10px;padding:11px 14px;font-size:.92rem;font-family:'Nunito',sans-serif;color:var(--charcoal);background:#fff;outline:none;width:100%;transition:border-color .18s,box-shadow .18s;-webkit-appearance:none;appearance:none}
+select.wi{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%230894A1' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 13px center;padding-right:34px}
+.wi:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(8,148,161,.1)}
+.wi.err{border-color:#e74c3c;box-shadow:0 0 0 3px rgba(231,76,60,.1)}
+.wtextarea{resize:vertical;min-height:90px;line-height:1.6}
+.ccount{text-align:right;font-size:.72rem;color:var(--muted);margin-top:2px}
+.ipw{display:flex;align-items:center;border:1.5px solid var(--border);border-radius:10px;background:#fff;overflow:hidden;transition:border-color .18s,box-shadow .18s}
+.ipw:focus-within{border-color:var(--teal);box-shadow:0 0 0 3px rgba(8,148,161,.1)}
+.ipw.err{border-color:#e74c3c}
+.ipfx{padding:11px 10px 11px 14px;font-size:.9rem;color:var(--teal);font-weight:700;font-family:'Sora',sans-serif;border-right:1.5px solid var(--border);background:var(--light);white-space:nowrap;flex-shrink:0}
+.wi.pre{border:none;box-shadow:none;border-radius:0;padding-left:12px}
+.wi.pre:focus{border:none;box-shadow:none}
+.ferr{font-size:.75rem;color:#e74c3c;font-weight:600;display:none;align-items:center;gap:4px}
+.ferr.show{display:flex}
+.fhint{font-size:.75rem;color:var(--muted);display:flex;align-items:center;gap:5px}
+.fhint i{color:var(--teal);font-size:.7rem}
+/* type picker */
+.tpicker{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.topt{border:2px solid var(--border);border-radius:12px;padding:14px 12px;background:#fff;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px;transition:border-color .18s,background .18s,transform .15s;text-align:center}
+.topt i{font-size:1.4rem;color:var(--muted);transition:color .18s}
+.topt span{font-family:'Sora',sans-serif;font-size:.82rem;font-weight:700;color:var(--charcoal)}
+.topt small{font-size:.72rem;color:var(--muted)}
+.topt:hover{border-color:var(--teal-d);background:var(--teal-xl);transform:translateY(-2px)}
+.topt:hover i{color:var(--teal)}
+.topt.sel{border-color:var(--teal);background:var(--teal-l);box-shadow:0 0 0 3px rgba(8,148,161,.12)}
+.topt.sel i{color:var(--teal)}
+.tpicker.err .topt{border-color:#f5c6c6}
+/* checkboxes */
+.cgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.copt{display:flex;align-items:center;gap:9px;padding:10px 12px;border-radius:9px;border:1.5px solid var(--border);cursor:pointer;font-size:.84rem;font-weight:600;color:var(--charcoal);transition:border-color .15s,background .15s;-webkit-user-select:none;user-select:none}
+.copt input{accent-color:var(--teal);width:15px;height:15px;flex-shrink:0}
+.copt i{color:var(--teal);font-size:.8rem}
+.copt:hover{border-color:var(--teal);background:var(--teal-xl)}
+.copt:has(input:checked){border-color:var(--teal);background:var(--teal-xl)}
+.agrid{grid-template-columns:repeat(3,1fr)}
+.rrow{display:flex;gap:10px;flex-wrap:wrap}
+.ropt{display:flex;align-items:center;gap:7px;padding:9px 16px;border-radius:9px;border:1.5px solid var(--border);cursor:pointer;font-size:.85rem;font-weight:600;color:var(--charcoal);transition:border-color .15s,background .15s}
+.ropt input{accent-color:var(--teal)}
+.ropt:has(input:checked){border-color:var(--teal);background:var(--teal-xl)}
+.terms-co{border-color:var(--border);align-items:flex-start;padding:14px;font-size:.83rem;line-height:1.5;font-weight:500}
+.terms-co:has(input:checked){border-color:var(--teal);background:var(--teal-xl)}
+/* preview */
+.pcard{border:1.5px solid var(--border);border-radius:var(--r-lg);overflow:hidden;background:#fff;margin-bottom:14px}
+.pimg{height:140px;display:flex;align-items:center;justify-content:center;position:relative}
+.pimg i.bgi{font-size:3.5rem;opacity:.25}
+.pchip{position:absolute;bottom:10px;left:10px;color:#fff;font-size:.7rem;font-weight:700;text-transform:uppercase;padding:3px 10px;border-radius:100px}
+.pbody{padding:16px 18px 18px}
+.pprice{font-family:'Sora',sans-serif;font-size:1.3rem;font-weight:900;color:var(--teal);margin-bottom:3px}
+.pprice span{font-size:.72rem;color:var(--muted);font-family:'Nunito',sans-serif;font-weight:500}
+.ptitle{font-size:.96rem;font-weight:700;color:var(--charcoal);margin-bottom:4px}
+.ploc{font-size:.82rem;color:var(--mid);display:flex;align-items:center;gap:5px;margin-bottom:12px}
+.ploc i{color:var(--teal);font-size:.75rem}
+.ptags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+.pnote{font-size:.82rem;color:var(--mid);font-style:italic;line-height:1.5;margin-bottom:14px;padding:10px 12px;background:var(--light);border-radius:8px}
+.punlock{display:flex;align-items:center;justify-content:center;gap:8px;background:linear-gradient(135deg,var(--orange),#d4691a);color:#fff;border-radius:10px;padding:12px;font-weight:700;font-size:.9rem;font-family:'Sora',sans-serif;opacity:.85}
+.prev-note{font-size:.8rem;color:var(--mid);background:var(--light);border-radius:10px;padding:10px 14px;display:flex;align-items:flex-start;gap:8px;border:1.5px solid var(--border)}
+.prev-note i{color:var(--teal);margin-top:2px;flex-shrink:0}
+/* success */
+.succ{text-align:center;padding:24px 8px 32px}
+.sanim{width:84px;height:84px;margin:0 auto 24px;position:relative;display:flex;align-items:center;justify-content:center}
+.sring{position:absolute;inset:0;border-radius:50%;border:3px solid var(--teal);animation:rg .5s ease both}
+@keyframes rg{from{transform:scale(.3);opacity:0}to{transform:scale(1);opacity:1}}
+.sicon{font-size:2rem;color:var(--teal);animation:ip .4s .3s ease both}
+@keyframes ip{from{transform:scale(0);opacity:0}60%{transform:scale(1.2)}to{transform:scale(1);opacity:1}}
+.succ h2{font-size:1.4rem;font-weight:900;margin-bottom:12px}
+.succ p{font-size:.9rem;color:var(--mid);max-width:380px;margin:0 auto 22px;line-height:1.65}
+.schips{display:flex;justify-content:center;gap:10px;flex-wrap:wrap}
+.schips span{background:var(--teal-xl);color:var(--teal-d);border-radius:100px;padding:6px 14px;font-size:.8rem;font-weight:700;display:flex;align-items:center;gap:6px}
+.schips span i{font-size:.75rem}
+/* wizard footer */
+.wftr{display:flex;align-items:center;justify-content:space-between;padding:14px 24px 20px;border-top:1.5px solid var(--border);background:#fff;flex-shrink:0;padding-bottom:max(20px,env(safe-area-inset-bottom))}
+.wbtn-back{display:flex;align-items:center;gap:7px;background:none;border:1.5px solid var(--border);color:var(--mid);padding:10px 18px;border-radius:10px;font-size:.88rem;font-weight:700;font-family:'Sora',sans-serif;cursor:pointer;transition:border-color .18s,color .18s}
+.wbtn-back:hover{border-color:var(--teal);color:var(--teal)}
+.wbtn-back:disabled{opacity:.3;pointer-events:none}
+.wctr{font-size:.78rem;font-weight:700;color:var(--muted);font-family:'Sora',sans-serif}
+.wbtn-next{display:flex;align-items:center;gap:7px;background:var(--teal);color:#fff;padding:10px 22px;border:none;border-radius:10px;font-size:.9rem;font-weight:700;font-family:'Sora',sans-serif;cursor:pointer;box-shadow:0 3px 12px rgba(8,148,161,.3);transition:background .18s,transform .15s}
+.wbtn-next:hover{background:var(--teal-d);transform:translateY(-1px)}
+.wbtn-next.confirm{background:linear-gradient(135deg,var(--orange),var(--orange-d));box-shadow:0 3px 12px rgba(224,122,44,.35)}
+
+/* ANIMATIONS */
+@keyframes fadeUp{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:translateY(0)}}
+.hero-in>*{animation:fadeUp .65s ease both}
+.pill{animation-delay:.05s}.hero h1{animation-delay:.14s}.hero-sub{animation-delay:.22s}.scard{animation-delay:.3s}.hstats{animation-delay:.4s}
+.lcard{animation:fadeUp .4s ease both}
+.lcard:nth-child(1){animation-delay:.03s}.lcard:nth-child(2){animation-delay:.09s}.lcard:nth-child(3){animation-delay:.15s}
+.lcard:nth-child(4){animation-delay:.21s}.lcard:nth-child(5){animation-delay:.27s}.lcard:nth-child(6){animation-delay:.33s}
+
+/* RESPONSIVE */
+@media(max-width:900px){.lgrid{grid-template-columns:repeat(2,1fr)}.ll-in{grid-template-columns:1fr;gap:36px}.lcards{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:780px){.stop{grid-template-columns:1fr 1fr}.btn-search{grid-column:1/-1;justify-content:center}.hiw-grid{grid-template-columns:1fr}.hiw-con{display:none}.ft{grid-template-columns:1fr 1fr}.why-grid{grid-template-columns:1fr}}
+@media(max-width:700px){.tab-bar{min-width:max-content}}
+@media(max-width:600px){
+  .dnav{display:none}.ham{display:block}
+  .stop{grid-template-columns:1fr}.btn-search{width:100%;justify-content:center}
+  .lgrid{grid-template-columns:1fr}
+  .ft{grid-template-columns:1fr;gap:28px}.fb{flex-direction:column;align-items:flex-start}
+  .hstats{gap:18px}.bnav{display:block}.toast{bottom:96px}
+  .lcards{grid-template-columns:1fr}
+  .fgrid{grid-template-columns:1fr}.ff.full{grid-column:1}
+  .agrid{grid-template-columns:1fr 1fr}
+  .wsl{font-size:.6rem;letter-spacing:0}
+  .wbody{padding:20px 18px 8px}.whdr{padding:16px 18px 0}.wftr{padding:12px 18px 18px}
+}
+@media(max-width:400px){.wbtn-next span,.wctr{font-size:.75rem}}
+/* ═══ HEADER LANDLORD STATE ═══ */
+.landlord-greeting{font-size:.82rem;font-weight:700;color:var(--teal);font-family:'Sora',sans-serif}
+.btn-dashboard{display:flex;align-items:center;gap:7px;background:var(--teal);color:#fff;padding:8px 16px;border-radius:9px;font-size:.85rem;font-weight:700;font-family:'Sora',sans-serif;text-decoration:none;transition:background .18s}
+.btn-dashboard:hover{background:var(--teal-d)}
+.btn-signout{display:flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:9px;background:var(--light);border:1.5px solid var(--border);color:var(--mid);text-decoration:none;font-size:.9rem;transition:background .18s,color .18s}
+.btn-signout:hover{background:#ffe5e5;color:#c0392b}
+
+/* ═══ SIDE PANEL (shared) ═══ */
+.side-overlay{position:fixed;inset:0;z-index:400;background:rgba(20,28,30,.6);backdrop-filter:blur(4px);opacity:0;pointer-events:none;transition:opacity .3s}
+.side-overlay.open{opacity:1;pointer-events:all}
+.side-panel{position:fixed;top:0;right:0;bottom:0;z-index:401;width:100%;max-width:440px;background:#fff;box-shadow:-8px 0 40px rgba(0,0,0,.15);display:flex;flex-direction:column;transform:translateX(100%);transition:transform .35s cubic-bezier(.22,.9,.42,1);overflow:hidden}
+.side-panel.open{transform:translateX(0)}
+.side-panel-wide{max-width:560px}
+.sp-header{display:flex;align-items:center;justify-content:space-between;padding:20px 24px;border-bottom:1.5px solid var(--border);flex-shrink:0}
+.sp-logo{font-family:'Sora',sans-serif;font-size:1.2rem;font-weight:900;color:var(--teal)}
+.sp-logo span{color:var(--orange)}
+.sp-close{width:34px;height:34px;border-radius:50%;border:none;background:var(--light);cursor:pointer;color:var(--mid);font-size:1rem;display:flex;align-items:center;justify-content:center;transition:background .18s,color .18s}
+.sp-close:hover{background:#ffe5e5;color:#c0392b}
+
+/* ═══ AUTH PANEL ═══ */
+.auth-view{padding:28px 24px;overflow-y:auto}
+.auth-intro{margin-bottom:26px}
+.auth-intro h2{font-size:1.4rem;font-weight:900;color:var(--charcoal);margin-bottom:6px}
+.auth-intro p{font-size:.9rem;color:var(--mid)}
+.auth-form{display:flex;flex-direction:column;gap:16px}
+.af{display:flex;flex-direction:column;gap:6px}
+.af label{font-size:.8rem;font-weight:700;color:var(--charcoal)}
+.pw-wrap{position:relative}
+.pw-wrap .wi{padding-right:44px}
+.pw-toggle{position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--muted);font-size:.9rem;transition:color .18s}
+.pw-toggle:hover{color:var(--teal)}
+.auth-err{font-size:.82rem;color:#e74c3c;font-weight:600;min-height:18px;display:none}
+.auth-err.show{display:block}
+.auth-btn{display:flex;align-items:center;justify-content:center;gap:9px;background:var(--teal);color:#fff;border:none;border-radius:11px;padding:13px;font-size:.95rem;font-weight:700;font-family:'Sora',sans-serif;cursor:pointer;box-shadow:0 3px 12px rgba(8,148,161,.3);transition:background .18s,transform .15s;margin-top:4px}
+.auth-btn:hover{background:var(--teal-d);transform:translateY(-1px)}
+.auth-btn:disabled{opacity:.6;pointer-events:none}
+.auth-btn.outline{background:#fff;color:var(--teal);border:2px solid var(--teal);box-shadow:none}
+.auth-btn.outline:hover{background:var(--teal-l)}
+.auth-link-btn{background:none;border:none;color:var(--teal);font-size:.86rem;font-weight:700;cursor:pointer;padding:6px 0;text-align:center;font-family:'Nunito',sans-serif;transition:color .18s}
+.auth-link-btn:hover{color:var(--teal-d)}
+.auth-switch{text-align:center;margin-top:20px;padding-top:20px;border-top:1.5px solid var(--border);font-size:.86rem;color:var(--mid)}
+.auth-switch button{background:none;border:none;color:var(--teal);font-weight:700;cursor:pointer;font-size:.86rem;font-family:'Nunito',sans-serif}
+.auth-verify{text-align:center;padding:16px 0}
+.verify-ico{width:72px;height:72px;border-radius:20px;background:linear-gradient(135deg,var(--teal-xl),var(--teal-l));display:flex;align-items:center;justify-content:center;margin:0 auto 20px;font-size:1.8rem}
+.verify-ico i{color:var(--teal)}
+.auth-verify h2{font-size:1.3rem;font-weight:900;margin-bottom:10px}
+.auth-verify p{font-size:.88rem;color:var(--mid);line-height:1.65;margin-bottom:10px}
+.verify-note{background:var(--light);border-radius:10px;padding:12px 16px;margin:16px 0;font-size:.84rem;color:var(--mid);border:1.5px solid var(--border)}
+
+/* ═══ DASHBOARD PANEL ═══ */
+.dash-body{flex:1;overflow-y:auto;padding:20px 24px;-webkit-overflow-scrolling:touch}
+.dash-empty{text-align:center;padding:48px 16px}
+.dash-empty i{font-size:2.5rem;color:var(--border);margin-bottom:14px;display:block}
+.dash-empty h3{font-size:1rem;font-weight:700;margin-bottom:8px}
+.dash-empty p{font-size:.86rem;color:var(--mid);margin-bottom:20px}
+.dash-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:22px}
+.dstat{background:var(--light);border:1.5px solid var(--border);border-radius:12px;padding:14px 12px;text-align:center}
+.dstat strong{display:block;font-family:'Sora',sans-serif;font-size:1.4rem;font-weight:900;color:var(--teal)}
+.dstat span{font-size:.72rem;color:var(--mid);font-weight:600;text-transform:uppercase;letter-spacing:.5px}
+.dash-section-title{font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin-bottom:12px}
+.dcard{border:1.5px solid var(--border);border-radius:var(--r);padding:16px;margin-bottom:12px;background:#fff;transition:border-color .2s,box-shadow .2s}
+.dcard:hover{border-color:rgba(8,148,161,.3);box-shadow:var(--sh)}
+.dcard-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:10px}
+.dcard-info{flex:1;min-width:0}
+.dcard-title{font-size:.97rem;font-weight:700;color:var(--charcoal);margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dcard-meta{font-size:.82rem;color:var(--mid);display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.dcard-meta i{color:var(--teal);font-size:.75rem}
+.dcard-status{flex-shrink:0}
+.status-badge{font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.5px;padding:4px 10px;border-radius:100px}
+.status-live{background:#e0f8ec;color:#1a8c4a}
+.status-pending{background:#fff8e0;color:#a06a00}
+.status-taken{background:#f0f0f0;color:#888}
+.dcard-actions{display:flex;gap:8px;flex-wrap:wrap}
+.da-btn{display:flex;align-items:center;gap:6px;padding:7px 14px;border-radius:8px;font-size:.8rem;font-weight:700;font-family:'Sora',sans-serif;cursor:pointer;border:1.5px solid var(--border);background:#fff;color:var(--charcoal);transition:border-color .18s,background .18s,color .18s}
+.da-btn:hover{border-color:var(--teal);color:var(--teal);background:var(--teal-xl)}
+.da-btn.taken-btn{border-color:#d0a000;color:#a06a00;background:#fff8e0}
+.da-btn.taken-btn:hover{background:#ffedb0}
+.da-btn.active-btn{border-color:#1a8c4a;color:#1a8c4a;background:#e0f8ec}
+.da-btn.active-btn:hover{background:#b8f0d0}
+.da-btn.del-btn{border-color:#fcc;color:#c0392b;background:#fff5f5}
+.da-btn.del-btn:hover{background:#ffe0e0}
+.dcard-unlocks{font-size:.78rem;color:var(--mid);display:flex;align-items:center;gap:5px;margin-top:8px;padding-top:8px;border-top:1px solid var(--border)}
+.dcard-unlocks i{color:var(--teal)}
+.dash-new-btn{display:flex;align-items:center;justify-content:center;gap:9px;width:100%;background:linear-gradient(135deg,var(--orange),var(--orange-d));color:#fff;border:none;border-radius:11px;padding:14px;font-size:.95rem;font-weight:700;font-family:'Sora',sans-serif;cursor:pointer;box-shadow:0 4px 14px rgba(224,122,44,.35);transition:transform .15s,box-shadow .15s;margin-top:4px}
+.dash-new-btn:hover{transform:translateY(-2px);box-shadow:0 8px 22px rgba(224,122,44,.42)}
+
+/* ═══ EDIT MODAL ═══ */
+.modal-overlay{position:fixed;inset:0;z-index:500;background:rgba(20,28,30,.7);backdrop-filter:blur(4px);opacity:0;pointer-events:none;transition:opacity .3s}
+.modal-overlay.open{opacity:1;pointer-events:all}
+.edit-modal{position:fixed;top:50%;left:50%;z-index:501;width:calc(100% - 32px);max-width:480px;background:#fff;border-radius:20px;box-shadow:0 24px 64px rgba(0,0,0,.22);transform:translate(-50%,-50%) scale(.95);opacity:0;pointer-events:none;transition:transform .3s cubic-bezier(.22,.9,.42,1),opacity .3s;overflow:hidden}
+.edit-modal.open{transform:translate(-50%,-50%) scale(1);opacity:1;pointer-events:all}
+.em-header{display:flex;align-items:center;justify-content:space-between;padding:18px 22px;border-bottom:1.5px solid var(--border)}
+.em-header h3{font-size:1.05rem;font-weight:800}
+.em-body{padding:20px 22px 24px;display:flex;flex-direction:column;gap:14px;max-height:70vh;overflow-y:auto}
+
+
+.wa-same-chip{display:inline-flex;align-items:center;gap:6px;margin-top:6px;padding:5px 12px;border-radius:100px;border:1.5px solid #25d366;background:#f0fff5;color:#1a8c4a;font-size:.75rem;font-weight:700;font-family:'Sora',sans-serif;cursor:pointer;transition:background .18s;width:fit-content}
+.wa-same-chip:hover{background:#d0f5e0}
+.wa-same-chip i{font-size:.7rem}
+
+/* ═══ PHOTO UPLOAD ═══ */
+.photo-upload-zone{border:2px dashed var(--border);border-radius:14px;padding:32px 20px;text-align:center;cursor:pointer;background:var(--light);transition:border-color .2s,background .2s;display:flex;flex-direction:column;align-items:center;gap:8px}
+.photo-upload-zone:hover{border-color:var(--teal);background:var(--teal-xl)}
+.photo-upload-zone i{font-size:2rem;color:var(--teal);opacity:.7}
+.photo-upload-zone span{font-size:.92rem;font-weight:700;color:var(--charcoal)}
+.photo-upload-zone small{font-size:.75rem;color:var(--muted)}
+.photo-upload-zone.dragover{border-color:var(--teal);background:var(--teal-l)}
+.photo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}
+.photo-thumb{position:relative;aspect-ratio:1;border-radius:10px;overflow:hidden;border:1.5px solid var(--border)}
+.photo-thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.photo-thumb .pt-remove{position:absolute;top:5px;right:5px;width:22px;height:22px;border-radius:50%;background:rgba(0,0,0,.6);border:none;color:#fff;font-size:.65rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .18s}
+.photo-thumb .pt-remove:hover{background:#c0392b}
+.photo-thumb .pt-primary{position:absolute;bottom:5px;left:5px;background:var(--teal);color:#fff;font-size:.62rem;font-weight:800;padding:2px 7px;border-radius:100px;text-transform:uppercase;letter-spacing:.3px}
+.photo-thumb .pt-uploading{position:absolute;inset:0;background:rgba(255,255,255,.8);display:flex;align-items:center;justify-content:center;font-size:1.2rem;color:var(--teal)}
+.photo-skip-note{display:flex;align-items:flex-start;gap:12px;background:var(--light);border:1.5px solid var(--border);border-radius:12px;padding:14px 16px}
+.photo-skip-note i{color:var(--orange);font-size:1.1rem;flex-shrink:0;margin-top:2px}
+.photo-skip-note strong{display:block;font-size:.85rem;font-weight:800;color:var(--charcoal);margin-bottom:3px}
+.photo-skip-note span{font-size:.82rem;color:var(--mid);line-height:1.55}
+</style>
+</head>
+<body>
+
+<div class="toast" id="toast"><i class="fa-solid fa-heart"></i><span id="toastMsg">Saved!</span></div>
+
+<!-- HEADER -->
+<header>
+  <div class="hdr">
+    <a href="#" class="logo"><div class="logo-badge"><i class="fa-solid fa-house"></i></div><span class="logo-text">Kasi<span>24</span></span></a>
+    <nav class="dnav">
+      <a href="#listings">Browse</a>
+      <a href="#landlords">List Property</a>
+      <a href="#hiw">How It Works</a>
+      <!-- Logged OUT state -->
+      <a href="#" class="btn-login" id="btnLogin" onclick="openAuthPanel('login');return false;">Login</a>
+      <!-- Logged IN state — hidden by default -->
+      <div class="landlord-hdr-btns" id="landlordHdrBtns" style="display:none;align-items:center;gap:10px;">
+        <span class="landlord-greeting" id="landlordGreeting"></span>
+        <a href="#" class="btn-dashboard" onclick="openDashboard();return false;"><i class="fa-solid fa-gauge"></i> My Listings</a>
+        <a href="#" class="btn-signout" onclick="signOut();return false;"><i class="fa-solid fa-right-from-bracket"></i></a>
+      </div>
+    </nav>
+    <button class="ham" id="hamBtn" onclick="toggleMenu()" aria-label="Menu"><i class="fa-solid fa-bars" id="hamIcon"></i></button>
+  </div>
+</header>
+<div class="mdrawer" id="mdrawer">
+  <a href="#listings"  onclick="closeMenu()"><i class="fa-solid fa-magnifying-glass"></i> Browse Listings</a>
+  <a href="#landlords" onclick="closeMenu()"><i class="fa-solid fa-plus"></i> List Your Property</a>
+  <a href="#hiw"       onclick="closeMenu()"><i class="fa-solid fa-circle-info"></i> How It Works</a>
+  <a href="#" id="mobileAuthLink" onclick="openAuthPanel('login');closeMenu();return false;"><i class="fa-solid fa-user"></i> Login / Register</a>
+  <a href="#" id="mobileDashLink" onclick="openDashboard();closeMenu();return false;" style="display:none"><i class="fa-solid fa-gauge"></i> My Listings</a>
+  <a href="#" id="mobileSignOut"  onclick="signOut();return false;" style="display:none"><i class="fa-solid fa-right-from-bracket"></i> Sign Out</a>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="blob b1"></div><div class="blob b2"></div>
+  <div class="hero-in">
+    <div class="pill"><div class="ldot"></div> KwaNdebele's Most Trusted Platform</div>
+    <h1>Find Your Next Home<br>in <span class="acc">Kwamhlanga</span></h1>
+    <p class="hero-sub">Rooms, flats &amp; houses. No agent fees.<br>Just <strong>R10</strong> to connect directly with the landlord.</p>
+    <div class="scard">
+      <div class="stop">
+        <div class="sf">
+          <label><i class="fa-solid fa-location-dot"></i>&nbsp; Area</label>
+          <select id="areaFilter"><option value="">All Areas</option><option>Slovo Park</option><option>Extension 1</option><option>Extension 2</option><option>Extension 3</option><option>CPA</option><option>Phola Park</option><option>Mandela Village</option><option>Hospital View</option></select>
+        </div>
+        <div class="sf">
+          <label><i class="fa-solid fa-building"></i>&nbsp; Property Type</label>
+          <select id="heroType"><option value="all">All Types</option><option value="room">Room To Let</option><option value="backroom">Back Room To Let</option><option value="flat">Flat To Let</option><option value="house">House To Let</option></select>
+        </div>
+        <button class="btn-search" id="heroSearchBtn"><i class="fa-solid fa-magnifying-glass"></i> Search</button>
+      </div>
+      <div class="prange">
+        <div class="pr-hdr">
+          <span class="pr-label"><i class="fa-solid fa-tag"></i>&nbsp; Price Range (R/month)</span>
+          <div class="pr-inputs">
+            <div class="pf"><span class="pf-lbl">Min</span><div class="piw"><span class="ppfx">R</span><input type="number" id="minInput" value="500" min="500" max="8000" step="100"></div></div>
+            <span class="psep">—</span>
+            <div class="pf"><span class="pf-lbl">Max</span><div class="piw"><span class="ppfx">R</span><input type="number" id="maxInput" value="8000" min="500" max="8000" step="100"></div></div>
+          </div>
+        </div>
+        <div class="rwrap">
+          <div class="rtrack"></div>
+          <div class="rfill" id="rfill"></div>
+          <input type="range" class="ri" id="minRange" min="500" max="8000" step="100" value="500">
+          <input type="range" class="ri" id="maxRange" min="500" max="8000" step="100" value="8000">
+        </div>
+      </div>
+    </div>
+    <div class="hstats">
+      <div class="hstat"><strong>120+</strong><span>Active Listings</span></div>
+      <div class="hstat"><strong>R10</strong><span>To Unlock Contact</span></div>
+      <div class="hstat"><strong>0</strong><span>Agent Fees</span></div>
+      <div class="hstat"><strong>5</strong><span>Property Types</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- LISTINGS -->
+<section class="listings-sec" id="listings">
+  <p class="eyebrow">Available Now</p>
+  <h2 class="sec-title">Browse Listings</h2>
+  <p class="sec-sub">Filter by type. Browse free — pay R10 to unlock a contact.</p>
+  <div class="tab-scroll">
+    <div class="tab-bar" role="tablist">
+      <button class="tab-btn active" data-tab="all"      onclick="switchTab(this,'all')"      role="tab"><i class="fa-solid fa-th-large"></i> All <span class="cbadge">14</span></button>
+      <button class="tab-btn"        data-tab="room"     onclick="switchTab(this,'room')"     role="tab"><i class="fa-solid fa-door-open"></i> Room To Let <span class="cbadge">4</span></button>
+      <button class="tab-btn"        data-tab="backroom" onclick="switchTab(this,'backroom')" role="tab"><i class="fa-solid fa-tree"></i> Back Room <span class="cbadge">4</span></button>
+      <button class="tab-btn"        data-tab="flat"     onclick="switchTab(this,'flat')"     role="tab"><i class="fa-solid fa-building"></i> Flat To Let <span class="cbadge">3</span></button>
+      <button class="tab-btn"        data-tab="house"    onclick="switchTab(this,'house')"    role="tab"><i class="fa-solid fa-house-chimney"></i> House To Let <span class="cbadge">3</span></button>
+    </div>
+  </div>
+  <div class="lgrid" id="lgrid"></div>
+  <div class="lf"><a href="#" class="btn-outline"><i class="fa-solid fa-th-large"></i> View All 120+ Listings</a></div>
+</section>
+
+<!-- HIW -->
+<section class="hiw" id="hiw">
+  <p class="eyebrow">Simple Process</p><h2 class="sec-title">How Kasi24 Works</h2>
+  <p class="sec-sub">Three steps. No account needed to browse. No monthly fees, ever.</p>
+  <div class="hiw-grid">
+    <div class="hiw-con"></div>
+    <div class="hiw-card"><div class="hiw-ico"><i class="fa-solid fa-house-chimney-window"></i><span class="snum">1</span></div><h3>Browse Listings</h3><p>See photos, prices, locations and features completely free. No sign-up required.</p></div>
+    <div class="hiw-card"><div class="hiw-ico"><i class="fa-solid fa-lock-open"></i><span class="snum">2</span></div><h3>Unlock Contact</h3><p>Found a place? Pay R10 via SnapScan or Ozow to instantly see the landlord's number.</p></div>
+    <div class="hiw-card"><div class="hiw-ico"><i class="fa-solid fa-key"></i><span class="snum">3</span></div><h3>Move In</h3><p>Call directly, arrange your viewing, negotiate your move-in date. Done.</p></div>
+  </div>
+  <div class="hiw-note"><i class="fa-solid fa-circle-check"></i> No subscriptions. No monthly fees. You only pay to connect.</div>
+</section>
+
+<!-- LANDLORDS -->
+<section class="landlords" id="landlords">
+  <div class="ll-in">
+    <div>
+      <p class="l-ey">For Property Owners</p>
+      <h2>Have a Room to Rent?<br><em>List for Free.</em></h2>
+      <p class="l-copy">No listing fees. No contracts. No middlemen. Post your property and let tenants find you. Only serious people — those who paid R10 — will ever call you.</p>
+      <ul class="bens">
+        <li><span class="bchk"><i class="fa-solid fa-check"></i></span> Free to list your property — always</li>
+        <li><span class="bchk"><i class="fa-solid fa-check"></i></span> Reach tenants in Kwamhlanga directly</li>
+        <li><span class="bchk"><i class="fa-solid fa-check"></i></span> No time-wasters — they paid to contact you</li>
+        <li><span class="bchk"><i class="fa-solid fa-check"></i></span> Manage listings from your phone</li>
+      </ul>
+      <button class="btn-teal" onclick="openWizard()"><i class="fa-solid fa-plus"></i> List Your Property Now</button>
+    </div>
+    <div class="lcards">
+      <div class="lcrd"><div class="lcrd-ico"><i class="fa-solid fa-eye"></i></div><div><div class="lcrd-lbl">Avg. Views / Week</div><div class="lcrd-val">47 views</div></div></div>
+      <div class="lcrd"><div class="lcrd-ico"><i class="fa-solid fa-phone"></i></div><div><div class="lcrd-lbl">Avg. Unlocks / Week</div><div class="lcrd-val">6 unlocks</div></div></div>
+      <div class="lcrd"><div class="lcrd-ico"><i class="fa-solid fa-clock"></i></div><div><div class="lcrd-lbl">Avg. Time to Let</div><div class="lcrd-val">&lt; 2 weeks</div></div></div>
+      <div class="lcrd"><div class="lcrd-ico"><i class="fa-solid fa-money-bill-wave"></i></div><div><div class="lcrd-lbl">Your Listing Cost</div><div class="lcrd-val">R0 — Free</div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY -->
+<section class="why">
+  <p class="eyebrow">Our Values</p><h2 class="sec-title">Why Kasi24?</h2>
+  <p class="sec-sub">Built for Kwamhlanga. No corporate nonsense.</p>
+  <div class="why-grid">
+    <div class="why-card"><div class="why-ico"><i class="fa-solid fa-handshake-slash"></i></div><div><h3>No Agents, No Middlemen</h3><p>We connect tenants directly to landlords. No agent taking a cut, no fees between you and your next home.</p></div></div>
+    <div class="why-card"><div class="why-ico"><i class="fa-solid fa-coins"></i></div><div><h3>Cheaper Than a Taxi to a Fake Listing</h3><p>R10 to unlock a contact — cheaper than taxi fare to view a place that doesn't exist.</p></div></div>
+    <div class="why-card"><div class="why-ico"><i class="fa-solid fa-shield-halved"></i></div><div><h3>Your Safety Matters</h3><p>We're building verification. Until then: view in daylight, bring someone you trust, never pay a deposit unseen.</p></div></div>
+    <div class="why-card"><div class="why-ico"><i class="fa-solid fa-map-location-dot"></i></div><div><h3>Local Numbers Only</h3><p>Real Kwamhlanga people renting to real Kwamhlanga people. No call centres, no out-of-town investors.</p></div></div>
+  </div>
+</section>
+
+<!-- PAYMENT -->
+<section class="payment">
+  <p class="eyebrow">Secure Payment</p>
+  <h2 class="sec-title" style="font-size:1.6rem;margin-bottom:10px;">Pay Safely With</h2>
+  <p>Trusted South African platforms. No cash, no EFTs to strangers.</p>
+  <div class="pmrow">
+    <div class="pmchip"><i class="fa-solid fa-qrcode"></i> SnapScan</div>
+    <div class="pmchip"><i class="fa-solid fa-mobile-screen"></i> Ozow</div>
+    <div class="pmchip"><i class="fa-solid fa-lock"></i> Secure &amp; Instant</div>
+    <div class="pmchip"><i class="fa-solid fa-receipt"></i> R10 flat fee</div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="fi">
+    <div class="ft">
+      <div>
+        <a href="#" class="fl"><div class="fl-b"><i class="fa-solid fa-house"></i></div><span class="fl-t">Kasi<span>24</span></span></a>
+        <p class="ftag">Kwamhlanga's local rental marketplace. Find rooms, flats &amp; houses — no agents, no nonsense.</p>
+        <div class="socs"><a href="#" class="sb"><i class="fa-brands fa-facebook-f"></i></a><a href="#" class="sb"><i class="fa-brands fa-whatsapp"></i></a><a href="#" class="sb"><i class="fa-brands fa-tiktok"></i></a><a href="#" class="sb"><i class="fa-brands fa-instagram"></i></a></div>
+      </div>
+      <div class="fc"><h4>Browse</h4><a href="#">Room To Let</a><a href="#">Back Room To Let</a><a href="#">Flat To Let</a><a href="#">House To Let</a></div>
+      <div class="fc"><h4>Areas</h4><a href="#">Slovo Park</a><a href="#">Extension 1 &amp; 2</a><a href="#">CPA</a><a href="#">Phola Park</a><a href="#">Mandela Village</a></div>
+      <div class="fc"><h4>Contact</h4><a href="/cdn-cgi/l/email-protection#c5acaba3aa85aea4b6acf7f1eba6aaebbfa4"><i class="fa-solid fa-envelope" style="color:var(--teal);margin-right:6px"></i><span class="__cf_email__" data-cfemail="50393e363f103b31233962647e333f7e2a31">[email&#160;protected]</span></a><a href="#"><i class="fa-brands fa-whatsapp" style="color:var(--teal);margin-right:6px"></i>WhatsApp Us</a><a href="#">Privacy Policy</a><a href="#">Terms of Use</a></div>
+    </div>
+    <div class="fb"><span>© 2025 Kasi24.co.za — All rights reserved</span><div class="pride"><i class="fa-solid fa-heart"></i> Proudly Kwamhlanga</div></div>
+  </div>
+</footer>
+
+<!-- MOBILE BOTTOM NAV -->
+<nav class="bnav"><div class="bnav-in">
+  <button class="bb active" onclick="bnav(this,'#listings')"><i class="fa-solid fa-house"></i><span>Browse</span></button>
+  <button class="bb"        onclick="bnav(this,'#listings')"><i class="fa-solid fa-magnifying-glass"></i><span>Search</span></button>
+  <button class="bb bb-cta" onclick="openWizard()"><i class="fa-solid fa-plus"></i><span>List</span></button>
+  <button class="bb"        onclick="bnav(this,'#hiw')"><i class="fa-solid fa-circle-info"></i><span>How</span></button>
+  <button class="bb"        onclick="openAuthPanel('login')"><i class="fa-solid fa-user"></i><span>Login</span></button>
+</div></nav>
+
+<!-- ═══ AUTH PANEL ═══ -->
+<div class="side-overlay" id="authOverlay" onclick="closeAuthPanel()"></div>
+<div class="side-panel" id="authPanel">
+  <div class="sp-header">
+    <div class="sp-logo">Kasi<span>24</span></div>
+    <button class="sp-close" onclick="closeAuthPanel()"><i class="fa-solid fa-xmark"></i></button>
+  </div>
+
+  <!-- LOGIN VIEW -->
+  <div class="auth-view" id="viewLogin">
+    <div class="auth-intro">
+      <h2>Welcome back</h2>
+      <p>Sign in to manage your listings</p>
+    </div>
+    <div class="auth-form">
+      <div class="af">
+        <label>Email Address</label>
+        <input type="email" id="loginEmail" class="wi" placeholder="your@email.com">
+      </div>
+      <div class="af">
+        <label>Password</label>
+        <div class="pw-wrap">
+          <input type="password" id="loginPassword" class="wi" placeholder="Your password">
+          <button type="button" class="pw-toggle" onclick="togglePw('loginPassword',this)"><i class="fa-solid fa-eye"></i></button>
+        </div>
+      </div>
+      <div class="auth-err" id="loginErr"></div>
+      <button class="auth-btn" id="loginBtn" onclick="doLogin()">
+        <i class="fa-solid fa-right-to-bracket"></i> Sign In
+      </button>
+      <button class="auth-link-btn" onclick="switchView('viewForgot')">Forgot your password?</button>
+    </div>
+    <div class="auth-switch">
+      Don't have an account? <button onclick="switchView('viewRegister')">Register here</button>
+    </div>
+  </div>
+
+  <!-- REGISTER VIEW -->
+  <div class="auth-view" id="viewRegister" style="display:none">
+    <div class="auth-intro">
+      <h2>Create your account</h2>
+      <p>List your property on Kasi24 for free</p>
+    </div>
+    <div class="auth-form">
+      <div class="af">
+        <label>Full Name</label>
+        <input type="text" id="regName" class="wi" placeholder="e.g. Thembi Dlamini">
+      </div>
+      <div class="af">
+        <label>Email Address</label>
+        <input type="email" id="regEmail" class="wi" placeholder="your@email.com">
+      </div>
+      <div class="af">
+        <label>Phone Number</label>
+        <div class="ipw"><span class="ipfx">🇿🇦</span><input type="tel" id="regPhone" class="wi pre" placeholder="071 234 5678" maxlength="15"></div>
+      </div>
+      <div class="af">
+        <label>Password</label>
+        <div class="pw-wrap">
+          <input type="password" id="regPassword" class="wi" placeholder="At least 8 characters">
+          <button type="button" class="pw-toggle" onclick="togglePw('regPassword',this)"><i class="fa-solid fa-eye"></i></button>
+        </div>
+      </div>
+      <div class="auth-err" id="regErr"></div>
+      <button class="auth-btn" id="regBtn" onclick="doRegister()">
+        <i class="fa-solid fa-user-plus"></i> Create Account
+      </button>
+    </div>
+    <div class="auth-switch">
+      Already have an account? <button onclick="switchView('viewLogin')">Sign in here</button>
+    </div>
+  </div>
+
+  <!-- FORGOT PASSWORD VIEW -->
+  <div class="auth-view" id="viewForgot" style="display:none">
+    <div class="auth-intro">
+      <h2>Reset your password</h2>
+      <p>We'll send a reset link to your email</p>
+    </div>
+    <div class="auth-form">
+      <div class="af">
+        <label>Email Address</label>
+        <input type="email" id="forgotEmail" class="wi" placeholder="your@email.com">
+      </div>
+      <div class="auth-err" id="forgotErr"></div>
+      <button class="auth-btn" id="forgotBtn" onclick="doForgot()">
+        <i class="fa-solid fa-paper-plane"></i> Send Reset Link
+      </button>
+      <button class="auth-link-btn" onclick="switchView('viewLogin')"><i class="fa-solid fa-arrow-left"></i> Back to login</button>
+    </div>
+  </div>
+
+  <!-- VERIFY EMAIL VIEW -->
+  <div class="auth-view" id="viewVerify" style="display:none">
+    <div class="auth-verify">
+      <div class="verify-ico"><i class="fa-solid fa-envelope-circle-check"></i></div>
+      <h2>Check your email</h2>
+      <p>We sent a verification link to <strong id="verifyEmailDisplay"></strong></p>
+      <p class="verify-note">Click the link in the email to activate your account, then come back here to sign in.</p>
+      <button class="auth-btn outline" onclick="switchView('viewLogin')">Back to Sign In</button>
+      <button class="auth-link-btn" onclick="doResendVerify()">Resend verification email</button>
+    </div>
+  </div>
+
+  <!-- RESET SENT VIEW -->
+  <div class="auth-view" id="viewResetSent" style="display:none">
+    <div class="auth-verify">
+      <div class="verify-ico" style="background:linear-gradient(135deg,#fff8ee,#fdecd8)"><i class="fa-solid fa-paper-plane" style="color:var(--orange)"></i></div>
+      <h2>Reset link sent!</h2>
+      <p>Check your email for a password reset link.</p>
+      <button class="auth-btn outline" onclick="switchView('viewLogin')">Back to Sign In</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ DASHBOARD PANEL ═══ -->
+<div class="side-overlay" id="dashOverlay" onclick="closeDashboard()"></div>
+<div class="side-panel side-panel-wide" id="dashPanel">
+  <div class="sp-header">
+    <div class="sp-logo">My Listings</div>
+    <button class="sp-close" onclick="closeDashboard()"><i class="fa-solid fa-xmark"></i></button>
+  </div>
+  <div class="dash-body" id="dashBody">
+    <!-- populated by JS -->
+  </div>
+</div>
+
+<!-- ═══ EDIT LISTING MODAL ═══ -->
+<div class="modal-overlay" id="editOverlay" onclick="closeEditModal()"></div>
+<div class="edit-modal" id="editModal">
+  <div class="em-header">
+    <h3>Edit Listing</h3>
+    <button class="sp-close" onclick="closeEditModal()"><i class="fa-solid fa-xmark"></i></button>
+  </div>
+  <div class="em-body">
+    <input type="hidden" id="editId">
+    <div class="af"><label>Title</label><input type="text" id="editTitle" class="wi" placeholder="Listing title"></div>
+    <div class="af"><label>Monthly Rent (R)</label><input type="number" id="editRent" class="wi" placeholder="2500" min="300"></div>
+    <div class="af"><label>Deposit (R)</label><input type="number" id="editDeposit" class="wi" placeholder="0"></div>
+    <div class="af"><label>Available From</label><input type="date" id="editAvail" class="wi"></div>
+    <div class="af"><label>Notes</label><textarea id="editNotes" class="wi wtextarea" rows="3" placeholder="Any extra details…" maxlength="400"></textarea></div>
+    <div class="auth-err" id="editErr"></div>
+    <button class="auth-btn" onclick="saveEdit()"><i class="fa-solid fa-floppy-disk"></i> Save Changes</button>
+  </div>
+</div>
+
+<!-- ═══ WIZARD ═══ -->
+<div class="woverlay" id="woverlay">
+ <div class="wpanel" id="wpanel">
+  <div class="whdr">
+   <div class="whdr-top">
+    <div class="wlogo">Kasi<span>24</span> — List Property</div>
+    <button class="wclose" onclick="closeWizard()"><i class="fa-solid fa-xmark"></i></button>
+   </div>
+   <div class="wstep-lbls">
+    <span class="wsl active" data-s="1">Basics</span>
+    <span class="wsl" data-s="2">Pricing</span>
+    <span class="wsl" data-s="3">Details</span>
+    <span class="wsl" data-s="4">Extras</span>
+    <span class="wsl" data-s="5">Contact</span>
+    <span class="wsl" data-s="6">Photos</span>
+    <span class="wsl" data-s="p">Preview</span>
+   </div>
+   <div class="wbar-track"><div class="wbar-fill" id="wbar"></div></div>
+  </div>
+
+  <div class="wbody" id="wbody">
+
+   <!-- STEP 1 -->
+   <div class="wstep active" id="ws1">
+    <div class="sintro"><div class="sico"><i class="fa-solid fa-house-chimney"></i></div><h2>Let's start with the basics</h2><p>Tell us what kind of property you're listing and where it is.</p></div>
+    <div class="fgrid">
+     <div class="ff full">
+      <label>Property Type <span class="req">*</span></label>
+      <div class="tpicker" id="tpicker">
+       <button type="button" class="topt" data-v="room"     onclick="pickType(this)"><i class="fa-solid fa-door-open"></i><span>Room To Let</span><small>Inside the house</small></button>
+       <button type="button" class="topt" data-v="backroom" onclick="pickType(this)"><i class="fa-solid fa-tree"></i><span>Back Room</span><small>Outside / yard</small></button>
+       <button type="button" class="topt" data-v="flat"     onclick="pickType(this)"><i class="fa-solid fa-building"></i><span>Flat To Let</span><small>Self-contained</small></button>
+       <button type="button" class="topt" data-v="house"    onclick="pickType(this)"><i class="fa-solid fa-house-chimney"></i><span>House To Let</span><small>Full house</small></button>
+      </div>
+      <span class="ferr" id="typeErr">Please select a property type</span>
+     </div>
+     <div class="ff">
+      <label for="w_area">Area <span class="req">*</span></label>
+      <select id="w_area" class="wi"><option value="">Choose area…</option><option>Slovo Park</option><option>Extension 1</option><option>Extension 2</option><option>Extension 3</option><option>CPA</option><option>Phola Park</option><option>Mandela Village</option><option>Hospital View</option><option>Other</option></select>
+      <span class="ferr" id="areaErr">Please select your area</span>
+     </div>
+     <div class="ff">
+      <label for="w_street">Street / Road <span class="hint">(optional)</span></label>
+      <input type="text" id="w_street" class="wi" placeholder="e.g. Mhlanga Street">
+      <p class="fhint"><i class="fa-solid fa-eye-slash"></i> Never shown to tenants</p>
+     </div>
+     <div class="ff">
+      <label for="w_avail">Available From <span class="req">*</span></label>
+      <input type="date" id="w_avail" class="wi">
+      <span class="ferr" id="availErr">Please set a date</span>
+     </div>
+
+    </div>
+   </div>
+
+   <!-- STEP 2 -->
+   <div class="wstep" id="ws2">
+    <div class="sintro"><div class="sico" style="background:linear-gradient(135deg,#fff8ee,#fdecd8)"><i class="fa-solid fa-coins" style="color:var(--orange)"></i></div><h2>Pricing &amp; deposit</h2><p>Be transparent — tenants trust listings more when everything is clear upfront.</p></div>
+    <div class="fgrid">
+     <div class="ff">
+      <label>Monthly Rent <span class="req">*</span></label>
+      <div class="ipw" id="rentWrap"><span class="ipfx">R</span><input type="number" id="w_rent" class="wi pre" placeholder="2 500" min="300" max="50000" step="100"></div>
+      <span class="ferr" id="rentErr">Please enter the monthly rent</span>
+     </div>
+     <div class="ff">
+      <label>Deposit Required</label>
+      <div class="ipw"><span class="ipfx">R</span><input type="number" id="w_deposit" class="wi pre" placeholder="0 if none" min="0" step="100"></div>
+      <p class="fhint"><i class="fa-solid fa-circle-info"></i> Shown upfront — builds trust</p>
+     </div>
+     <div class="ff full">
+      <label>What's included in the rent?</label>
+      <div class="cgrid" id="inclGrid">
+       <label class="copt"><input type="checkbox" value="water"><i class="fa-solid fa-droplet"></i> Water</label>
+       <label class="copt"><input type="checkbox" value="electricity"><i class="fa-solid fa-bolt"></i> Electricity</label>
+       <label class="copt"><input type="checkbox" value="wifi"><i class="fa-solid fa-wifi"></i> WiFi</label>
+       <label class="copt"><input type="checkbox" value="refuse"><i class="fa-solid fa-trash"></i> Refuse removal</label>
+       <label class="copt"><input type="checkbox" value="security"><i class="fa-solid fa-shield-halved"></i> Security</label>
+       <label class="copt"><input type="checkbox" value="dstv"><i class="fa-solid fa-satellite-dish"></i> DStv signal</label>
+      </div>
+     </div>
+     <div class="ff full">
+      <label>Payment preference</label>
+      <div class="rrow">
+       <label class="ropt"><input type="radio" name="ppref" value="monthly" checked> Monthly</label>
+       <label class="ropt"><input type="radio" name="ppref" value="weekly"> Weekly</label>
+       <label class="ropt"><input type="radio" name="ppref" value="negotiate"> Negotiable</label>
+      </div>
+     </div>
+    </div>
+   </div>
+
+   <!-- STEP 3 -->
+   <div class="wstep" id="ws3">
+    <div class="sintro"><div class="sico" style="background:linear-gradient(135deg,#f0fde8,#d8f5c0)"><i class="fa-solid fa-list-check" style="color:#3a8c10"></i></div><h2>Details &amp; rules</h2><p>Help tenants know exactly what to expect. Good details = fewer wrong calls.</p></div>
+    <div class="fgrid">
+     <div class="ff"><label>Bedrooms</label><select id="w_beds" class="wi"><option value="1">1 Bedroom / Room</option><option value="2">2 Bedrooms</option><option value="3">3 Bedrooms</option><option value="4">4+ Bedrooms</option><option value="bachelor">Bachelor / Studio</option></select></div>
+     <div class="ff"><label>Bathroom</label><select id="w_bath" class="wi"><option value="private">Private bathroom</option><option value="shared">Shared bathroom</option><option value="ensuite">En-suite</option><option value="outside">Outside bathroom</option></select></div>
+     <div class="ff full">
+      <label>Tenant preferences</label>
+      <div class="cgrid" id="prefGrid">
+       <label class="copt"><input type="checkbox" value="no_smokers"><i class="fa-solid fa-ban"></i> No smokers</label>
+       <label class="copt"><input type="checkbox" value="no_pets"><i class="fa-solid fa-paw"></i> No pets</label>
+       <label class="copt"><input type="checkbox" value="no_kids"><i class="fa-solid fa-baby"></i> No small children</label>
+       <label class="copt"><input type="checkbox" value="working"><i class="fa-solid fa-briefcase"></i> Working professionals</label>
+       <label class="copt"><input type="checkbox" value="students"><i class="fa-solid fa-graduation-cap"></i> Students welcome</label>
+       <label class="copt"><input type="checkbox" value="couples"><i class="fa-solid fa-heart"></i> Couples welcome</label>
+       <label class="copt"><input type="checkbox" value="single"><i class="fa-solid fa-user"></i> Single person only</label>
+       <label class="copt"><input type="checkbox" value="female"><i class="fa-solid fa-venus"></i> Female only</label>
+      </div>
+     </div>
+     <div class="ff full"><label>Furnished?</label><select id="w_furn" class="wi"><option value="unfurnished">Unfurnished</option><option value="furnished">Fully furnished</option><option value="semi">Semi-furnished</option></select></div>
+    </div>
+   </div>
+
+   <!-- STEP 4 -->
+   <div class="wstep" id="ws4">
+    <div class="sintro"><div class="sico" style="background:linear-gradient(135deg,#f0f0ff,#d8d8ff)"><i class="fa-solid fa-star" style="color:#6060c8"></i></div><h2>Extras &amp; amenities</h2><p>These small details can be the reason a tenant picks your listing over another.</p></div>
+    <div class="fgrid">
+     <div class="ff full">
+      <label>Available amenities</label>
+      <div class="cgrid agrid" id="amenGrid">
+       <label class="copt"><input type="checkbox" value="parking"><i class="fa-solid fa-car"></i> Safe parking</label>
+       <label class="copt"><input type="checkbox" value="wifi"><i class="fa-solid fa-wifi"></i> Free WiFi</label>
+       <label class="copt"><input type="checkbox" value="laundry"><i class="fa-solid fa-shirt"></i> Laundry area</label>
+       <label class="copt"><input type="checkbox" value="yard"><i class="fa-solid fa-tree"></i> Yard / garden</label>
+       <label class="copt"><input type="checkbox" value="fence"><i class="fa-solid fa-shield"></i> Fenced property</label>
+       <label class="copt"><input type="checkbox" value="geyser"><i class="fa-solid fa-fire"></i> Geyser / hot water</label>
+       <label class="copt"><input type="checkbox" value="stove"><i class="fa-solid fa-utensils"></i> Stove / cooking</label>
+       <label class="copt"><input type="checkbox" value="storage"><i class="fa-solid fa-box"></i> Storage space</label>
+       <label class="copt"><input type="checkbox" value="prepaid"><i class="fa-solid fa-bolt"></i> Prepaid meter</label>
+       <label class="copt"><input type="checkbox" value="solar"><i class="fa-solid fa-sun"></i> Solar / no loadshedding</label>
+       <label class="copt"><input type="checkbox" value="gate"><i class="fa-solid fa-lock"></i> Security gate</label>
+       <label class="copt"><input type="checkbox" value="cctv"><i class="fa-solid fa-camera"></i> CCTV cameras</label>
+      </div>
+     </div>
+     <div class="ff full">
+      <label for="w_notes">Additional notes <span class="hint">(optional)</span></label>
+      <textarea id="w_notes" class="wi wtextarea" placeholder="e.g. Quiet street, close to taxi rank, 5 min walk to shops…" rows="4" maxlength="400"></textarea>
+      <div class="ccount"><span id="charCount">0</span> / 400</div>
+     </div>
+    </div>
+   </div>
+
+   <!-- STEP 5 -->
+   <div class="wstep" id="ws5">
+    <div class="sintro"><div class="sico" style="background:linear-gradient(135deg,#fff0f8,#ffd8ee)"><i class="fa-solid fa-user" style="color:#c0408a"></i></div><h2>Your contact details</h2><p>Your phone number is hidden until a tenant pays R10. Your ID is private and never shown.</p></div>
+    <div class="fgrid">
+     <div class="ff full"><label for="w_name">Your Name <span class="req">*</span></label><input type="text" id="w_name" class="wi" placeholder="e.g. Thembi Dlamini"><span class="ferr" id="nameErr">Please enter your name</span></div>
+     <div class="ff full"><label for="w_email">Email Address <span class="req">*</span></label><input type="email" id="w_email" class="wi" placeholder="e.g. thembi@gmail.com"><span class="ferr" id="emailErr">Please enter a valid email address</span><p class="fhint"><i class="fa-solid fa-envelope"></i> Used for login and listing notifications — never shown to tenants</p></div>
+     <div class="ff">
+      <label>Phone Number <span class="req">*</span></label>
+      <div class="ipw" id="phoneWrap"><span class="ipfx">🇿🇦</span><input type="tel" id="w_phone" class="wi pre" placeholder="071 234 5678" maxlength="12" oninput="fmtPhone(this)"></div>
+      <span class="ferr" id="phoneErr">Please enter a valid SA number</span>
+     </div>
+     <div class="ff">
+      <label>WhatsApp <span class="hint">(if different)</span></label>
+      <div class="ipw"><span class="ipfx"><i class="fa-brands fa-whatsapp" style="color:#25d366"></i></span><input type="tel" id="w_wa" class="wi pre" placeholder="071 234 5678" maxlength="12" oninput="fmtPhone(this)"></div>
+      <button type="button" class="wa-same-chip" onclick="copyPhoneToWa()"><i class="fa-solid fa-copy"></i> Same as phone number</button>
+     </div>
+     <div class="ff full"><label for="w_id">SA ID Number <span class="hint">(private — never shown)</span></label><input type="text" id="w_id" class="wi" placeholder="13-digit SA ID number" maxlength="13"><p class="fhint"><i class="fa-solid fa-lock"></i> Stored securely. Used only for accountability.</p></div>
+     <div class="ff full">
+      <label class="copt terms-co" id="termsLbl"><input type="checkbox" id="w_terms"><span>I confirm this property is mine or I have permission to list it, and all information is accurate.</span></label>
+      <span class="ferr" id="termsErr">You must confirm this before submitting</span>
+     </div>
+    </div>
+   </div>
+
+
+   <!-- STEP 6: PHOTOS -->
+   <div class="wstep" id="ws6">
+    <div class="sintro"><div class="sico" style="background:linear-gradient(135deg,#f8f0ff,#e8d8ff)"><i class="fa-solid fa-camera" style="color:#8040c0"></i></div><h2>Add photos</h2><p>Listings with photos get far more interest. Add up to 10 — the first one is your main photo.</p></div>
+    <div class="fgrid">
+     <div class="ff full">
+      <div class="photo-upload-zone" id="photoZone" onclick="document.getElementById('photoInput').click()">
+       <i class="fa-solid fa-cloud-arrow-up"></i>
+       <span>Tap to add photos</span>
+       <small>JPG or PNG · Max 5MB each · Up to 10 photos</small>
+      </div>
+      <input type="file" id="photoInput" accept="image/jpeg,image/png,image/webp" multiple style="display:none" onchange="handlePhotoSelect(event)">
+      <div class="photo-grid" id="photoGrid"></div>
+      <p class="fhint" style="margin-top:8px"><i class="fa-solid fa-circle-info"></i> Drag to reorder. First photo is shown on the listing card.</p>
+     </div>
+     <div class="ff full">
+      <div class="photo-skip-note">
+       <i class="fa-solid fa-lightbulb"></i>
+       <div>
+        <strong>No photos yet?</strong>
+        <span>You can skip this step and add photos later from your dashboard. But listings with photos get 3x more views.</span>
+       </div>
+      </div>
+     </div>
+    </div>
+   </div>
+
+   <!-- PREVIEW -->
+   <div class="wstep" id="wsp">
+    <div class="sintro"><div class="sico"><i class="fa-solid fa-eye"></i></div><h2>Preview your listing</h2><p>This is exactly what tenants will see. Happy with it? Hit confirm below.</p></div>
+    <div class="pcard" id="pcard"></div>
+    <div class="prev-note"><i class="fa-solid fa-circle-info"></i> Your phone number is hidden — tenants pay R10 to unlock it. Your address and ID are never shown.</div>
+   </div>
+
+   <!-- SUCCESS -->
+   <div class="wstep" id="wss">
+    <div class="succ">
+     <div class="sanim"><div class="sring"></div><i class="fa-solid fa-check sicon"></i></div>
+     <h2>You're live on Kasi24!</h2>
+     <p>Your listing is now visible to tenants in Kwamhlanga. When someone pays R10 to unlock your number, you'll be notified.</p>
+     <div class="schips"><span><i class="fa-solid fa-eye"></i> Visible to tenants</span><span><i class="fa-solid fa-lock"></i> Phone number hidden</span><span><i class="fa-solid fa-bell"></i> You'll get notified</span></div>
+     <button class="btn-teal" style="margin-top:28px" onclick="closeWizard()"><i class="fa-solid fa-arrow-left"></i> Back to Kasi24</button>
+    </div>
+   </div>
+
+  </div><!-- /wbody -->
+
+  <div class="wftr" id="wftr">
+   <button class="wbtn-back" id="wbtnBack" onclick="wizBack()"><i class="fa-solid fa-arrow-left"></i> Back</button>
+   <span class="wctr" id="wctr">Step 1 of 5</span>
+   <button class="wbtn-next" id="wbtnNext" onclick="wizNext()">Continue <i class="fa-solid fa-arrow-right"></i></button>
+  </div>
+ </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════
+// SUPABASE CONNECTION
+// ═══════════════════════════════════════════
+const SUPABASE_URL = 'https://fxoaqzclszjvkwupkdiv.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_I5JH_smIkSc7oEWN-gjjNQ_2Lv7onsm';
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+// ═══════════════════════════════════════════
+// LISTING CONSTANTS
+// ═══════════════════════════════════════════
+const TL = { room:'Room To Let', backroom:'Back Room To Let', flat:'Flat To Let', house:'House To Let' };
+const TI = { room:'fa-door-open', backroom:'fa-tree', flat:'fa-building', house:'fa-house-chimney' };
+const PC = {
+  room:     { g1:'#d4eef0', g2:'#a0d8dc', ic:'var(--teal)',    bg:'rgba(6,115,125,0.85)' },
+  backroom: { g1:'#dff5e0', g2:'#b5e0b8', ic:'#28a060',        bg:'rgba(40,160,96,0.85)'  },
+  flat:     { g1:'#fdecd8', g2:'#f8d0aa', ic:'var(--orange)',   bg:'rgba(224,122,44,0.85)' },
+  house:    { g1:'#e8f4d0', g2:'#c0e090', ic:'#4a8c10',         bg:'rgba(74,140,16,0.85)'  },
+};
+
+// ═══════════════════════════════════════════
+// SAVED LISTINGS (localStorage)
+// ═══════════════════════════════════════════
+let saved = [];
+try { saved = JSON.parse(localStorage.getItem('k24') || '[]'); } catch(e) {}
+
+// ═══════════════════════════════════════════
+// PRICE RANGE SLIDER
+// ═══════════════════════════════════════════
+const PMIN = 500, PMAX = 8000;
+let pMin = PMIN, pMax = PMAX;
+const elMinR = document.getElementById('minRange');
+const elMaxR = document.getElementById('maxRange');
+const elMinI = document.getElementById('minInput');
+const elMaxI = document.getElementById('maxInput');
+const elFill = document.getElementById('rfill');
+
+function updateSlider() {
+  var p1 = ((pMin - PMIN) / (PMAX - PMIN)) * 100;
+  var p2 = ((pMax - PMIN) / (PMAX - PMIN)) * 100;
+  elFill.style.left  = 'calc(' + p1 + '% + 10px)';
+  elFill.style.width = 'calc(' + (p2 - p1) + '% - ' + (p1 > 0 || p2 < 100 ? '0px' : '20px') + ')';
+  elMinR.value = pMin; elMaxR.value = pMax;
+  elMinI.value = pMin; elMaxI.value = pMax;
+}
+elMinR.addEventListener('input', function() { pMin = Math.min(parseInt(this.value), pMax - 100); updateSlider(); });
+elMaxR.addEventListener('input', function() { pMax = Math.max(parseInt(this.value), pMin + 100); updateSlider(); });
+elMinI.addEventListener('change', function() { pMin = Math.max(PMIN, Math.min(parseInt(this.value) || PMIN, pMax - 100)); updateSlider(); });
+elMaxI.addEventListener('change', function() { pMax = Math.min(PMAX, Math.max(parseInt(this.value) || PMAX, pMin + 100)); updateSlider(); });
+updateSlider();
+
+// ═══════════════════════════════════════════
+// FETCH & RENDER LISTINGS FROM SUPABASE
+// ═══════════════════════════════════════════
+var curTab = 'all';
+
+async function renderListings(tab) {
+  var grid = document.getElementById('lgrid');
+
+  // Show skeletons while loading
+  grid.innerHTML = Array(6).fill(0).map(function() {
+    return '<div class="skel-card"><div class="sk sk-img"></div><div class="sk-body"><div class="sk sk-line w60"></div><div class="sk sk-line w80"></div><div class="sk sk-line w40"></div><div class="sk sk-btn"></div></div></div>';
+  }).join('');
+
+  try {
+    // Build query — only fetch approved, active listings
+    var query = sb
+      .from('listings')
+      .select('*, listing_photos(storage_path, is_primary)')
+      .eq('is_active', true)
+      .eq('is_approved', true)
+      .gte('rent', pMin)
+      .lte('rent', pMax)
+      .order('created_at', { ascending: false });
+
+    // Filter by type if not "all"
+    if (tab !== 'all') {
+      query = query.eq('type', tab);
+    }
+
+    var { data, error } = await query;
+
+    if (error) throw error;
+
+    if (!data || data.length === 0) {
+      grid.innerHTML = '<div class="no-res"><i class="fa-solid fa-house-circle-xmark"></i><h3>No listings found</h3><p>Try adjusting your price range or pick a different type.</p></div>';
+      return;
+    }
+
+    grid.innerHTML = data.map(buildCard).join('');
+
+    // Restore saved hearts
+    saved.forEach(function(id) {
+      var b = document.querySelector('.hbtn[data-id="' + id + '"]');
+      if (b) { b.classList.add('saved'); b.querySelector('i').className = 'fa-solid fa-heart'; }
+    });
+
+  } catch(err) {
+    console.error('Error loading listings:', JSON.stringify(err, null, 2));
+    grid.innerHTML = '<div class="no-res"><i class="fa-solid fa-triangle-exclamation"></i><h3>Could not load listings</h3><p>Please check your internet connection and try again.</p></div>';
+  }
+}
+
+function buildCardImg(l, c) {
+  var photos = l.listing_photos || [];
+  var primary = photos.find(function(p) { return p.is_primary; }) || photos[0];
+  if (primary) {
+    var url = '${SUPABASE_URL}/storage/v1/object/public/listing-photos/' + primary.storage_path;
+    url = url.replace('${SUPABASE_URL}', 'https://fxoaqzclszjvkwupkdiv.supabase.co');
+    return '<div class="limg" style="background:url(' + url + ') center/cover no-repeat">'
+      + '<span class="tchip" style="background:' + c.bg + '">' + (TL[l.type] || l.type) + '</span></div>';
+  }
+  return '<div class="limg" style="background:linear-gradient(135deg,' + c.g1 + ',' + c.g2 + ')">'
+    + '<i class="fa-solid ' + (TI[l.type] || 'fa-house') + ' bgi" style="color:' + c.ic + '"></i>'
+    + '<span class="tchip" style="background:' + c.bg + '">' + (TL[l.type] || l.type) + '</span></div>';
+}
+
+
+function buildCard(l) {
+  var c    = PC[l.type] || PC.room;
+  var incl = (l.included || []);
+  var inclIcons = { water:'fa-droplet', electricity:'fa-bolt', wifi:'fa-wifi', refuse:'fa-trash', security:'fa-shield-halved', dstv:'fa-satellite-dish' };
+  var inclLabels = { water:'Water', electricity:'Electricity', wifi:'WiFi', refuse:'Refuse', security:'Security', dstv:'DStv' };
+  var tags = incl.slice(0, 3).map(function(v) {
+    return '<span class="tag"><i class="fa-solid ' + (inclIcons[v] || 'fa-check') + '"></i>' + (inclLabels[v] || v) + '</span>';
+  }).join('');
+  var rentFmt = 'R' + parseInt(l.rent).toLocaleString();
+  var isNew = (new Date() - new Date(l.created_at)) < (3 * 24 * 60 * 60 * 1000); // under 3 days old
+
+  return '<div class="lcard" onclick="window.location=\'listing-detail.html?id=' + l.id + '\'" style="cursor:pointer;">'
+    + '<button class="hbtn" data-id="' + l.id + '" onclick="event.stopPropagation();toggleSave(this,\'' + l.id + '\')" aria-label="Save"><i class="fa-regular fa-heart"></i></button>'
+    + (isNew ? '<span class="nbadge">New</span>' : '')
+    + buildCardImg(l, c)
+    + '<div class="lbody">'
+    + '<div class="lprice">' + rentFmt + ' <span>/ month</span></div>'
+    + '<div class="ltitle">' + l.title + '</div>'
+    + '<div class="lloc"><i class="fa-solid fa-location-dot"></i> ' + l.area + ', Kwamhlanga</div>'
+    + '<div class="ltags">' + tags + '</div>'
+    + '<div class="view-detail-hint"><i class="fa-solid fa-arrow-right"></i> View full details</div>'
+    + '</div></div>';
+}
+
+function switchTab(btn, tab) {
+  document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+  btn.classList.add('active');
+  curTab = tab;
+  renderListings(tab);
+}
+
+function toggleSave(btn, id) {
+  btn.classList.add('pop');
+  setTimeout(function() { btn.classList.remove('pop'); }, 350);
+  var idx = saved.indexOf(id);
+  if (idx > -1) {
+    saved.splice(idx, 1);
+    btn.classList.remove('saved');
+    btn.querySelector('i').className = 'fa-regular fa-heart';
+    showToast('Removed from saved');
+  } else {
+    saved.push(id);
+    btn.classList.add('saved');
+    btn.querySelector('i').className = 'fa-solid fa-heart';
+    showToast('Saved to wishlist!');
+  }
+  try { localStorage.setItem('k24', JSON.stringify(saved)); } catch(e) {}
+}
+
+function doUnlock(btn, listingId) {
+  btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Opening payment…';
+  btn.disabled = true;
+  // TODO: integrate Ozow/SnapScan payment here
+  setTimeout(function() {
+    btn.innerHTML = '<i class="fa-solid fa-lock-open"></i> Unlock for R10';
+    btn.disabled = false;
+  }, 2200);
+}
+
+document.getElementById('heroSearchBtn').addEventListener('click', function() {
+  var tab = document.getElementById('heroType').value;
+  this.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Searching…';
+  var self = this;
+  setTimeout(function() {
+    self.innerHTML = '<i class="fa-solid fa-magnifying-glass"></i> Search';
+    document.getElementById('listings').scrollIntoView({ behavior: 'smooth' });
+    if (tab !== 'all') {
+      var t = document.querySelector('.tab-btn[data-tab="' + tab + '"]');
+      if (t) switchTab(t, tab);
+    } else {
+      renderListings(curTab);
+    }
+  }, 750);
+});
+
+// ═══════════════════════════════════════════
+// TOAST
+// ═══════════════════════════════════════════
+var toastT;
+function showToast(msg) {
+  var e = document.getElementById('toast');
+  document.getElementById('toastMsg').textContent = msg;
+  e.classList.add('show');
+  clearTimeout(toastT);
+  toastT = setTimeout(function() { e.classList.remove('show'); }, 2400);
+}
+
+// ═══════════════════════════════════════════
+// MOBILE MENU
+// ═══════════════════════════════════════════
+function toggleMenu() {
+  var d = document.getElementById('mdrawer');
+  var i = document.getElementById('hamIcon');
+  var o = d.classList.toggle('open');
+  i.className = o ? 'fa-solid fa-xmark' : 'fa-solid fa-bars';
+}
+function closeMenu() {
+  document.getElementById('mdrawer').classList.remove('open');
+  document.getElementById('hamIcon').className = 'fa-solid fa-bars';
+}
+document.addEventListener('click', function(e) {
+  var d = document.getElementById('mdrawer');
+  var h = document.getElementById('hamBtn');
+  if (!d.contains(e.target) && !h.contains(e.target)) closeMenu();
+});
+function bnav(btn, href) {
+  document.querySelectorAll('.bb').forEach(function(b) { if (!b.classList.contains('bb-cta')) b.classList.remove('active'); });
+  if (!btn.classList.contains('bb-cta')) btn.classList.add('active');
+  if (href !== '#') document.querySelector(href).scrollIntoView({ behavior: 'smooth' });
+}
+
+// ═══════════════════════════════════════════
+// WIZARD
+// ═══════════════════════════════════════════
+var WD = {};
+var WSTEPS = ['ws1','ws2','ws3','ws4','ws5','ws6','wsp','wss'];
+var WPCT   = { ws1:0.17, ws2:0.34, ws3:0.5, ws4:0.67, ws5:0.84, ws6:1.0, wsp:1.0, wss:1.0 };
+var curWStep = 'ws1';
+
+function openWizard() {
+  WD = {};
+  document.querySelectorAll('.topt').forEach(function(b) { b.classList.remove('sel'); });
+  document.querySelectorAll('.wstep input[type=checkbox]').forEach(function(c) { c.checked = false; });
+  document.querySelectorAll('.wstep input[type=text],.wstep input[type=tel],.wstep input[type=number],.wstep input[type=email],.wstep textarea').forEach(function(i) { i.value = ''; });
+  document.getElementById('charCount').textContent = '0';
+  // WhatsApp field clears via the input reset above
+  // Reset photo uploads
+  WD.photos = [];
+  document.getElementById('photoGrid').innerHTML = '';
+  var today = new Date().toISOString().split('T')[0];
+  document.getElementById('w_avail').min   = today;
+  document.getElementById('w_avail').value = today;
+  document.getElementById('woverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  goWStep('ws1', true);
+}
+
+function closeWizard() {
+  document.getElementById('woverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+document.getElementById('woverlay').addEventListener('click', function(e) {
+  if (e.target === this) closeWizard();
+});
+
+function goWStep(sid, fwd) {
+  WSTEPS.forEach(function(s) { var e = document.getElementById(s); if (e) e.classList.remove('active','back'); });
+  var el = document.getElementById(sid);
+  if (!el) return;
+  el.classList.add('active');
+  if (!fwd) el.classList.add('back');
+  curWStep = sid;
+
+  document.getElementById('wbar').style.width = ((WPCT[sid] || 0) * 100) + '%';
+
+  var sn = { ws1:1, ws2:2, ws3:3, ws4:4, ws5:5, ws6:6 };
+  var cur = sn[sid] || 99;
+  document.querySelectorAll('.wsl').forEach(function(l) {
+    var n = parseInt(l.dataset.s);
+    l.classList.remove('active','done');
+    if (n === cur) l.classList.add('active');
+    else if (n < cur) l.classList.add('done');
+    if (l.dataset.s === '6' && sid === 'ws6') l.classList.add('active');
+    if (l.dataset.s === 'p' && (sid === 'wsp' || sid === 'wss')) l.classList.add('active');
+  });
+
+  var ftr = document.getElementById('wftr');
+  var bb  = document.getElementById('wbtnBack');
+  var bn  = document.getElementById('wbtnNext');
+  var ct  = document.getElementById('wctr');
+
+  if (sid === 'wss') { ftr.style.display = 'none'; return; }
+  ftr.style.display = 'flex';
+  bb.disabled = (sid === 'ws1');
+
+  if (sid === 'wsp') {
+    bn.innerHTML  = 'Confirm & Go Live <i class="fa-solid fa-rocket"></i>';
+    bn.className  = 'wbtn-next confirm';
+    ct.textContent = 'Almost there!';
+  } else {
+    bn.innerHTML  = 'Continue <i class="fa-solid fa-arrow-right"></i>';
+    bn.className  = 'wbtn-next';
+    var n = sn[sid];
+    ct.textContent = n ? 'Step ' + n + ' of 6' : '';
+  }
+  document.getElementById('wbody').scrollTop = 0;
+}
+
+async function wizNext() {
+  if (curWStep === 'wsp') { await submitListing(); return; }
+  if (!validateW(curWStep)) return;
+  collectW(curWStep);
+  var order = ['ws1','ws2','ws3','ws4','ws5','ws6','wsp'];
+  var idx = order.indexOf(curWStep);
+  if (idx < order.length - 1) {
+    if (order[idx + 1] === 'wsp') buildPreview();
+    goWStep(order[idx + 1], true);
+  }
+}
+
+function wizBack() {
+  var order = ['ws1','ws2','ws3','ws4','ws5','ws6','wsp'];
+  var idx = order.indexOf(curWStep);
+  if (idx > 0) goWStep(order[idx - 1], false);
+}
+
+function validateW(sid) {
+  var ok = true; clearWErrs();
+  if (sid === 'ws1') {
+    if (!WD.type) { document.getElementById('typeErr').classList.add('show'); document.getElementById('tpicker').classList.add('err'); ok = false; }
+    if (!document.getElementById('w_area').value)         { showWErr('areaErr','w_area');   ok = false; }
+    if (!document.getElementById('w_avail').value)        { showWErr('availErr','w_avail'); ok = false; }
+  }
+  if (sid === 'ws2') {
+    var r = parseInt(document.getElementById('w_rent').value);
+    if (!r || r < 300) { document.getElementById('rentErr').classList.add('show'); document.getElementById('rentWrap').classList.add('err'); ok = false; }
+  }
+  if (sid === 'ws5') {
+    if (!document.getElementById('w_name').value.trim()) { showWErr('nameErr','w_name'); ok = false; }
+    var em = document.getElementById('w_email').value.trim();
+    if (!em || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)) { showWErr('emailErr','w_email'); ok = false; }
+    var ph = document.getElementById('w_phone').value.replace(/\s/g,'');
+    if (!ph || ph.length < 9) { document.getElementById('phoneErr').classList.add('show'); document.getElementById('phoneWrap').classList.add('err'); ok = false; }
+    if (!document.getElementById('w_terms').checked) { document.getElementById('termsErr').classList.add('show'); document.getElementById('termsLbl').style.borderColor = '#e74c3c'; ok = false; }
+  }
+  return ok;
+}
+
+function showWErr(eid, iid) {
+  var e = document.getElementById(eid); if (e) e.classList.add('show');
+  var i = document.getElementById(iid); if (i) i.classList.add('err');
+}
+
+function clearWErrs() {
+  document.querySelectorAll('.ferr').forEach(function(e) { e.classList.remove('show'); });
+  document.querySelectorAll('.wi').forEach(function(e) { e.classList.remove('err'); });
+  document.querySelectorAll('.ipw').forEach(function(e) { e.classList.remove('err'); });
+  var tp = document.getElementById('tpicker'); if (tp) tp.classList.remove('err');
+  var tl = document.getElementById('termsLbl'); if (tl) tl.style.borderColor = '';
+}
+
+function collectW(sid) {
+  if (sid === 'ws1') {
+    WD.area  = document.getElementById('w_area').value;
+    WD.avail = document.getElementById('w_avail').value;
+    // Auto-generate title from type + area
+    var typeLabels = { room:'Room To Let', backroom:'Back Room To Let', flat:'Flat To Let', house:'House To Let' };
+    WD.title = (typeLabels[WD.type] || WD.type) + ' in ' + WD.area;
+  }
+  if (sid === 'ws2') {
+    WD.rent    = parseInt(document.getElementById('w_rent').value);
+    WD.deposit = parseInt(document.getElementById('w_deposit').value) || 0;
+    WD.incl    = [...document.querySelectorAll('#inclGrid input:checked')].map(function(i) { return i.value; });
+  }
+  if (sid === 'ws3') {
+    WD.beds  = document.getElementById('w_beds').value;
+    WD.bath  = document.getElementById('w_bath').value;
+    WD.furn  = document.getElementById('w_furn').value;
+    WD.prefs = [...document.querySelectorAll('#prefGrid input:checked')].map(function(i) { return i.value; });
+  }
+  if (sid === 'ws4') {
+    WD.amen  = [...document.querySelectorAll('#amenGrid input:checked')].map(function(i) { return i.value; });
+    WD.notes = document.getElementById('w_notes').value.trim();
+  }
+  if (sid === 'ws5') {
+    WD.name  = document.getElementById('w_name').value.trim();
+    WD.email = document.getElementById('w_email').value.trim();
+    WD.phone = document.getElementById('w_phone').value.trim();
+    WD.wa    = document.getElementById('w_wa').value.trim() || WD.phone;
+    WD.idnum = document.getElementById('w_id').value.trim();
+  }
+}
+
+function pickType(btn) {
+  document.querySelectorAll('.topt').forEach(function(b) { b.classList.remove('sel'); });
+  btn.classList.add('sel');
+  WD.type = btn.dataset.v;
+  document.getElementById('typeErr').classList.remove('show');
+  document.getElementById('tpicker').classList.remove('err');
+}
+
+document.getElementById('w_notes').addEventListener('input', function() {
+  document.getElementById('charCount').textContent = this.value.length;
+});
+
+// ── Preview ──
+var IL = { water:'Water', electricity:'Electricity', wifi:'WiFi', refuse:'Refuse', security:'Security', dstv:'DStv' };
+var II = { water:'fa-droplet', electricity:'fa-bolt', wifi:'fa-wifi', refuse:'fa-trash', security:'fa-shield-halved', dstv:'fa-satellite-dish' };
+var AL = { parking:'Parking', wifi:'WiFi', laundry:'Laundry', yard:'Yard', fence:'Fenced', geyser:'Hot water', stove:'Stove', storage:'Storage', prepaid:'Prepaid', solar:'Solar', gate:'Security gate', cctv:'CCTV' };
+var AI = { parking:'fa-car', wifi:'fa-wifi', laundry:'fa-shirt', yard:'fa-tree', fence:'fa-shield', geyser:'fa-fire', stove:'fa-utensils', storage:'fa-box', prepaid:'fa-bolt', solar:'fa-sun', gate:'fa-lock', cctv:'fa-camera' };
+
+function buildPreview() {
+  var c   = PC[WD.type] || PC.room;
+  var ico = TI[WD.type] || 'fa-house';
+  var lbl = TL[WD.type] || WD.type;
+  var rf  = WD.rent ? 'R' + parseInt(WD.rent).toLocaleString() : '—';
+  var dep = WD.deposit && WD.deposit > 0 ? '<span class="tag"><i class="fa-solid fa-coins"></i>Deposit: R' + WD.deposit.toLocaleString() + '</span>' : '';
+  var it  = (WD.incl || []).slice(0,4).map(function(v) { return '<span class="tag"><i class="fa-solid ' + (II[v]||'fa-check') + '"></i>' + (IL[v]||v) + '</span>'; }).join('');
+  var at  = (WD.amen || []).slice(0,3).map(function(v) { return '<span class="tag"><i class="fa-solid ' + (AI[v]||'fa-star') + '"></i>' + (AL[v]||v) + '</span>'; }).join('');
+  var nh  = WD.notes ? '<div class="pnote">"' + WD.notes + '"</div>' : '';
+  var avf = WD.avail ? new Date(WD.avail + 'T12:00').toLocaleDateString('en-ZA', { day:'numeric', month:'short', year:'numeric' }) : '';
+
+  document.getElementById('pcard').innerHTML =
+    '<div class="pimg" style="background:linear-gradient(135deg,' + c.g1 + ',' + c.g2 + ')">'
+    + '<i class="fa-solid ' + ico + ' bgi" style="color:' + c.ic + '"></i>'
+    + '<span class="pchip" style="background:' + c.bg + '">' + lbl + '</span></div>'
+    + '<div class="pbody">'
+    + '<div class="pprice">' + rf + ' <span>/ month</span></div>'
+    + '<div class="ptitle">' + (WD.title || 'My Listing') + '</div>'
+    + '<div class="ploc"><i class="fa-solid fa-location-dot"></i> ' + (WD.area || '') + ', Kwamhlanga' + (avf ? ' · Available ' + avf : '') + '</div>'
+    + '<div class="ptags">' + it + at + dep + '</div>'
+    + nh
+    + '<div class="punlock"><i class="fa-solid fa-lock"></i> Tenants unlock your number for R10</div>'
+    + '</div>';
+}
+
+function copyPhoneToWa() {
+  var phone = document.getElementById('w_phone').value.trim();
+  if (!phone) {
+    var pw = document.getElementById('phoneWrap');
+    pw.style.borderColor = '#e74c3c';
+    setTimeout(function() { pw.style.borderColor = ''; }, 1500);
+    showToast('Please enter your phone number first');
+    return;
+  }
+  document.getElementById('w_wa').value = phone;
+  showToast('WhatsApp number copied!');
+}
+
+// Phone number formatter — formats as 071 234 5678
+function fmtPhone(input) {
+  var digits = input.value.replace(/\D/g, '').slice(0, 10);
+  var formatted = digits;
+  if (digits.length > 6) {
+    formatted = digits.slice(0,3) + ' ' + digits.slice(3,6) + ' ' + digits.slice(6);
+  } else if (digits.length > 3) {
+    formatted = digits.slice(0,3) + ' ' + digits.slice(3);
+  }
+  input.value = formatted;
+}
+
+
+// ═══════════════════════════════════════════
+// PHOTO UPLOADS
+// ═══════════════════════════════════════════
+var WD_photos = []; // { file, previewUrl, uploaded: false }
+
+function handlePhotoSelect(event) {
+  var files = Array.from(event.target.files);
+  var remaining = 10 - WD_photos.length;
+  if (remaining <= 0) { showToast('Maximum 10 photos reached'); return; }
+  files = files.slice(0, remaining);
+
+  files.forEach(function(file) {
+    if (file.size > 5 * 1024 * 1024) {
+      showToast(file.name + ' is too large (max 5MB)');
+      return;
+    }
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      WD_photos.push({ file: file, previewUrl: e.target.result, uploaded: false });
+      renderPhotoGrid();
+    };
+    reader.readAsDataURL(file);
+  });
+  // Reset input so same file can be re-selected
+  event.target.value = '';
+}
+
+function renderPhotoGrid() {
+  var grid = document.getElementById('photoGrid');
+  if (!grid) return;
+  if (WD_photos.length === 0) { grid.innerHTML = ''; return; }
+  grid.innerHTML = WD_photos.map(function(p, i) {
+    return '<div class="photo-thumb" id="pthumb-' + i + '">'
+      + '<img src="' + p.previewUrl + '" alt="Photo ' + (i+1) + '">'
+      + (i === 0 ? '<span class="pt-primary">Main</span>' : '')
+      + '<button type="button" class="pt-remove" onclick="removePhoto(' + i + ')"><i class="fa-solid fa-xmark"></i></button>'
+      + '</div>';
+  }).join('');
+
+  // Update upload zone text
+  var zone = document.getElementById('photoZone');
+  if (zone) {
+    var remaining = 10 - WD_photos.length;
+    zone.querySelector('span').textContent = WD_photos.length + ' photo' + (WD_photos.length !== 1 ? 's' : '') + ' added' + (remaining > 0 ? ' — tap to add more' : ' (maximum reached)');
+  }
+}
+
+function removePhoto(idx) {
+  WD_photos.splice(idx, 1);
+  renderPhotoGrid();
+}
+
+// Drag and drop on upload zone
+document.addEventListener('DOMContentLoaded', function() {
+  var zone = document.getElementById('photoZone');
+  if (!zone) return;
+  zone.addEventListener('dragover', function(e) { e.preventDefault(); zone.classList.add('dragover'); });
+  zone.addEventListener('dragleave', function() { zone.classList.remove('dragover'); });
+  zone.addEventListener('drop', function(e) {
+    e.preventDefault(); zone.classList.remove('dragover');
+    var files = Array.from(e.dataTransfer.files).filter(function(f) { return f.type.startsWith('image/'); });
+    var fakeEvent = { target: { files: files, value: '' } };
+    handlePhotoSelect(fakeEvent);
+  });
+});
+
+async function uploadPhotos(listingId) {
+  var uploaded = [];
+  for (var i = 0; i < WD_photos.length; i++) {
+    var photo = WD_photos[i];
+    var ext   = photo.file.name.split('.').pop().toLowerCase() || 'jpg';
+    var path  = listingId + '/' + Date.now() + '-' + i + '.' + ext;
+
+    // Show uploading spinner on thumb
+    var thumb = document.getElementById('pthumb-' + i);
+    if (thumb) thumb.innerHTML += '<div class="pt-uploading"><i class="fa-solid fa-spinner fa-spin"></i></div>';
+
+    var { data, error } = await sb.storage
+      .from('listing-photos')
+      .upload(path, photo.file, { contentType: photo.file.type, upsert: false });
+
+    if (!error) {
+      var { data: urlData } = sb.storage.from('listing-photos').getPublicUrl(path);
+      uploaded.push({ path: path, url: urlData.publicUrl, isPrimary: i === 0 });
+    } else {
+      console.warn('Photo upload failed:', error.message);
+    }
+  }
+  return uploaded;
+}
+
+
+// ── Submit to Supabase ──
+async function submitListing() {
+  var btn = document.getElementById('wbtnNext');
+  btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Saving…';
+  btn.disabled  = true;
+
+  try {
+    // 1. Check if landlord already exists by phone number
+    var { data: existing } = await sb
+      .from('landlords')
+      .select('id')
+      .eq('phone', WD.phone)
+      .maybeSingle();
+
+    var landlordId;
+
+    if (existing) {
+      // Landlord already in the system — reuse their ID
+      landlordId = existing.id;
+    } else {
+      // New landlord — create their record
+      var { data: newLandlord, error: landlordErr } = await sb
+        .from('landlords')
+        .insert({
+          name:       WD.name,
+          phone:      WD.phone,
+          whatsapp:   WD.wa    || WD.phone,
+          id_number:  WD.idnum || null,
+          email:      WD.email,
+        })
+        .select('id')
+        .single();
+
+      if (landlordErr) throw landlordErr;
+      landlordId = newLandlord.id;
+    }
+
+    // 2. Save the listing (is_approved = false — awaits your manual approval)
+    var { data: newListing, error: listingErr } = await sb
+      .from('listings')
+      .insert({
+        landlord_id:    landlordId,
+        type:           WD.type,
+        title:          WD.title,
+        area:           WD.area,
+        rent:           WD.rent,
+        deposit:        WD.deposit || 0,
+        available_from: WD.avail,
+        bedrooms:       WD.beds   || '1',
+        bathroom:       WD.bath   || 'shared',
+        furnished:      WD.furn   || 'unfurnished',
+        included:       WD.incl   || [],
+        amenities:      WD.amen   || [],
+        preferences:    WD.prefs  || [],
+        notes:          WD.notes  || null,
+        is_active:      true,
+        is_approved:    false,
+      })
+      .select('id')
+      .single();
+
+    if (listingErr) throw listingErr;
+
+    // 3. Upload photos if any were selected
+    if (WD_photos.length > 0 && newListing) {
+      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Uploading photos…';
+      var uploaded = await uploadPhotos(newListing.id);
+
+      // Save photo records to listing_photos table
+      if (uploaded.length > 0) {
+        var photoRows = uploaded.map(function(p, i) {
+          return {
+            listing_id:   newListing.id,
+            storage_path: p.path,
+            is_primary:   p.isPrimary,
+            sort_order:   i
+          };
+        });
+        await sb.from('listing_photos').insert(photoRows);
+      }
+    }
+
+    // Success!
+    WD_photos = [];
+    goWStep('wss', true);
+
+  } catch(err) {
+    console.error('Submit error:', err);
+    btn.innerHTML = 'Confirm & Go Live <i class="fa-solid fa-rocket"></i>';
+    btn.disabled  = false;
+    showToast('Something went wrong. Please try again.');
+  }
+}
+
+// ═══════════════════════════// INIT
+// ═══════════════════════════════════════════
+renderListings('all');
+initAuth();
+
+// ═══════════════════════════════════════════
+// AUTH — SUPABASE LOGIN / REGISTER / LOGOUT
+// ═══════════════════════════════════════════
+
+function openAuthPanel(view) {
+  document.getElementById('authOverlay').classList.add('open');
+  document.getElementById('authPanel').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  switchView('view' + (view === 'login' ? 'Login' : 'Register'));
+}
+function closeAuthPanel() {
+  document.getElementById('authOverlay').classList.remove('open');
+  document.getElementById('authPanel').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function switchView(id) {
+  ['viewLogin','viewRegister','viewForgot','viewVerify','viewResetSent'].forEach(function(v) {
+    var el = document.getElementById(v);
+    if (el) el.style.display = 'none';
+  });
+  var target = document.getElementById(id);
+  if (target) target.style.display = 'block';
+}
+function togglePw(inputId, btn) {
+  var inp = document.getElementById(inputId);
+  if (inp.type === 'password') { inp.type = 'text'; btn.querySelector('i').className = 'fa-solid fa-eye-slash'; }
+  else { inp.type = 'password'; btn.querySelector('i').className = 'fa-solid fa-eye'; }
+}
+function showAuthErr(id, msg) {
+  var el = document.getElementById(id);
+  if (el) { el.textContent = msg; el.classList.add('show'); }
+}
+function clearAuthErr(id) {
+  var el = document.getElementById(id);
+  if (el) { el.textContent = ''; el.classList.remove('show'); }
+}
+function setAuthLoading(btnId, loading, label) {
+  var btn = document.getElementById(btnId);
+  if (!btn) return;
+  btn.disabled = loading;
+  btn.innerHTML = loading
+    ? '<i class="fa-solid fa-spinner fa-spin"></i> Please wait…'
+    : label;
+}
+
+async function doLogin() {
+  clearAuthErr('loginErr');
+  var email = document.getElementById('loginEmail').value.trim();
+  var pass  = document.getElementById('loginPassword').value;
+  if (!email || !pass) { showAuthErr('loginErr', 'Please fill in both fields.'); return; }
+  setAuthLoading('loginBtn', true, '<i class="fa-solid fa-right-to-bracket"></i> Sign In');
+  var { data, error } = await sb.auth.signInWithPassword({ email: email, password: pass });
+  setAuthLoading('loginBtn', false, '<i class="fa-solid fa-right-to-bracket"></i> Sign In');
+  if (error) { showAuthErr('loginErr', error.message); return; }
+  closeAuthPanel();
+  showToast('Welcome back!');
+  await onLogin(data.user);
+}
+
+async function doRegister() {
+  clearAuthErr('regErr');
+  var name  = document.getElementById('regName').value.trim();
+  var email = document.getElementById('regEmail').value.trim();
+  var phone = document.getElementById('regPhone').value.trim();
+  var pass  = document.getElementById('regPassword').value;
+  if (!name || !email || !phone || !pass) { showAuthErr('regErr', 'Please fill in all fields.'); return; }
+  if (pass.length < 8) { showAuthErr('regErr', 'Password must be at least 8 characters.'); return; }
+  setAuthLoading('regBtn', true, '<i class="fa-solid fa-user-plus"></i> Create Account');
+
+  // 1. Create Supabase Auth user
+  var { data, error } = await sb.auth.signUp({
+    email: email,
+    password: pass,
+    options: { data: { name: name, phone: phone } }
+  });
+  setAuthLoading('regBtn', false, '<i class="fa-solid fa-user-plus"></i> Create Account');
+  if (error) { showAuthErr('regErr', error.message); return; }
+
+  // 2. Insert landlord record
+  if (data.user) {
+    await sb.from('landlords').upsert({
+      id:    data.user.id,
+      name:  name,
+      phone: phone,
+      email: email,
+    }, { onConflict: 'id' });
+  }
+
+  // Show verify screen
+  document.getElementById('verifyEmailDisplay').textContent = email;
+  switchView('viewVerify');
+}
+
+async function doForgot() {
+  clearAuthErr('forgotErr');
+  var email = document.getElementById('forgotEmail').value.trim();
+  if (!email) { showAuthErr('forgotErr', 'Please enter your email address.'); return; }
+  setAuthLoading('forgotBtn', true, '<i class="fa-solid fa-paper-plane"></i> Send Reset Link');
+  var { error } = await sb.auth.resetPasswordForEmail(email);
+  setAuthLoading('forgotBtn', false, '<i class="fa-solid fa-paper-plane"></i> Send Reset Link');
+  if (error) { showAuthErr('forgotErr', error.message); return; }
+  switchView('viewResetSent');
+}
+
+async function doResendVerify() {
+  var email = document.getElementById('regEmail').value.trim()
+           || document.getElementById('loginEmail').value.trim();
+  if (!email) { showToast('Please enter your email first.'); return; }
+  await sb.auth.resend({ type: 'signup', email: email });
+  showToast('Verification email resent!');
+}
+
+async function signOut() {
+  await sb.auth.signOut();
+  setLoggedOutState();
+  showToast('Signed out successfully.');
+}
+
+// Called when user is confirmed logged in
+async function onLogin(user) {
+  // Fetch their landlord record
+  var { data: landlord } = await sb
+    .from('landlords')
+    .select('name')
+    .eq('id', user.id)
+    .maybeSingle();
+  var name = (landlord && landlord.name) ? landlord.name.split(' ')[0] : 'Landlord';
+  setLoggedInState(name);
+}
+
+function setLoggedInState(firstName) {
+  document.getElementById('btnLogin').style.display = 'none';
+  var hdrBtns = document.getElementById('landlordHdrBtns');
+  hdrBtns.style.display = 'flex';
+  document.getElementById('landlordGreeting').textContent = 'Hi, ' + firstName;
+  // Mobile drawer
+  document.getElementById('mobileAuthLink').style.display = 'none';
+  document.getElementById('mobileDashLink').style.display = 'flex';
+  document.getElementById('mobileSignOut').style.display  = 'flex';
+}
+
+function setLoggedOutState() {
+  document.getElementById('btnLogin').style.display = '';
+  document.getElementById('landlordHdrBtns').style.display = 'none';
+  document.getElementById('mobileAuthLink').style.display = 'flex';
+  document.getElementById('mobileDashLink').style.display = 'none';
+  document.getElementById('mobileSignOut').style.display  = 'none';
+}
+
+// On page load — check if user is already logged in
+async function initAuth() {
+  var { data: { session } } = await sb.auth.getSession();
+  if (session && session.user) {
+    await onLogin(session.user);
+  }
+  // Listen for auth changes
+  sb.auth.onAuthStateChange(async function(event, session) {
+    if (event === 'SIGNED_IN' && session) {
+      await onLogin(session.user);
+    } else if (event === 'SIGNED_OUT') {
+      setLoggedOutState();
+    }
+  });
+}
+
+// ═══════════════════════════════════════════
+// DASHBOARD
+// ═══════════════════════════════════════════
+
+async function openDashboard() {
+  document.getElementById('dashOverlay').classList.add('open');
+  document.getElementById('dashPanel').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  await loadDashboard();
+}
+function closeDashboard() {
+  document.getElementById('dashOverlay').classList.remove('open');
+  document.getElementById('dashPanel').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+async function loadDashboard() {
+  var body = document.getElementById('dashBody');
+  body.innerHTML = '<div style="padding:40px;text-align:center;color:var(--muted)"><i class="fa-solid fa-spinner fa-spin" style="font-size:1.5rem"></i></div>';
+
+  var { data: { session } } = await sb.auth.getSession();
+  if (!session) { body.innerHTML = '<div class="dash-empty"><i class="fa-solid fa-lock"></i><h3>Not logged in</h3><p>Please sign in to view your listings.</p></div>'; return; }
+
+  var userId = session.user.id;
+
+  // Fetch listings + unlock counts
+  var { data: listings, error } = await sb
+    .from('listings')
+    .select('*, unlocks(count)')
+    .eq('landlord_id', userId)
+    .order('created_at', { ascending: false });
+
+  if (error) { body.innerHTML = '<div class="dash-empty"><i class="fa-solid fa-triangle-exclamation"></i><h3>Could not load listings</h3></div>'; return; }
+
+  // Stats
+  var total    = listings ? listings.length : 0;
+  var live     = listings ? listings.filter(function(l) { return l.is_active && l.is_approved; }).length : 0;
+  var unlocks  = listings ? listings.reduce(function(sum, l) { return sum + ((l.unlocks && l.unlocks[0]) ? (l.unlocks[0].count || 0) : 0); }, 0) : 0;
+
+  var statsHtml = '<div class="dash-stats">'
+    + '<div class="dstat"><strong>' + total + '</strong><span>Total listings</span></div>'
+    + '<div class="dstat"><strong>' + live  + '</strong><span>Live now</span></div>'
+    + '<div class="dstat"><strong>' + unlocks + '</strong><span>Total unlocks</span></div>'
+    + '</div>';
+
+  if (!listings || listings.length === 0) {
+    body.innerHTML = statsHtml
+      + '<div class="dash-empty">'
+      + '<i class="fa-solid fa-house-circle-xmark"></i>'
+      + '<h3>No listings yet</h3>'
+      + '<p>Post your first property and start getting tenants.</p>'
+      + '<button class="dash-new-btn" onclick="closeDashboard();openWizard()"><i class="fa-solid fa-plus"></i> List Your First Property</button>'
+      + '</div>';
+    return;
+  }
+
+  var cardsHtml = listings.map(function(l) {
+    var unlockCount = (l.unlocks && l.unlocks[0]) ? (l.unlocks[0].count || 0) : 0;
+    var status, statusClass;
+    if (!l.is_approved) { status = 'Pending Approval'; statusClass = 'status-pending'; }
+    else if (!l.is_active) { status = 'Taken'; statusClass = 'status-taken'; }
+    else { status = 'Live'; statusClass = 'status-live'; }
+
+    var takenBtnHtml = l.is_active
+      ? '<button class="da-btn taken-btn" onclick="toggleActive(\'' + l.id + '\',false)"><i class="fa-solid fa-circle-xmark"></i> Mark as Taken</button>'
+      : '<button class="da-btn active-btn" onclick="toggleActive(\'' + l.id + '\',true)"><i class="fa-solid fa-circle-check"></i> Mark as Available</button>';
+
+    return '<div class="dcard" id="dcard-' + l.id + '">'
+      + '<div class="dcard-top">'
+      + '<div class="dcard-info">'
+      + '<div class="dcard-title">' + l.title + '</div>'
+      + '<div class="dcard-meta">'
+      + '<span><i class="fa-solid fa-location-dot"></i> ' + l.area + '</span>'
+      + '<span><i class="fa-solid fa-tag"></i> R' + parseInt(l.rent).toLocaleString() + '/mo</span>'
+      + '</div>'
+      + '</div>'
+      + '<span class="status-badge ' + statusClass + '">' + status + '</span>'
+      + '</div>'
+      + '<div class="dcard-actions">'
+      + '<button class="da-btn" onclick="openEditModal(\'' + l.id + '\')"><i class="fa-solid fa-pen"></i> Edit</button>'
+      + takenBtnHtml
+      + '<button class="da-btn del-btn" onclick="deleteListing(\'' + l.id + '\')"><i class="fa-solid fa-trash"></i></button>'
+      + '</div>'
+      + '<div class="dcard-unlocks"><i class="fa-solid fa-lock-open"></i> ' + unlockCount + ' unlock' + (unlockCount !== 1 ? 's' : '') + ' so far</div>'
+      + '</div>';
+  }).join('');
+
+  body.innerHTML = statsHtml
+    + '<p class="dash-section-title">Your Listings</p>'
+    + cardsHtml
+    + '<button class="dash-new-btn" style="margin-top:8px" onclick="closeDashboard();openWizard()"><i class="fa-solid fa-plus"></i> Add Another Listing</button>';
+}
+
+async function toggleActive(listingId, makeActive) {
+  var { error } = await sb
+    .from('listings')
+    .update({ is_active: makeActive })
+    .eq('id', listingId);
+  if (error) { showToast('Could not update listing.'); return; }
+  showToast(makeActive ? 'Listing is now available!' : 'Listing marked as taken.');
+  await loadDashboard();
+  renderListings(curTab);
+}
+
+async function deleteListing(listingId) {
+  if (!confirm('Are you sure you want to delete this listing? This cannot be undone.')) return;
+  var { error } = await sb.from('listings').delete().eq('id', listingId);
+  if (error) { showToast('Could not delete listing.'); return; }
+  showToast('Listing deleted.');
+  await loadDashboard();
+  renderListings(curTab);
+}
+
+// ── Edit modal ──
+async function openEditModal(listingId) {
+  var { data: l, error } = await sb.from('listings').select('*').eq('id', listingId).single();
+  if (error || !l) { showToast('Could not load listing.'); return; }
+  document.getElementById('editId').value      = l.id;
+  document.getElementById('editTitle').value   = l.title;
+  document.getElementById('editRent').value    = l.rent;
+  document.getElementById('editDeposit').value = l.deposit || 0;
+  document.getElementById('editAvail').value   = l.available_from || '';
+  document.getElementById('editNotes').value   = l.notes || '';
+  clearAuthErr('editErr');
+  document.getElementById('editOverlay').classList.add('open');
+  document.getElementById('editModal').classList.add('open');
+}
+function closeEditModal() {
+  document.getElementById('editOverlay').classList.remove('open');
+  document.getElementById('editModal').classList.remove('open');
+}
+async function saveEdit() {
+  var id      = document.getElementById('editId').value;
+  var title   = document.getElementById('editTitle').value.trim();
+  var rent    = parseInt(document.getElementById('editRent').value);
+  var deposit = parseInt(document.getElementById('editDeposit').value) || 0;
+  var avail   = document.getElementById('editAvail').value;
+  var notes   = document.getElementById('editNotes').value.trim();
+  if (!title || !rent || rent < 300) { showAuthErr('editErr', 'Please fill in title and a valid rent amount.'); return; }
+  var { error } = await sb.from('listings').update({
+    title: title, rent: rent, deposit: deposit,
+    available_from: avail || null, notes: notes || null
+  }).eq('id', id);
+  if (error) { showAuthErr('editErr', 'Could not save changes.'); return; }
+  closeEditModal();
+  showToast('Listing updated!');
+  await loadDashboard();
+  renderListings(curTab);
+}
+</script>
+</body>
+</html>
