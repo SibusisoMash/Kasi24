@@ -1,3 +1,12 @@
+<!--
+  ═══════════════════════════════════════════════════════════
+  FILE 1 OF 3 — THIS IS A WEBSITE FILE
+  Goes to: your website hosting, same place as your other
+  .html files (index.html, admin.html). This REPLACES your
+  old listing-detail.html.
+  Does NOT go anywhere near Supabase.
+  ═══════════════════════════════════════════════════════════
+-->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,12 +27,12 @@
   --charcoal:#2D2D2A;--mid:#6b6b67;--muted:#9a9a96;
   --light:#f6fafb;--white:#fff;--border:#e4ecee;
   --r:16px;--r-lg:22px;
-  --sh:0 6px 28px rgba(8,148,161,0.13);
+  --sh:0 4px 16px rgba(20,24,26,.08);
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
-body{font-family:'Nunito',sans-serif;color:var(--charcoal);background:var(--light);line-height:1.6;min-height:100vh}
-h1,h2,h3,h4{font-family:'Sora',sans-serif}
+body{font-family:'Nunito',sans-serif;color:var(--charcoal);background:var(--light);line-height:1.6;min-height:100vh;font-kerning:normal;font-feature-settings:"kern" 1,"liga" 1;text-rendering:optimizeLegibility}
+h1,h2,h3,h4{font-family:'Sora',sans-serif;font-kerning:normal;letter-spacing:-0.015em}
 
 /* HEADER */
 header{background:rgba(255,255,255,0.97);backdrop-filter:blur(14px);border-bottom:1.5px solid var(--border);padding:0 5vw;position:sticky;top:0;z-index:100}
@@ -31,7 +40,7 @@ header{background:rgba(255,255,255,0.97);backdrop-filter:blur(14px);border-botto
 .back-btn{display:flex;align-items:center;gap:8px;color:var(--mid);font-size:.88rem;font-weight:700;text-decoration:none;padding:8px 14px;border-radius:9px;border:1.5px solid var(--border);background:#fff;transition:border-color .18s,color .18s;font-family:'Sora',sans-serif}
 .back-btn:hover{border-color:var(--teal);color:var(--teal)}
 .logo{display:flex;align-items:center;gap:8px;text-decoration:none}
-.logo-badge{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,var(--teal),var(--teal-d));display:flex;align-items:center;justify-content:center}
+.logo-badge{width:34px;height:34px;border-radius:10px;background:var(--teal-d);display:flex;align-items:center;justify-content:center}
 .logo-badge i{color:#fff;font-size:15px}
 .logo-text{font-family:'Sora',sans-serif;font-size:1.35rem;font-weight:900;color:var(--teal)}
 .logo-text span{color:var(--orange)}
@@ -83,12 +92,12 @@ header{background:rgba(255,255,255,0.97);backdrop-filter:blur(14px);border-botto
 
 /* UNLOCK SECTION */
 .unlock-card{background:#fff;border-radius:var(--r-lg);border:1.5px solid var(--border);padding:24px;margin-bottom:16px;text-align:center}
-.unlock-icon{width:64px;height:64px;border-radius:18px;background:linear-gradient(135deg,#fff8ee,#fdecd8);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-size:1.6rem}
+.unlock-icon{width:64px;height:64px;border-radius:18px;background:#fdecd8;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-size:1.6rem}
 .unlock-icon i{color:var(--orange)}
 .unlock-card h3{font-size:1.1rem;font-weight:900;margin-bottom:8px}
 .unlock-card p{font-size:.88rem;color:var(--mid);line-height:1.65;margin-bottom:20px;max-width:360px;margin-left:auto;margin-right:auto}
-.btn-unlock-big{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;background:linear-gradient(135deg,var(--orange),var(--orange-d));color:#fff;border:none;border-radius:13px;padding:16px;font-size:1.05rem;font-weight:800;font-family:'Sora',sans-serif;cursor:pointer;box-shadow:0 6px 20px rgba(224,122,44,.4);transition:transform .15s,box-shadow .15s;text-decoration:none;margin-bottom:12px}
-.btn-unlock-big:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(224,122,44,.45)}
+.btn-unlock-big{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;background:var(--orange);color:#fff;border:none;border-radius:13px;padding:16px;font-size:1.05rem;font-weight:800;font-family:'Sora',sans-serif;cursor:pointer;box-shadow:0 4px 14px rgba(20,24,26,.14);transition:transform .15s,box-shadow .15s;text-decoration:none;margin-bottom:12px}
+.btn-unlock-big:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(20,24,26,.18)}
 .unlock-note{font-size:.78rem;color:var(--muted);display:flex;align-items:center;justify-content:center;gap:6px}
 .unlock-note i{color:var(--teal);font-size:.72rem}
 
@@ -106,6 +115,52 @@ header{background:rgba(255,255,255,0.97);backdrop-filter:blur(14px);border-botto
 .safety-list{list-style:none;display:flex;flex-direction:column;gap:7px}
 .safety-list li{font-size:.82rem;color:var(--mid);display:flex;align-items:flex-start;gap:8px}
 .safety-list li i{color:var(--teal);font-size:.72rem;margin-top:3px;flex-shrink:0}
+
+/* REVIEWS */
+.reviews-card{background:#fff;border-radius:var(--r-lg);border:1.5px solid var(--border);padding:24px;margin-bottom:16px}
+.reviews-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;gap:12px;flex-wrap:wrap}
+.reviews-title{font-size:1.02rem;font-weight:800;display:flex;align-items:center;gap:9px}
+.reviews-avg{display:flex;align-items:center;gap:8px}
+.reviews-avg-num{font-family:'Sora',sans-serif;font-weight:900;font-size:1.3rem}
+.stars{display:inline-flex;gap:2px;color:#e4ecee}
+.stars i.filled{color:#f5a623}
+.reviews-count{color:var(--mid);font-size:.85rem}
+.btn-write-review{background:var(--teal);color:#fff;border:none;border-radius:10px;padding:10px 18px;font-size:.86rem;font-weight:700;font-family:'Sora',sans-serif;cursor:pointer;white-space:nowrap;transition:background .18s}
+.btn-write-review:hover{background:var(--teal-d)}
+.btn-write-review:disabled{background:var(--border);color:var(--muted);cursor:not-allowed}
+.review-gate-note{font-size:.8rem;color:var(--muted);margin-top:6px}
+.review-list{display:flex;flex-direction:column;gap:16px}
+.review-item{padding-bottom:16px;border-bottom:1.5px solid var(--border)}
+.review-item:last-child{border-bottom:none;padding-bottom:0}
+.review-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:6px;flex-wrap:wrap}
+.review-who{display:flex;align-items:center;gap:9px}
+.review-name{font-weight:700;font-size:.9rem}
+.review-verified{display:inline-flex;align-items:center;gap:4px;font-size:.68rem;font-weight:700;color:#1a8c4a;background:#e0faea;padding:2px 8px;border-radius:100px}
+.review-date{font-size:.76rem;color:var(--muted)}
+.review-comment{font-size:.88rem;color:var(--charcoal);line-height:1.6;margin-top:4px}
+.review-actions{margin-top:6px}
+.review-flag-btn{background:none;border:none;color:var(--muted);font-size:.74rem;cursor:pointer;text-decoration:underline}
+.review-flag-btn:hover{color:#c0392b}
+.review-flagged-note{font-size:.74rem;color:var(--orange-d);margin-top:6px}
+.review-reply{background:var(--light);border-radius:10px;padding:12px 14px;margin-top:10px}
+.review-reply-label{font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:var(--teal);margin-bottom:4px}
+.review-reply-text{font-size:.85rem;color:var(--charcoal)}
+.reviews-empty{text-align:center;color:var(--mid);font-size:.88rem;padding:16px 0}
+.review-form{margin-top:18px;padding-top:18px;border-top:1.5px solid var(--border)}
+.review-form.hidden{display:none}
+.review-form label{display:block;font-size:.76rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin-bottom:6px}
+.review-form-row{margin-bottom:14px}
+.star-picker{display:flex;gap:6px;font-size:1.5rem;cursor:pointer}
+.star-picker i{color:var(--border);transition:color .12s}
+.star-picker i.active{color:#f5a623}
+.review-form input[type=text],.review-form textarea{width:100%;border:1.5px solid var(--border);border-radius:10px;padding:10px 12px;font-size:.88rem;font-family:'Nunito',sans-serif;color:var(--charcoal);outline:none;transition:border-color .18s}
+.review-form input[type=text]:focus,.review-form textarea:focus{border-color:var(--teal)}
+.review-form textarea{resize:vertical;min-height:80px}
+.stayed-check{display:flex;align-items:center;gap:8px;font-size:.85rem;color:var(--charcoal)}
+.review-form-actions{display:flex;gap:10px;margin-top:6px}
+.btn-submit-review{background:var(--teal);color:#fff;border:none;border-radius:10px;padding:11px 20px;font-size:.88rem;font-weight:700;font-family:'Sora',sans-serif;cursor:pointer}
+.btn-submit-review:hover{background:var(--teal-d)}
+.btn-cancel-review{background:none;border:1.5px solid var(--border);color:var(--mid);border-radius:10px;padding:11px 20px;font-size:.88rem;font-weight:700;font-family:'Sora',sans-serif;cursor:pointer}
 
 /* SKELETON */
 .sk{background:linear-gradient(90deg,#f0f0f0 25%,#e8e8e8 50%,#f0f0f0 75%);background-size:200% 100%;animation:shim 1.5s infinite;border-radius:8px}
@@ -132,6 +187,8 @@ header{background:rgba(255,255,255,0.97);backdrop-filter:blur(14px);border-botto
   .detail-price{font-size:1.6rem}
   .share-card{flex-direction:column;align-items:flex-start}
   .btn-wa-share{width:100%;justify-content:center}
+  .reviews-head{flex-direction:column;align-items:flex-start}
+  .btn-write-review{width:100%}
 }
 
 /* PHOTO GALLERY */
@@ -147,7 +204,7 @@ header{background:rgba(255,255,255,0.97);backdrop-filter:blur(14px);border-botto
 @media(max-width:600px){.gallery-main{height:220px}.gthumb{height:48px}}
 
 /* UNLOCK STATES */
-.unlock-card.unlocked{background:linear-gradient(135deg,#f0fff8,#e0faea);border-color:#25d366}
+.unlock-card.unlocked{background:#e0faea;border-color:#25d366}
 .unlocked-number{display:flex;align-items:center;justify-content:center;gap:12px;background:#fff;border:2px solid #25d366;border-radius:13px;padding:18px;margin-bottom:12px}
 .unlocked-number i{color:#25d366;font-size:1.4rem}
 .unlocked-number a{font-family:'Sora',sans-serif;font-size:1.4rem;font-weight:900;color:var(--charcoal);text-decoration:none;letter-spacing:1px}
@@ -162,13 +219,13 @@ header{background:rgba(255,255,255,0.97);backdrop-filter:blur(14px);border-botto
 /* PHONE MODAL */
 .pmodal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:999;display:none;align-items:center;justify-content:center;padding:20px}
 .pmodal-overlay.open{display:flex}
-.pmodal{background:#fff;border-radius:var(--r-lg);padding:28px 24px 24px;width:100%;max-width:400px;box-shadow:0 24px 64px rgba(0,0,0,.22);animation:pmIn .22s ease}
+.pmodal{background:#fff;border-radius:var(--r-lg);padding:28px 24px 24px;width:100%;max-width:400px;box-shadow:0 16px 40px rgba(20,24,26,.14);animation:pmIn .22s ease}
 @keyframes pmIn{from{transform:translateY(18px);opacity:0}to{transform:translateY(0);opacity:1}}
 .pmodal h3{font-family:'Sora',sans-serif;font-size:1.1rem;font-weight:900;color:var(--charcoal);margin-bottom:6px}
 .pmodal p{font-size:.85rem;color:var(--mid);margin-bottom:20px;line-height:1.6}
 .pmodal-label{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:6px;display:block}
 .pmodal-input-row{display:flex;align-items:center;border:1.5px solid var(--border);border-radius:11px;overflow:hidden;transition:border-color .18s,box-shadow .18s;margin-bottom:6px}
-.pmodal-input-row:focus-within{border-color:var(--teal);box-shadow:0 0 0 3px rgba(8,148,161,.12)}
+.pmodal-input-row:focus-within{border-color:var(--teal);box-shadow:0 0 0 3px rgba(20,24,26,.08)}
 .pmodal-input-row.err{border-color:#e74c3c;box-shadow:0 0 0 3px rgba(231,76,60,.1)}
 .pmodal-prefix{padding:12px 12px 12px 16px;font-family:'Sora',sans-serif;font-size:.95rem;font-weight:700;color:var(--teal);background:var(--teal-xl);border-right:1.5px solid var(--teal-l);white-space:nowrap}
 .pmodal-input{border:none;outline:none;padding:12px 14px;font-size:.95rem;font-family:'Nunito',sans-serif;color:var(--charcoal);font-weight:600;width:100%;background:#fff}
@@ -177,8 +234,8 @@ header{background:rgba(255,255,255,0.97);backdrop-filter:blur(14px);border-botto
 .pmodal-actions{display:flex;gap:10px;margin-top:4px}
 .pmodal-cancel{flex:1;background:none;border:1.5px solid var(--border);border-radius:10px;padding:12px;font-size:.9rem;font-weight:700;font-family:'Sora',sans-serif;color:var(--mid);cursor:pointer;transition:border-color .18s,color .18s}
 .pmodal-cancel:hover{border-color:var(--teal);color:var(--teal)}
-.pmodal-confirm{flex:2;background:linear-gradient(135deg,var(--orange),var(--orange-d));color:#fff;border:none;border-radius:10px;padding:12px;font-size:.9rem;font-weight:800;font-family:'Sora',sans-serif;cursor:pointer;box-shadow:0 4px 14px rgba(224,122,44,.35);transition:transform .15s,box-shadow .15s}
-.pmodal-confirm:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(224,122,44,.42)}
+.pmodal-confirm{flex:2;background:var(--orange);color:#fff;border:none;border-radius:10px;padding:12px;font-size:.9rem;font-weight:800;font-family:'Sora',sans-serif;cursor:pointer;box-shadow:0 3px 10px rgba(20,24,26,.14);transition:transform .15s,box-shadow .15s}
+.pmodal-confirm:hover{transform:translateY(-1px);box-shadow:0 4px 14px rgba(20,24,26,.16)}
 .pmodal-confirm:disabled{opacity:.7;transform:none;cursor:default}
 </style>
 </head>
@@ -294,7 +351,7 @@ async function loadListing() {
     ]);
 
     renderListing(l, landlord, photos || []);
-    handlePayFastReturn();
+    handlePaymentReturn();
 
   } catch(err) {
     showNotFound('Something went wrong. Please try again.');
@@ -420,6 +477,11 @@ function renderListing(l, landlord, photos) {
       </div>
     </div>
 
+    <!-- REVIEWS -->
+    <div class="reviews-card" id="reviewsCard">
+      <div id="reviewsContent"><div class="sk sk-line" style="width:40%"></div></div>
+    </div>
+
     <!-- SHARE CARD -->
     <div class="share-card">
       <div class="share-card-left">
@@ -455,6 +517,8 @@ function renderListing(l, landlord, photos) {
   const content = document.getElementById('listingContent');
   content.innerHTML = html;
   content.style.display = 'block';
+
+  loadReviews(l.id, l.landlord_id);
 }
 
 function showNotFound(msg) {
@@ -505,7 +569,16 @@ function setMainPhoto(btn, path) {
 
 
 // ===========================================
-// PAYFAST PAYMENT
+// OZOW PAYMENT (active)
+// ===========================================
+
+const OZOW_TEST_MODE = true; // switch to false once you're ready to go live
+
+const OZOW_CREATE_PAYMENT_URL = 'https://fxoaqzclszjvkwupkdiv.supabase.co/functions/v1/ozow-create-payment';
+const OZOW_NOTIFY_URL         = 'https://fxoaqzclszjvkwupkdiv.supabase.co/functions/v1/ozow-webhook';
+
+// ===========================================
+// PAYFAST PAYMENT (dormant — kept for when Peach/PayFast is reintroduced)
 // ===========================================
 
 const PAYFAST_SANDBOX = true;
@@ -515,10 +588,7 @@ const PAYFAST_MERCHANT_KEY = '46f0cd694581a';
 const PAYFAST_URL_SANDBOX  = 'https://sandbox.payfast.co.za/eng/process';
 const PAYFAST_URL_LIVE     = 'https://www.payfast.co.za/eng/process';
 const PAYFAST_URL          = PAYFAST_SANDBOX ? PAYFAST_URL_SANDBOX : PAYFAST_URL_LIVE;
-const WEBHOOK_URL = 'https://fxoaqzclszjvkwupkdiv.supabase.co/functions/v1/pay-fast-webhooks';
-
-// Your Supabase Edge Function URL
-https://fxoaqzclszjvkwupkdiv.supbase.co/functions/v1/pay-fast-webhooks;
+const WEBHOOK_URL          = 'https://fxoaqzclszjvkwupkdiv.supabase.co/functions/v1/payfast-webhook';
 
 // Check if tenant already paid for this listing
 function getUnlockKey(listingId) {
@@ -559,8 +629,8 @@ function buildLockedHTML(listingId) {
     + '<button class="btn-unlock-big" onclick="startPayment(&#39;' + listingId + '&#39;)" id="payBtn">'
     + '<i class="fa-solid fa-lock-open"></i> Unlock for R10'
     + '</button>'
-    + '<div class="unlock-note"><i class="fa-solid fa-shield-halved"></i> Secure payment via PayFast · No card details stored</div>'
-    + '<div class="payfast-badge"><i class="fa-solid fa-circle-check"></i> Powered by PayFast - trusted by 80,000+ SA businesses</div>';
+    + '<div class="unlock-note"><i class="fa-solid fa-shield-halved"></i> Secure instant EFT via Ozow · No card details needed</div>'
+    + '<div class="payfast-badge"><i class="fa-solid fa-circle-check"></i> Pay directly from your banking app — powered by Ozow</div>';
 }
 
 function buildUnlockedHTML(phone, whatsapp, listingId, fromCache) {
@@ -571,7 +641,7 @@ function buildUnlockedHTML(phone, whatsapp, listingId, fromCache) {
   var waLink = waFormatted ? 'https://wa.me/' + waFormatted + '?text=' + waMsg : '#';
 
   return (fromCache ? '<div class="unlock-already"><i class="fa-solid fa-circle-check"></i> You already unlocked this listing - here is the number again, free of charge.</div>' : '')
-    + '<div class="unlock-icon" style="background:linear-gradient(135deg,#e0fff0,#b8f0d0)"><i class="fa-solid fa-lock-open" style="color:#1a8c4a"></i></div>'
+    + '<div class="unlock-icon" style="background:#b8f0d0"><i class="fa-solid fa-lock-open" style="color:#1a8c4a"></i></div>'
     + '<h3>Contact details unlocked!</h3>'
     + '<div class="unlocked-number">'
     + '<i class="fa-solid fa-phone"></i>'
@@ -583,7 +653,6 @@ function buildUnlockedHTML(phone, whatsapp, listingId, fromCache) {
     + '<div class="unlock-note"><i class="fa-solid fa-circle-info"></i> Call or WhatsApp to arrange a viewing. Always view in person before paying a deposit.</div>';
 }
 
-// -- Start PayFast payment --
 // -- Phone modal helpers --
 var _pendingListingId = null;
 
@@ -641,7 +710,7 @@ function confirmPhone() {
   proceedWithPayment(_pendingListingId, normalised);
 }
 
-// -- Start PayFast payment --
+// -- Start Ozow payment --
 async function startPayment(listingId) {
   var btn = document.getElementById('payBtn');
   if (btn) {
@@ -675,33 +744,40 @@ async function proceedWithPayment(listingId, tenantPhone) {
     }
     if (!unlock) throw new Error('No unlock record returned');
 
-    // 2. Build PayFast payment form and submit
+    // 2. Ask our Supabase Edge Function to build a signed Ozow payment request
+    //    (the Ozow private key lives server-side only, never in this file)
     var baseUrl   = window.location.href.split('?')[0];
     var params    = new URLSearchParams(window.location.search);
     var returnUrl = baseUrl + '?id=' + params.get('id') + '&unlockId=' + unlock.id + '&status=success';
     var cancelUrl = baseUrl + '?id=' + params.get('id') + '&status=cancelled';
 
-    var pfData = {
-      merchant_id:      PAYFAST_MERCHANT_ID,
-      merchant_key:     PAYFAST_MERCHANT_KEY,
-      return_url:       returnUrl,
-      cancel_url:       cancelUrl,
-      notify_url:       WEBHOOK_URL,
-      m_payment_id:     unlock.id,
-      amount:           '10.00',
-      item_name:        'Kasi24 Contact Unlock',
-      item_description: 'Unlock landlord contact details',
-      email_confirmation: '1',
-    };
+    var resp = await fetch(OZOW_CREATE_PAYMENT_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + SUPABASE_KEY,
+        'apikey': SUPABASE_KEY
+      },
+      body: JSON.stringify({
+        reference: unlock.id,
+        amount: '10.00',
+        returnUrl: returnUrl,
+        cancelUrl: cancelUrl,
+        notifyUrl: OZOW_NOTIFY_URL
+      })
+    });
+    var ozowData = await resp.json();
+    if (!resp.ok || ozowData.error) throw new Error(ozowData.error || 'Could not start Ozow payment');
 
+    // 3. Redirect to Ozow's hosted payment page with the signed fields
     var form = document.createElement('form');
     form.method = 'POST';
-    form.action = PAYFAST_URL;
-    Object.keys(pfData).forEach(function(key) {
+    form.action = ozowData.postUrl;
+    Object.keys(ozowData.params).forEach(function(key) {
       var input = document.createElement('input');
       input.type  = 'hidden';
       input.name  = key;
-      input.value = pfData[key];
+      input.value = ozowData.params[key];
       form.appendChild(input);
     });
     document.body.appendChild(form);
@@ -714,8 +790,8 @@ async function proceedWithPayment(listingId, tenantPhone) {
   }
 }
 
-// -- Handle return from PayFast --
-async function handlePayFastReturn() {
+// -- Handle return from Ozow --
+async function handlePaymentReturn() {
   var params    = new URLSearchParams(window.location.search);
   var unlockId  = params.get('unlockId');
   var status    = params.get('status');
@@ -778,6 +854,174 @@ async function handlePayFastReturn() {
 // Store landlord ID globally for use in startPayment
 var currentLandlordId = null;
 
+
+// ===========================================
+// REVIEWS
+// ===========================================
+
+function starsHTML(rating, size) {
+  var out = '<span class="stars"' + (size ? ' style="font-size:' + size + '"' : '') + '>';
+  for (var i = 1; i <= 5; i++) {
+    out += '<i class="fa-solid fa-star' + (i <= Math.round(rating) ? ' filled' : '') + '"></i>';
+  }
+  return out + '</span>';
+}
+
+function timeAgo(dateStr) {
+  var diffDays = Math.floor((new Date() - new Date(dateStr)) / (1000 * 60 * 60 * 24));
+  if (diffDays < 1) return 'Today';
+  if (diffDays === 1) return 'Yesterday';
+  if (diffDays < 30) return diffDays + ' days ago';
+  var months = Math.floor(diffDays / 30);
+  if (months < 12) return months + (months === 1 ? ' month ago' : ' months ago');
+  var years = Math.floor(months / 12);
+  return years + (years === 1 ? ' year ago' : ' years ago');
+}
+
+async function loadReviews(listingId, landlordId) {
+  var { data: reviews, error } = await sb
+    .from('reviews')
+    .select('*')
+    .eq('listing_id', listingId)
+    .eq('is_hidden', false)
+    .order('created_at', { ascending: false });
+
+  var container = document.getElementById('reviewsContent');
+  if (!container) return;
+  if (error) { reviews = []; }
+
+  var count = reviews.length;
+  var avg = count > 0 ? (reviews.reduce(function(s, r) { return s + r.rating; }, 0) / count) : 0;
+
+  var listHtml = count === 0
+    ? '<p class="reviews-empty">No reviews yet — be the first to share how your stay went.</p>'
+    : '<div class="review-list">' + reviews.map(renderReviewItem).join('') + '</div>';
+
+  var canReview = !!hasAlreadyUnlocked(listingId);
+
+  container.innerHTML =
+      '<div class="reviews-head">'
+    +   '<div>'
+    +     '<div class="reviews-title"><i class="fa-solid fa-comment-dots" style="color:var(--teal)"></i> Reviews</div>'
+    +     (count > 0
+            ? '<div class="reviews-avg">' + starsHTML(avg) + '<span class="reviews-avg-num">' + avg.toFixed(1) + '</span><span class="reviews-count">(' + count + ' review' + (count !== 1 ? 's' : '') + ')</span></div>'
+            : '<span class="reviews-count">No ratings yet</span>')
+    +   '</div>'
+    +   '<button class="btn-write-review" id="writeReviewBtn" onclick="toggleReviewForm(\'' + listingId + '\',\'' + landlordId + '\')" ' + (canReview ? '' : 'disabled') + '>'
+    +     '<i class="fa-solid fa-pen"></i> Write a review'
+    +   '</button>'
+    + '</div>'
+    + (canReview ? '' : '<p class="review-gate-note"><i class="fa-solid fa-circle-info"></i> Unlock this listing\'s contact details first — reviews are limited to people who actually connected with the landlord.</p>')
+    + listHtml
+    + '<div class="review-form hidden" id="reviewForm"></div>';
+}
+
+function renderReviewItem(r) {
+  var verifiedBadge = r.stayed_here
+    ? '<span class="review-verified"><i class="fa-solid fa-circle-check"></i> Stayed here' + (r.stay_period ? ' · ' + escapeHtml(r.stay_period) : '') + '</span>'
+    : '';
+  var flagNote = r.is_flagged ? '<div class="review-flagged-note"><i class="fa-solid fa-flag"></i> This review has been flagged and is pending admin review.</div>' : '';
+  var replyHtml = r.landlord_reply
+    ? '<div class="review-reply"><div class="review-reply-label">Landlord response</div><div class="review-reply-text">' + escapeHtml(r.landlord_reply) + '</div></div>'
+    : '';
+
+  return '<div class="review-item">'
+    + '<div class="review-top">'
+    +   '<div class="review-who">'
+    +     '<span class="review-name">' + escapeHtml(r.reviewer_name) + '</span>'
+    +     verifiedBadge
+    +   '</div>'
+    +   '<span class="review-date">' + timeAgo(r.created_at) + '</span>'
+    + '</div>'
+    + starsHTML(r.rating, '.85rem')
+    + '<p class="review-comment">' + escapeHtml(r.comment) + '</p>'
+    + '<div class="review-actions"><button class="review-flag-btn" onclick="flagReview(\'' + r.id + '\')">Report this review</button></div>'
+    + flagNote
+    + replyHtml
+    + '</div>';
+}
+
+function escapeHtml(str) {
+  var d = document.createElement('div');
+  d.textContent = str == null ? '' : str;
+  return d.innerHTML;
+}
+
+var _selectedRating = 0;
+
+function toggleReviewForm(listingId, landlordId) {
+  var form = document.getElementById('reviewForm');
+  if (!form) return;
+  if (!form.classList.contains('hidden')) { form.classList.add('hidden'); return; }
+
+  _selectedRating = 0;
+  var unlock = hasAlreadyUnlocked(listingId) || {};
+
+  form.innerHTML =
+      '<div class="review-form-row"><label>Your rating</label>'
+    + '<div class="star-picker" id="starPicker">'
+    +   [1,2,3,4,5].map(function(n) { return '<i class="fa-regular fa-star" data-val="' + n + '" onclick="setRating(' + n + ')"></i>'; }).join('')
+    + '</div></div>'
+    + '<div class="review-form-row"><label>Your first name</label><input type="text" id="reviewName" placeholder="e.g. Thabo" maxlength="40"></div>'
+    + '<div class="review-form-row"><label>Roughly when did you stay? (optional)</label><input type="text" id="reviewPeriod" placeholder="e.g. March 2026" maxlength="30"></div>'
+    + '<div class="review-form-row"><label class="stayed-check"><input type="checkbox" id="stayedCheck" checked> I actually stayed at this property</label></div>'
+    + '<div class="review-form-row"><label>Your review</label><textarea id="reviewComment" placeholder="How was the place, the landlord, the area?" maxlength="600"></textarea></div>'
+    + '<div class="review-form-actions">'
+    +   '<button class="btn-submit-review" onclick="submitReview(\'' + listingId + '\',\'' + landlordId + '\')">Submit review</button>'
+    +   '<button class="btn-cancel-review" onclick="toggleReviewForm(\'' + listingId + '\',\'' + landlordId + '\')">Cancel</button>'
+    + '</div>';
+
+  form.classList.remove('hidden');
+  form.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+function setRating(n) {
+  _selectedRating = n;
+  document.querySelectorAll('#starPicker i').forEach(function(el) {
+    var v = parseInt(el.getAttribute('data-val'));
+    el.className = v <= n ? 'fa-solid fa-star active' : 'fa-regular fa-star';
+  });
+}
+
+async function submitReview(listingId, landlordId) {
+  var unlock = hasAlreadyUnlocked(listingId);
+  if (!unlock) { alert('Please unlock this listing\'s contact details before leaving a review.'); return; }
+
+  var name = document.getElementById('reviewName').value.trim();
+  var period = document.getElementById('reviewPeriod').value.trim();
+  var stayed = document.getElementById('stayedCheck').checked;
+  var comment = document.getElementById('reviewComment').value.trim();
+
+  if (!name) { alert('Please add your first name.'); return; }
+  if (!_selectedRating) { alert('Please select a star rating.'); return; }
+  if (!comment || comment.length < 10) { alert('Please write a few words about your stay (at least 10 characters).'); return; }
+
+  var { error } = await sb.from('reviews').insert({
+    listing_id: listingId,
+    landlord_id: landlordId,
+    reviewer_name: name,
+    reviewer_phone: unlock.phone || unlock.whatsapp || '',
+    rating: _selectedRating,
+    comment: comment,
+    stayed_here: stayed,
+    stay_period: period || null
+  });
+
+  if (error) { alert('Could not submit your review right now. Please try again shortly.'); return; }
+
+  await loadReviews(listingId, landlordId);
+}
+
+async function flagReview(reviewId) {
+  var reason = prompt('Why are you reporting this review?\n\n1. Fake / not a real tenant\n2. Offensive language\n3. Off-topic or spam\n4. Other\n\nType a number (1-4):');
+  var reasonMap = { '1':'fake_review', '2':'offensive', '3':'spam', '4':'other' };
+  var reasonVal = reasonMap[reason ? reason.trim() : ''];
+  if (!reasonVal) return;
+  var { error } = await sb.from('reviews').update({ is_flagged: true, flag_reason: reasonVal }).eq('id', reviewId);
+  if (error) { alert('Could not submit your report right now.'); return; }
+  alert('Thanks — this review has been flagged for admin review.');
+  location.reload();
+}
 
 // ===========================================
 // REPORT LISTING
