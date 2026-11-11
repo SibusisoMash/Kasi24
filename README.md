@@ -3,11 +3,11 @@ Kasi24 is a rental marketplace for Kwamhlanga, Mpumalanga, connecting tenants to
 
 # Kasi24 – Find Your Room in Kwamhlanga
 
-**Kasi24 is a rental marketplace built specifically for Kwamhlanga, Mpumalanga. Tenants pay R10 to unlock landlord contact details. Landlords list for free.**
+**Kasi24 is a rental marketplace built specifically for Kwamhlanga, Mpumalanga. Tenants pay R20 to unlock landlord contact details. Landlords list for free.**
 
 [![Live Demo](https://img.shields.io/badge/Live%20Demo-Netlify-0894A1?style=for-the-badge&logo=netlify&logoColor=white)](https://your-netlify-url.netlify.app)
 [![Supabase](https://img.shields.io/badge/Supabase-Backend-3FCF8E?style=for-the-badge&logo=supabase&logoColor=white)](https://supabase.com)
-[![PayFast](https://img.shields.io/badge/PayFast-Payments-FF6B35?style=for-the-badge)](https://payfast.io)
+[![Yoco](https://img.shields.io/badge/Yoco-Payments-FF6B35?style=for-the-badge)](https://yoco.com)
 
 ---
 
@@ -30,7 +30,7 @@ Finding a room, back room, flat, or house to rent in Kwamhlanga is broken:
 |-------------|----------------|
 | Browse listings for free | List your property for free |
 | Filter by area, type, and price | 6-step wizard with photo uploads |
-| Pay R10 to unlock landlord's number | Dashboard to manage listings |
+| Pay R20 to unlock landlord's number | Dashboard to manage listings |
 | Leave feedback after unlocking | View how many tenants unlocked your number |
 | Save favourites to wishlist | Boost your listing for R20/week |
 
@@ -42,9 +42,9 @@ Finding a room, back room, flat, or house to rent in Kwamhlanga is broken:
 
 | Technology | Purpose |
 |------------|---------|
-| HTML5, CSS3, Vanilla JavaScript | Frontend |
+| HTML5, CSS3, Vanilla JavaScript | Frontend (no build step) |
 | Supabase (PostgreSQL) | Database, Auth, Storage |
-| PayFast | Payment processing |
+| Yoco Payment Links (Plan B) | Manual R20 payment links, owner confirms each payment |
 | ClickSend | SMS verification (in progress) |
 | Font Awesome 6.5.0 | Icons |
 | Google Fonts (Sora, Nunito) | Typography |
@@ -53,7 +53,14 @@ Finding a room, back room, flat, or house to rent in Kwamhlanga is broken:
 
 ## 📁 Project Structure
 
-
+```
+kasi24/
+├── index.html            # Homepage (browse, search, landlord section)
+├── listing-detail.html   # Listing page + Yoco Plan B unlock flow
+├── admin.html            # Admin panel (approvals, confirm payments)
+├── privacy-policy.html   # POPIA privacy policy
+└── README.md             # This file
+```
 
 ---
 
@@ -67,7 +74,7 @@ Finding a room, back room, flat, or house to rent in Kwamhlanga is broken:
 - ✅ Price range slider (R500 – R8,000)
 - ✅ Save favourites to localStorage
 - ✅ View full listing details (photos, rent, deposit, included utilities, amenities, preferences)
-- ✅ Pay R10 via PayFast to unlock landlord's phone number
+- ✅ Pay R20 via Yoco to unlock landlord's phone number
 - ✅ WhatsApp share button for listings
 - ✅ Report fake/stale listings
 
@@ -95,18 +102,17 @@ Finding a room, back room, flat, or house to rent in Kwamhlanga is broken:
 - ✅ Approve or reject pending listings
 - ✅ Manage live listings (mark taken, delete, reactivate)
 - ✅ View all registered landlords
-- ✅ View unlock history with tenant phone numbers
+- ✅ Confirm R20 payments and view unlock history with tenant phone numbers
 
-### Payment Flow
+### Payment Flow (Plan B — no API keys, no Edge Functions)
 
-1. Tenant clicks "Unlock for R10"
+1. Tenant clicks "Unlock for R20"
 2. Enters SA phone number
-3. Creates pending unlock record in Supabase
-4. Redirects to PayFast (sandbox or live)
-5. Completes payment
-6. Redirects back to listing page
-7. Polls for payment confirmation
-8. Displays landlord's phone number and WhatsApp link
+3. Creates `pending` unlock record in Supabase
+4. Fixed Yoco R20 payment link opens in a new tab (tenant uses their cell number as reference)
+5. Tenant returns and taps "I've Paid R20" → record becomes `awaiting`
+6. Owner checks Yoco Activity for the R20, taps **Confirm R20 received** in `admin.html` → record becomes `complete`
+7. Tenant's page polls every 3 seconds and displays the landlord's phone number + WhatsApp link
 
 ---
 
@@ -161,8 +167,8 @@ Finding a room, back room, flat, or house to rent in Kwamhlanga is broken:
 | listing_id | UUID |
 | landlord_id | UUID |
 | tenant_phone | TEXT |
-| amount_paid | INTEGER (10) |
-| payment_status | TEXT (pending / complete) |
+| amount_paid | INTEGER (20) |
+| payment_status | TEXT (pending / awaiting / complete) |
 | unlocked_at | TIMESTAMP |
 
 ### `reports`
@@ -171,7 +177,7 @@ Finding a room, back room, flat, or house to rent in Kwamhlanga is broken:
 | id | UUID |
 | listing_id | UUID |
 | reason | TEXT |
-| created_at | TIMESTAMP |
+| created_at | TEXT |
 
 ---
 
@@ -183,9 +189,9 @@ Finding a room, back room, flat, or house to rent in Kwamhlanga is broken:
 | Tenant shares unlocked number | Accept some sharing; encourage sharing listing link instead; temporary numbers (future) |
 | Stale / already-taken listings | Admin approval, tenant reports, expiry system (planned) |
 | No landlord incentive | Free listings expire; boosts cost R20; good reviews earn "Verified" badge (planned) |
-| Payment webhook failures | Return URL polling (implemented); idempotency; retry queue (planned) |
+| Tenant pays but owner is slow to confirm | Tenant page polls automatically; WhatsApp fallback number on the waiting screen |
 | Manual admin approval bottleneck | Automated flagging (planned); community manager (future) |
-| Free competitors (Facebook, Gumtree) | R10 = quality filter, not cost; local focus; tenant feedback loop |
+| Free competitors (Facebook, Gumtree) | R20 = quality filter, not cost; local focus; tenant feedback loop |
 | Legal compliance (POPIA, CPA) | Privacy policy; consent checkboxes; minimal data collection |
 
 ---
@@ -196,7 +202,7 @@ Finding a room, back room, flat, or house to rent in Kwamhlanga is broken:
 - ✅ Listing creation wizard (6 steps)
 - ✅ Photo upload (up to 10 images)
 - ✅ Browse + filter listings
-- ✅ PayFast payment integration
+- ✅ Yoco payment integration (Plan B manual link)
 - ✅ Landlord dashboard
 - ✅ Admin panel
 - ✅ Wishlist (localStorage)
@@ -208,6 +214,7 @@ Finding a room, back room, flat, or house to rent in Kwamhlanga is broken:
 - 🔄 Tenant comments/reviews on listings
 - 🔄 Listing expiry (30 days) + renewal
 - 🔄 Boost feature (R20/week)
+- 🔄 Automatic Yoco confirmation via Checkout API (replaces manual confirm)
 
 ### Phase 3 – Post-Competition
 - ⏳ Real estate agency subscriptions (R199–R499/month)
@@ -222,7 +229,7 @@ Finding a room, back room, flat, or house to rent in Kwamhlanga is broken:
 
 | User Type | Pays | Receives |
 |-----------|------|----------|
-| Tenant | R10 (one-time per listing) | Landlord's phone number + ability to leave feedback |
+| Tenant | R20 (one-time per listing) | Landlord's phone number + ability to leave feedback |
 | Individual landlord | R0 (free) | Standard placement in search results |
 | Individual landlord (boost) | R20/week | Featured placement + "Boosted" badge |
 | Real estate agency (Phase 2) | R199–R499/month | Unlimited listings, analytics, priority support |
@@ -234,11 +241,27 @@ Finding a room, back room, flat, or house to rent in Kwamhlanga is broken:
 ### Prerequisites
 - A modern web browser (Chrome, Firefox, Safari)
 - Supabase account (free tier)
-- PayFast sandbox account (for testing payments)
+- One fixed Yoco payment link for R20 (Online Payment Tools → New Payment Link)
 
 ### Setup
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/your-username/kasi24.git
-   cd kasi24
+   git clone https://github.com/SibusisoMash/Kasi24.git
+   cd Kasi24
+   ```
+
+2. **Configure the payment link**
+   - Open `listing-detail.html`, set `YOCO_PAYMENT_LINK` to your Yoco link and `UNLOCK_PRICE = 20`.
+
+3. **Configure Supabase**
+   - Create the tables in `🗄️ Database Schema` above (or import your existing project).
+   - Set the anon key in the frontend files and deploy the `get_landlord_contact` RPC.
+   - No Edge Functions needed for Plan B.
+
+4. **Run it — no build step**
+   - Open `index.html` in a browser, or serve the folder statically:
+   ```bash
+   npx serve .
+   ```
+   - Upload the four `.html` files to Netlify (or any static host) to go live. Replace `your-netlify-url` in the badge above with your real URL.
