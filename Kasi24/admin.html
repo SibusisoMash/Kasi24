@@ -517,7 +517,7 @@ async function loadUnlocks() {
   var { data, error } = await sb
     .from('unlocks')
     .select('*, listings(title, area), landlords(name)')
-    .eq('payment_status', 'confirmed')
+    .eq('payment_status', 'complete')
     .order('unlocked_at', { ascending: false })
     .limit(100);
   if (error || !data || data.length === 0) {

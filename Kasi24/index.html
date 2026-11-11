@@ -619,7 +619,7 @@ select.wi{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.o
   <div class="hiw-grid">
     <div class="hiw-con"></div>
     <div class="hiw-card"><div class="hiw-ico"><i class="fa-solid fa-house-chimney-window"></i><span class="snum">1</span></div><h3>Browse Listings</h3><p>See photos, prices, locations and features completely free. No sign-up required.</p></div>
-    <div class="hiw-card"><div class="hiw-ico"><i class="fa-solid fa-lock-open"></i><span class="snum">2</span></div><h3>Unlock Contact</h3><p>Found a place? Pay R10 via SnapScan or Ozow to instantly see the landlord's number.</p></div>
+    <div class="hiw-card"><div class="hiw-ico"><i class="fa-solid fa-lock-open"></i><span class="snum">2</span></div><h3>Unlock Contact</h3><p>Found a place? Pay R10 via Yoco to instantly see the landlord's number.</p></div>
     <div class="hiw-card"><div class="hiw-ico"><i class="fa-solid fa-key"></i><span class="snum">3</span></div><h3>Move In</h3><p>Call directly, arrange your viewing, negotiate your move-in date. Done.</p></div>
   </div>
   <div class="hiw-note"><i class="fa-solid fa-circle-check"></i> No subscriptions. No monthly fees. You only pay to connect.</div>
@@ -667,8 +667,8 @@ select.wi{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.o
   <h2 class="sec-title" style="font-size:1.6rem;margin-bottom:10px;">Pay Safely With</h2>
   <p>Trusted South African platforms. No cash, no EFTs to strangers.</p>
   <div class="pmrow">
-    <div class="pmchip"><i class="fa-solid fa-qrcode"></i> SnapScan</div>
-    <div class="pmchip"><i class="fa-solid fa-mobile-screen"></i> Ozow</div>
+    <div class="pmchip"><i class="fa-solid fa-credit-card"></i> Yoco</div>
+    <div class="pmchip"><i class="fa-solid fa-mobile-screen"></i> Card &amp; Mobile</div>
     <div class="pmchip"><i class="fa-solid fa-lock"></i> Secure &amp; Instant</div>
     <div class="pmchip"><i class="fa-solid fa-receipt"></i> R10 flat fee</div>
   </div>
@@ -687,6 +687,7 @@ select.wi{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.o
       <div class="fc"><h4>Areas</h4><a href="#">Slovo Park</a><a href="#">Extension 1 &amp; 2</a><a href="#">CPA</a><a href="#">Phola Park</a><a href="#">Mandela Village</a></div>
       <div class="fc"><h4>Contact</h4><a href="/cdn-cgi/l/email-protection#c5acaba3aa85aea4b6acf7f1eba6aaebbfa4"><i class="fa-solid fa-envelope" style="color:var(--teal);margin-right:6px"></i><span class="__cf_email__" data-cfemail="50393e363f103b31233962647e333f7e2a31">[email&#160;protected]</span></a><a href="#"><i class="fa-brands fa-whatsapp" style="color:var(--teal);margin-right:6px"></i>WhatsApp Us</a><a href="#">Privacy Policy</a><a href="#">Terms of Use</a></div>
     </div>
+    <p style="font-size:.78rem;line-height:1.6;color:rgba(255,255,255,.45);max-width:760px;margin:0 0 16px">Kasi24 is not an estate agency, we do not negotiate leases or manage or collect rent.</p>
     <div class="fb"><span>© 2025 Kasi24.co.za — All rights reserved</span><div class="pride"><i class="fa-solid fa-heart"></i> Proudly Kwamhlanga</div></div>
   </div>
 </footer>
@@ -1236,13 +1237,8 @@ function toggleSave(btn, id) {
 }
 
 function doUnlock(btn, listingId) {
-  btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Opening payment…';
-  btn.disabled = true;
-  // TODO: integrate Ozow/SnapScan payment here
-  setTimeout(function() {
-    btn.innerHTML = '<i class="fa-solid fa-lock-open"></i> Unlock for R10';
-    btn.disabled = false;
-  }, 2200);
+  // Unlocks happen on listing-detail.html via Yoco — send the tenant there.
+  window.location = 'listing-detail.html?id=' + listingId;
 }
 
 document.getElementById('heroSearchBtn').addEventListener('click', function() {

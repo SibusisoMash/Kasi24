@@ -213,8 +213,8 @@ header{background:rgba(255,255,255,0.97);backdrop-filter:blur(14px);border-botto
 .unlock-wa-btn:hover{background:#1da851;transform:translateY(-1px)}
 .unlock-already{background:var(--teal-xl);border:1.5px solid var(--teal-l);border-radius:10px;padding:12px 16px;font-size:.82rem;color:var(--teal-d);display:flex;align-items:center;gap:8px;margin-bottom:12px;font-weight:600}
 .unlock-already i{color:var(--teal);flex-shrink:0}
-.payfast-badge{display:flex;align-items:center;justify-content:center;gap:6px;font-size:.72rem;color:var(--muted);margin-top:6px}
-.payfast-badge i{color:var(--teal);font-size:.68rem}
+.yoco-badge{display:flex;align-items:center;justify-content:center;gap:6px;font-size:.72rem;color:var(--muted);margin-top:6px}
+.yoco-badge i{color:var(--teal);font-size:.68rem}
 
 /* PHONE MODAL */
 .pmodal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:999;display:none;align-items:center;justify-content:center;padding:20px}
@@ -569,26 +569,16 @@ function setMainPhoto(btn, path) {
 
 
 // ===========================================
-// OZOW PAYMENT (active)
+// YOCO PAYMENT — PLAN B (manual link, no API keys, no Edge Functions)
+// SETUP: In Yoco → Online Payment Tools → New Payment Link → Amount R10 →
+// Product "Kasi24 Unlock" → Create → paste that link below.
 // ===========================================
 
-const OZOW_TEST_MODE = true; // switch to false once you're ready to go live
+const YOCO_PAYMENT_LINK = 'https://pay.yoco.com/r/9DMzqj'; // fixed R20 Kasi24 Unlock link
 
-const OZOW_CREATE_PAYMENT_URL = 'https://fxoaqzclszjvkwupkdiv.supabase.co/functions/v1/ozow-create-payment';
-const OZOW_NOTIFY_URL         = 'https://fxoaqzclszjvkwupkdiv.supabase.co/functions/v1/ozow-webhook';
-
-// ===========================================
-// PAYFAST PAYMENT (dormant — kept for when Peach/PayFast is reintroduced)
-// ===========================================
-
-const PAYFAST_SANDBOX = true;
-
-const PAYFAST_MERCHANT_ID  = '10000100';
-const PAYFAST_MERCHANT_KEY = '46f0cd694581a';
-const PAYFAST_URL_SANDBOX  = 'https://sandbox.payfast.co.za/eng/process';
-const PAYFAST_URL_LIVE     = 'https://www.payfast.co.za/eng/process';
-const PAYFAST_URL          = PAYFAST_SANDBOX ? PAYFAST_URL_SANDBOX : PAYFAST_URL_LIVE;
-const WEBHOOK_URL          = 'https://fxoaqzclszjvkwupkdiv.supabase.co/functions/v1/payfast-webhook';
+// PRICE: change this ONE number and all buttons/text/amounts follow.
+// Your Yoco link amount (README Step 1) MUST match this number.
+const UNLOCK_PRICE = 20; // R20 — matches the fixed Yoco link above
 
 // Check if tenant already paid for this listing
 function getUnlockKey(listingId) {
@@ -625,12 +615,12 @@ function buildUnlockSection(listingId) {
 function buildLockedHTML(listingId) {
   return '<div class="unlock-icon"><i class="fa-solid fa-lock"></i></div>'
     + "<h3>Get the landlord's number</h3>"
-    + "<p>Pay R10 to unlock the landlord's contact details. Once paid, the number is yours - no expiry, no repeat charges.</p>"
+    + "<p>Pay R" + UNLOCK_PRICE + " to unlock the landlord's contact details. Once paid, the number is yours - no expiry, no repeat charges.</p>"
     + '<button class="btn-unlock-big" onclick="startPayment(&#39;' + listingId + '&#39;)" id="payBtn">'
-    + '<i class="fa-solid fa-lock-open"></i> Unlock for R10'
+    + '<i class="fa-solid fa-lock-open"></i> Unlock for R" + UNLOCK_PRICE + "'
     + '</button>'
-    + '<div class="unlock-note"><i class="fa-solid fa-shield-halved"></i> Secure instant EFT via Ozow · No card details needed</div>'
-    + '<div class="payfast-badge"><i class="fa-solid fa-circle-check"></i> Pay directly from your banking app — powered by Ozow</div>';
+    + '<div class="unlock-note"><i class="fa-solid fa-shield-halved"></i> Secure card payment via Yoco · No account needed</div>'
+    + '<div class="yoco-badge"><i class="fa-solid fa-circle-check"></i> Pay with card or mobile — powered by Yoco</div>';
 }
 
 function buildUnlockedHTML(phone, whatsapp, listingId, fromCache) {
@@ -694,7 +684,7 @@ function closePhoneModal() {
   document.getElementById('phoneModalOverlay').classList.remove('open');
   _pendingListingId = null;
   var btn = document.getElementById('payBtn');
-  if (btn) { btn.innerHTML = '<i class="fa-solid fa-lock-open"></i> Unlock for R10'; btn.disabled = false; }
+  if (btn) { btn.innerHTML = '<i class="fa-solid fa-lock-open"></i> Unlock for R" + UNLOCK_PRICE + "'; btn.disabled = false; }
 }
 
 function confirmPhone() {
@@ -710,7 +700,7 @@ function confirmPhone() {
   proceedWithPayment(_pendingListingId, normalised);
 }
 
-// -- Start Ozow payment --
+// -- Start Yoco payment --
 async function startPayment(listingId) {
   var btn = document.getElementById('payBtn');
   if (btn) {
@@ -728,7 +718,7 @@ async function proceedWithPayment(listingId, tenantPhone) {
       listing_id:     listingId,
       landlord_id:    currentLandlordId,
       tenant_phone:   tenantPhone,
-      amount_paid:    10,
+      amount_paid:    UNLOCK_PRICE,
       payment_status: 'pending',
     };
 
@@ -744,60 +734,90 @@ async function proceedWithPayment(listingId, tenantPhone) {
     }
     if (!unlock) throw new Error('No unlock record returned');
 
-    // 2. Ask our Supabase Edge Function to build a signed Ozow payment request
-    //    (the Ozow private key lives server-side only, never in this file)
-    var baseUrl   = window.location.href.split('?')[0];
-    var params    = new URLSearchParams(window.location.search);
-    var returnUrl = baseUrl + '?id=' + params.get('id') + '&unlockId=' + unlock.id + '&status=success';
-    var cancelUrl = baseUrl + '?id=' + params.get('id') + '&status=cancelled';
+    // 2. PLAN B: remember this unlock, then open your fixed Yoco R10 link.
+    //    No Edge Function, no secret key needed.
+    if (!YOCO_PAYMENT_LINK || YOCO_PAYMENT_LINK.indexOf('PASTE_') === 0) {
+      throw new Error('Payment link not set up yet. The owner still needs to paste the Yoco R10 link into listing-detail.html (YOCO_PAYMENT_LINK).');
+    }
+    try { sessionStorage.setItem('k24_pending_unlock', unlock.id); } catch(e) {}
+    window.open(YOCO_PAYMENT_LINK, '_blank');
 
-    var resp = await fetch(OZOW_CREATE_PAYMENT_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + SUPABASE_KEY,
-        'apikey': SUPABASE_KEY
-      },
-      body: JSON.stringify({
-        reference: unlock.id,
-        amount: '10.00',
-        returnUrl: returnUrl,
-        cancelUrl: cancelUrl,
-        notifyUrl: OZOW_NOTIFY_URL
-      })
-    });
-    var ozowData = await resp.json();
-    if (!resp.ok || ozowData.error) throw new Error(ozowData.error || 'Could not start Ozow payment');
-
-    // 3. Redirect to Ozow's hosted payment page with the signed fields
-    var form = document.createElement('form');
-    form.method = 'POST';
-    form.action = ozowData.postUrl;
-    Object.keys(ozowData.params).forEach(function(key) {
-      var input = document.createElement('input');
-      input.type  = 'hidden';
-      input.name  = key;
-      input.value = ozowData.params[key];
-      form.appendChild(input);
-    });
-    document.body.appendChild(form);
-    form.submit();
+    // 3. Show "pay then tap I've Paid" screen for this unlock.
+    showAwaitingPayment(listingId, unlock.id);
 
   } catch(err) {
     console.error('Payment error:', err);
-    if (btn) { btn.innerHTML = '<i class="fa-solid fa-lock-open"></i> Unlock for R10'; btn.disabled = false; }
+    if (btn) { btn.innerHTML = '<i class="fa-solid fa-lock-open"></i> Unlock for R" + UNLOCK_PRICE + "'; btn.disabled = false; }
     alert('Payment setup failed: ' + err.message + '\n\nCheck the browser console for details.');
   }
 }
 
-// -- Handle return from Ozow --
-async function handlePaymentReturn() {
-  var params    = new URLSearchParams(window.location.search);
-  var unlockId  = params.get('unlockId');
-  var status    = params.get('status');
-  var listingId = params.get('id');
+// -- PLAN B: "I've Paid" + wait for owner confirmation --
+function showAwaitingPayment(listingId, unlockId) {
+  var card = document.getElementById('unlockContent');
+  if (!card) return;
+  card.innerHTML = '<div class="unlock-icon"><i class="fa-solid fa-clock" style="color:var(--orange)"></i></div>'
+    + '<h3>Complete your R10 payment</h3>'
+    + '<p style="color:var(--mid);font-size:.9rem">A Yoco payment tab was opened. Pay R" + UNLOCK_PRICE + " there (use your cell number as the reference), then come back here and tap below.</p>'
+    + '<button class="btn-unlock-big" id="ivePaidBtn" onclick="markPaidAndWait(\'' + listingId + '\',\'' + unlockId + '\)">'
+    + '<i class="fa-solid fa-check"></i> I\'ve Paid R" + UNLOCK_PRICE + " — Show Number'
+    + '</button>'
+    + '<div class="unlock-note"><i class="fa-solid fa-shield-halved"></i> The landlord number appears after the owner confirms your payment (usually minutes).</div>'
+    + '<div style="margin-top:10px"><a href="' + YOCO_PAYMENT_LINK + '" target="_blank" style="font-size:.85rem;font-weight:700;color:var(--teal)">Re-open Yoco payment link</a></div>';
+}
 
-  if (!unlockId || status !== 'success') return;
+async function markPaidAndWait(listingId, unlockId) {
+  var card = document.getElementById('unlockContent');
+  var btn = document.getElementById('ivePaidBtn');
+  if (btn) { btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Waiting for confirmation…'; btn.disabled = true; }
+  try {
+    await sb.from('unlocks').update({ payment_status: 'awaiting' }).eq('id', unlockId);
+  } catch(e) { console.error('mark awaiting failed:', e); }
+  pollForConfirmation(listingId, unlockId);
+}
+
+function pollForConfirmation(listingId, unlockId) {
+  var card = document.getElementById('unlockContent');
+  if (card) card.innerHTML = '<div class="unlock-icon"><i class="fa-solid fa-spinner fa-spin" style="color:var(--teal)"></i></div>'
+    + '<h3 style="margin-top:12px">Waiting for confirmation…</h3>'
+    + '<p style="color:var(--mid);font-size:.9rem">You tapped "I\'ve Paid". The owner checks Yoco Activity and confirms. Keep this page open — the number appears automatically.</p>';
+  var attempts = 0;
+  var maxAttempts = 120; // ~6 min at 3s
+  var checkInterval = setInterval(async function() {
+    attempts++;
+    var { data: unlock } = await sb.from('unlocks').select('payment_status').eq('id', unlockId).single();
+    if (unlock && unlock.payment_status === 'complete') {
+      clearInterval(checkInterval);
+      var { data: contact } = await sb.rpc('get_landlord_contact', { p_listing_id: listingId, p_unlock_id: unlockId });
+      var phone = contact && contact[0] ? contact[0].phone : null;
+      var whatsapp = contact && contact[0] ? contact[0].whatsapp : null;
+      if (phone) {
+        try { saveUnlock(listingId, phone, whatsapp); } catch(e) {}
+        if (card) card.innerHTML = buildUnlockedHTML(phone, whatsapp, listingId, false);
+        document.getElementById('unlockCard').classList.add('unlocked');
+      } else if (card) {
+        card.innerHTML = '<div class="unlock-icon"><i class="fa-solid fa-circle-exclamation" style="color:var(--orange)"></i></div>'
+          + '<h3>Confirmed!</h3><p>Payment confirmed — please refresh the page to see the number.</p>';
+      }
+    } else if (attempts >= maxAttempts) {
+      clearInterval(checkInterval);
+      if (card) card.innerHTML = '<div class="unlock-icon"><i class="fa-solid fa-clock" style="color:var(--orange)"></i></div>'
+        + '<h3>Still waiting</h3>'
+        + '<p style="color:var(--mid);font-size:.9rem">Not confirmed yet. If you paid, WhatsApp us at <strong>+27 81 352 8749</strong> with your cell number and we will confirm.</p>'
+        + '<button class="btn-unlock-big" onclick="pollForConfirmation(\'' + listingId + '\',\'' + unlockId + '\)"><i class="fa-solid fa-rotate"></i> Check again</button>';
+    }
+  }, 3000);
+  try { window.pollForConfirmation = pollForConfirmation; } catch(e) {}
+}
+
+// -- Handle return from Yoco (Plan B: resume waiting if tenant left and came back) --
+async function handlePaymentReturn() {
+  // Plan B has no ?unlockId return URL (fixed Yoco link). If the tenant
+  // already started an unlock on this listing, resume waiting for confirmation.
+  var listingId = new URLSearchParams(window.location.search).get('id');
+  var unlockId = null;
+  try { unlockId = sessionStorage.getItem('k24_pending_unlock'); } catch(e) {}
+  if (!unlockId || !listingId) return;
 
   // Show confirming state immediately
   var card = document.getElementById('unlockContent');
