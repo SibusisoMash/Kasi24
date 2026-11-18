@@ -338,19 +338,21 @@ async function loadListing() {
 
     if (error || !l) { showNotFound('This listing could not be found.'); return; }
 
-    // Step 2: fetch landlord + photos in parallel
+    // Step 2: fetch landlord NAME ONLY + photos in parallel.
+    // NEVER fetch phone/whatsapp here — anon must not download numbers before payment.
+    // The number comes only from get_landlord_contact() after you Confirm to 'complete'.
     const [{ data: landlord }, { data: photos }] = await Promise.all([
-      sb.from('landlords')
-        .select('name, phone, whatsapp')
-        .eq('id', l.landlord_id)
-        .single(),
+      sb.rpc('get_landlord_name', { p_landlord_id: l.landlord_id }),
       sb.from('listing_photos')
         .select('*')
         .eq('listing_id', id)
         .order('sort_order', { ascending: true })
     ]);
 
-    renderListing(l, landlord, photos || []);
+    // rpc returns an array of rows — take the first (name only, no phone)
+    const landlordObj = Array.isArray(landlord) ? landlord[0] : landlord;
+
+    renderListing(l, landlordObj, photos || []);
     handlePaymentReturn();
 
   } catch(err) {
@@ -395,12 +397,8 @@ function renderListing(l, landlord, photos) {
     ? (l.preferences || []).map(v => `<span class="dchip grey"><i class="fa-solid ${PREF_ICONS[v]||'fa-circle-info'}"></i>${PREF_LABELS[v]||v}</span>`).join('')
     : '<span class="dchip grey">No specific preferences</span>';
 
-  // WhatsApp unlock link
-  const waNumber = (landlord && (landlord.whatsapp || landlord.phone) || '').replace(/\D/g,'');
-  const waFormatted = waNumber.startsWith('0') ? '27' + waNumber.slice(1) : waNumber;
-  const listingUrl = encodeURIComponent(window.location.href);
-  const waMsg = encodeURIComponent(`Hi, I found your listing on Kasi24: ${l.title} in ${l.area} for ${rentFmt}/month. Is it still available?`);
-  const waLink = waFormatted ? `https://wa.me/${waFormatted}?text=${waMsg}` : '#';
+  // NOTE: no landlord phone here on purpose — number only appears after paid unlock via RPC.
+  // waLink for pre-unlock contact removed (was leaking the number before payment).
 
   // WhatsApp share message
   const shareMsg = encodeURIComponent(`🏠 ${l.title}\n📍 ${l.area}, Kwamhlanga\n💰 ${rentFmt}/month\n\nSee full details on Kasi24:\n${window.location.href}`);

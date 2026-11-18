@@ -134,7 +134,7 @@
 
 <main>
   <h1>Privacy Policy</h1>
-  <p class="updated">Last updated: <span class="fill">[DATE]</span> · Effective from: <span class="fill">[DATE]</span></p>
+  <p class="updated">Last updated: <span class="fill">18 November 2026</span> · Effective from: <span class="fill">18 November 2026</span></p>
 
   <div class="placeholder-note">
     <strong>Before you publish this page</strong>
@@ -164,16 +164,16 @@
 
   <h2 id="who">1. Who we are</h2>
   <p>
-    Kasi24 ("Kasi24", "we", "us", "our") operates the website kasi24.co.za, a platform that connects
-    landlords in <span class="fill">[Kwamhlanga / KwaNdebele region]</span> with tenants looking for
+    Kasi24 ("Kasi24", "we", "us", "our") operates the website kasi24.netlify.app, a platform that connects
+    landlords in <span class="fill">Kwamhlanga, Mpumalanga</span> with tenants looking for
     rooms, back rooms, flats and houses to rent. Kasi24 is operated by
-    <span class="fill">[your full name or registered business name]</span>, of
-    <span class="fill">[physical address]</span>.
+    <span class="fill">Sibusiso Mahlangu trading as Kasi24</span>, of
+    <span class="fill">235 Sakhile Street, Section A, Kwamhlanga, Mpumalanga 1020</span>.
   </p>
   <p>
     Under POPIA, Kasi24 is the "responsible party" for the personal information described in this policy.
-    Our designated Information Officer is <span class="fill">[name]</span>, contactable at
-    <span class="fill">[email/phone]</span>. POPIA requires every responsible party to register its
+    Our designated Information Officer is <span class="fill">Sibusiso Mahlangu</span>, contactable at
+    <span class="fill">backroomrentals24@gmail.com / 081 352 8749</span>. POPIA requires every responsible party to register its
     Information Officer with the Information Regulator before processing personal information — see
     section 15 for how to do this if you haven't yet.
   </p>
@@ -190,7 +190,7 @@
   <ul>
     <li>To create and manage landlord accounts and listings</li>
     <li>To let tenants search, filter and unlock listings</li>
-    <li>To process the R10 unlock payment and confirm it went through</li>
+    <li>To process the R20 unlock payment via Yoco and confirm it went through (manual confirmation by the owner in the admin panel)</li>
     <li>To contact landlords about their listings (approval, expiry reminders, unlock notifications)</li>
     <li>To detect and prevent fraud, fake listings and abuse of the platform</li>
     <li>To improve the site and understand how it's used</li>
@@ -210,7 +210,7 @@
   <p>We share personal information only where necessary to run the platform:</p>
   <ul>
     <li><strong>Supabase</strong> (database, authentication and file storage provider) — hosts all the information described in section 2.</li>
-    <li><strong>Yoco</strong> — processes the R10 unlock payment. We share only the information needed to process the transaction; we never see or store your full card details.</li>
+    <li><strong>Yoco</strong> — processes the R20 unlock payment via a Yoco payment link (you pay on Yoco’s site using your cell number as reference). We share only the information needed to process the transaction; we never see or store your full card details.</li>
     <li><strong>Netlify</strong> (hosting provider) — serves the website itself.</li>
     <li><strong>Law enforcement or regulators</strong> — only where we are legally required to, such as in response to a valid court order.</li>
   </ul>
@@ -219,10 +219,7 @@
   <h2 id="transfer">6. Where your information is stored</h2>
   <p>
     Our database and storage provider (Supabase) may store information on servers located outside South Africa,
-    depending on which region your project is hosted in. <span class="fill">[Confirm your Supabase project region here —
-    if it is not in South Africa, POPIA requires that the country it's hosted in have data protection laws that are
-    substantially similar to POPIA, or that you have another lawful basis for the cross-border transfer, such as the
-    data subject's consent.]</span> Where information is transferred outside South Africa, we take reasonable steps
+    depending on which region your project is hosted in. <span class="fill">Your project region is shown in your Supabase dashboard under Project Settings. If it is outside South Africa, the transfer is protected by Supabase’s data processing terms plus your consent when you submit your information.</span> Where information is transferred outside South Africa, we take reasonable steps
     to ensure it remains protected in line with POPIA.
   </p>
 
@@ -237,16 +234,18 @@
 
   <h2 id="retain">8. How long we keep it</h2>
   <ul>
-    <li>Account and listing information — for as long as your account is active, plus <span class="fill">[X]</span> months after deletion, to prevent fraud and resolve disputes.</li>
+    <li>Account and listing information — for as long as your account is active, plus <span class="fill">12</span> months after deletion, to prevent fraud and resolve disputes.</li>
     <li>Payment/unlock records — as required by South African tax law (currently five years).</li>
     <li>Deleted listings — removed from public view immediately; underlying records may be retained briefly for dispute resolution before permanent deletion.</li>
   </ul>
 
   <h2 id="security">9. How we protect it</h2>
   <p>
-    We use Supabase's Row Level Security to restrict access to personal information, and our admin panel is
-    protected against public access. We are aware that our current admin authentication check happens in the
-    browser rather than being enforced at the database level, and we are working to strengthen this. No method of
+    We use Supabase Row Level Security to restrict access: public visitors can only read live approved
+    listings and photos — landlord phone numbers, ID numbers and email addresses are not readable directly.
+    The listing page fetches the landlord name only; the phone number is returned solely by a secure database
+    function after a confirmed (`complete`) unlock. Our admin panel requires a Supabase login on an allowlisted
+    admin email, and database rules allow full management only to logged-in admins. No method of
     transmission or storage is 100% secure, and we cannot guarantee absolute security, but we take reasonable
     technical and organisational measures appropriate to the risk.
   </p>
@@ -294,9 +293,9 @@
   <h2 id="contact">15. Contact us / the Information Regulator</h2>
   <p>
     <strong>Kasi24</strong><br>
-    Information Officer: <span class="fill">[name]</span><br>
-    Email: <span class="fill">[email address]</span><br>
-    Phone / WhatsApp: <span class="fill">[number]</span>
+    Information Officer: <span class="fill">Sibusiso Mahlangu</span><br>
+    Email: <span class="fill">backroomrentals24@gmail.com</span><br>
+    Phone / WhatsApp: <span class="fill">081 352 8749</span>
   </p>
   <p>
     If you're not satisfied with our response, you can lodge a complaint with South Africa's Information Regulator:
@@ -309,7 +308,7 @@
 </main>
 
 <footer>
-  © <span class="fill">[YEAR]</span> Kasi24. All rights reserved.
+  © <span class="fill">2026</span> Kasi24. All rights reserved.
 </footer>
 
 </body>

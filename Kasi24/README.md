@@ -5,7 +5,7 @@ Kasi24 is a rental marketplace for Kwamhlanga, Mpumalanga, connecting tenants to
 
 **Kasi24 is a rental marketplace built specifically for Kwamhlanga, Mpumalanga. Tenants pay R20 to unlock landlord contact details. Landlords list for free.**
 
-[![Live Demo](https://img.shields.io/badge/Live%20Demo-Netlify-0894A1?style=for-the-badge&logo=netlify&logoColor=white)](https://your-netlify-url.netlify.app)
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Netlify-0894A1?style=for-the-badge&logo=netlify&logoColor=white)](https://kasi24.netlify.app)
 [![Supabase](https://img.shields.io/badge/Supabase-Backend-3FCF8E?style=for-the-badge&logo=supabase&logoColor=white)](https://supabase.com)
 [![Yoco](https://img.shields.io/badge/Yoco-Payments-FF6B35?style=for-the-badge)](https://yoco.com)
 
@@ -112,7 +112,7 @@ kasi24/
 4. Fixed Yoco R20 payment link opens in a new tab (tenant uses their cell number as reference)
 5. Tenant returns and taps "I've Paid R20" → record becomes `awaiting`
 6. Owner checks Yoco Activity for the R20, taps **Confirm R20 received** in `admin.html` → record becomes `complete`
-7. Tenant's page polls every 3 seconds and displays the landlord's phone number + WhatsApp link
+7. Tenant's page polls every 3 seconds and calls `get_landlord_contact()` — phone + WhatsApp appear only after `complete`. Detail page never fetches phone directly (name only via `get_landlord_name()`).
 
 ---
 
@@ -256,7 +256,10 @@ kasi24/
 
 3. **Configure Supabase**
    - Create the tables in `🗄️ Database Schema` above (or import your existing project).
-   - Set the anon key in the frontend files and deploy the `get_landlord_contact` RPC.
+   - Set the anon key in the frontend files.
+   - In Supabase > SQL Editor, run `fix-rls.sql` (in this folder). This locks it down:
+     `landlords` = no anon reads, `listings` = live approved only,
+     `get_landlord_name()` = name only, `get_landlord_contact()` = phone only after `complete` unlock.
    - No Edge Functions needed for Plan B.
 
 4. **Run it — no build step**
