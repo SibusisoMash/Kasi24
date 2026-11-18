@@ -570,7 +570,7 @@ function setMainPhoto(btn, path) {
 
 // ===========================================
 // YOCO PAYMENT — PLAN B (manual link, no API keys, no Edge Functions)
-// SETUP: In Yoco → Online Payment Tools → New Payment Link → Amount R10 →
+// SETUP: In Yoco → Online Payment Tools → New Payment Link → Amount matching UNLOCK_PRICE below →
 // Product "Kasi24 Unlock" → Create → paste that link below.
 // ===========================================
 
@@ -617,7 +617,7 @@ function buildLockedHTML(listingId) {
     + "<h3>Get the landlord's number</h3>"
     + "<p>Pay R" + UNLOCK_PRICE + " to unlock the landlord's contact details. Once paid, the number is yours - no expiry, no repeat charges.</p>"
     + '<button class="btn-unlock-big" onclick="startPayment(&#39;' + listingId + '&#39;)" id="payBtn">'
-    + '<i class="fa-solid fa-lock-open"></i> Unlock for R" + UNLOCK_PRICE + "'
+    + '<i class="fa-solid fa-lock-open"></i> Unlock for R' + UNLOCK_PRICE + ''
     + '</button>'
     + '<div class="unlock-note"><i class="fa-solid fa-shield-halved"></i> Secure card payment via Yoco · No account needed</div>'
     + '<div class="yoco-badge"><i class="fa-solid fa-circle-check"></i> Pay with card or mobile — powered by Yoco</div>';
@@ -684,7 +684,7 @@ function closePhoneModal() {
   document.getElementById('phoneModalOverlay').classList.remove('open');
   _pendingListingId = null;
   var btn = document.getElementById('payBtn');
-  if (btn) { btn.innerHTML = '<i class="fa-solid fa-lock-open"></i> Unlock for R" + UNLOCK_PRICE + "'; btn.disabled = false; }
+  if (btn) { btn.innerHTML = '<i class="fa-solid fa-lock-open"></i> Unlock for R' + UNLOCK_PRICE + ''; btn.disabled = false; }
 }
 
 function confirmPhone() {
@@ -734,10 +734,10 @@ async function proceedWithPayment(listingId, tenantPhone) {
     }
     if (!unlock) throw new Error('No unlock record returned');
 
-    // 2. PLAN B: remember this unlock, then open your fixed Yoco R10 link.
+    // 2. PLAN B: remember this unlock, then open your fixed Yoco link (amount must match UNLOCK_PRICE).
     //    No Edge Function, no secret key needed.
     if (!YOCO_PAYMENT_LINK || YOCO_PAYMENT_LINK.indexOf('PASTE_') === 0) {
-      throw new Error('Payment link not set up yet. The owner still needs to paste the Yoco R10 link into listing-detail.html (YOCO_PAYMENT_LINK).');
+      throw new Error('Payment link not set up yet. The owner still needs to paste the Yoco link into listing-detail.html (YOCO_PAYMENT_LINK).');
     }
     try { sessionStorage.setItem('k24_pending_unlock', unlock.id); } catch(e) {}
     window.open(YOCO_PAYMENT_LINK, '_blank');
@@ -747,7 +747,7 @@ async function proceedWithPayment(listingId, tenantPhone) {
 
   } catch(err) {
     console.error('Payment error:', err);
-    if (btn) { btn.innerHTML = '<i class="fa-solid fa-lock-open"></i> Unlock for R" + UNLOCK_PRICE + "'; btn.disabled = false; }
+    if (btn) { btn.innerHTML = '<i class="fa-solid fa-lock-open"></i> Unlock for R' + UNLOCK_PRICE + ''; btn.disabled = false; }
     alert('Payment setup failed: ' + err.message + '\n\nCheck the browser console for details.');
   }
 }
@@ -757,10 +757,10 @@ function showAwaitingPayment(listingId, unlockId) {
   var card = document.getElementById('unlockContent');
   if (!card) return;
   card.innerHTML = '<div class="unlock-icon"><i class="fa-solid fa-clock" style="color:var(--orange)"></i></div>'
-    + '<h3>Complete your R10 payment</h3>'
-    + '<p style="color:var(--mid);font-size:.9rem">A Yoco payment tab was opened. Pay R" + UNLOCK_PRICE + " there (use your cell number as the reference), then come back here and tap below.</p>'
+    + '<h3>Complete your R' + UNLOCK_PRICE + ' payment</h3>'
+    + '<p style="color:var(--mid);font-size:.9rem">A Yoco payment tab was opened. Pay R' + UNLOCK_PRICE + ' there (use your cell number as the reference), then come back here and tap below.</p>'
     + '<button class="btn-unlock-big" id="ivePaidBtn" onclick="markPaidAndWait(\'' + listingId + '\',\'' + unlockId + '\)">'
-    + '<i class="fa-solid fa-check"></i> I\'ve Paid R" + UNLOCK_PRICE + " — Show Number'
+    + '<i class="fa-solid fa-check"></i> I\'ve Paid R' + UNLOCK_PRICE + ' — Show Number'
     + '</button>'
     + '<div class="unlock-note"><i class="fa-solid fa-shield-halved"></i> The landlord number appears after the owner confirms your payment (usually minutes).</div>'
     + '<div style="margin-top:10px"><a href="' + YOCO_PAYMENT_LINK + '" target="_blank" style="font-size:.85rem;font-weight:700;color:var(--teal)">Re-open Yoco payment link</a></div>';

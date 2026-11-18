@@ -347,7 +347,7 @@ const SECTIONS = {
   pending:   { title:'Pending Approvals',     sub:'New listings waiting for your review',   load: loadPending },
   live:      { title:'Live Listings',          sub:'All approved and active listings',        load: loadLive },
   landlords: { title:'Registered Landlords',   sub:'Everyone who has listed on Kasi24',       load: loadLandlords },
-  unlocks:   { title:'Unlock History',         sub:'Record of all R10 contact unlocks',       load: loadUnlocks },
+  unlocks:   { title:'Unlock History',         sub:'Record of all R20 contact unlocks',       load: loadUnlocks },
 };
 
 function switchSection(key) {
@@ -514,27 +514,57 @@ async function loadLandlords() {
 // ═══════════════════════════════════════════
 async function loadUnlocks() {
   var el = document.getElementById('unlocksContent');
+  // PLAN B: show awaiting first (needs your confirmation), then history.
   var { data, error } = await sb
     .from('unlocks')
     .select('*, listings(title, area), landlords(name)')
-    .eq('payment_status', 'complete')
     .order('unlocked_at', { ascending: false })
     .limit(100);
   if (error || !data || data.length === 0) {
-    el.innerHTML = emptyState('fa-lock-open', 'No unlocks yet', 'Once tenants pay R10 to unlock contacts, they will appear here.');
+    el.innerHTML = emptyState('fa-lock-open', 'No unlocks yet', 'Once tenants tap "I\'ve Paid", they appear here for confirmation.');
     return;
   }
-  el.innerHTML = '<table class="admin-table"><thead><tr><th>Listing</th><th>Landlord</th><th>Tenant Phone</th><th>Amount</th><th>Date</th><th>Ref</th></tr></thead><tbody>'
-    + data.map(function(u) {
-      return '<tr>'
-        + '<td>' + (u.listings ? u.listings.title + '<br><small style="color:var(--muted)">' + u.listings.area + '</small>' : '—') + '</td>'
-        + '<td>' + (u.landlords ? u.landlords.name : '—') + '</td>'
-        + '<td>' + (u.tenant_phone || '—') + '</td>'
-        + '<td><strong style="color:var(--teal)">R' + (u.amount_paid || 10) + '</strong></td>'
-        + '<td style="color:var(--muted);font-size:.8rem">' + fmtDate(u.unlocked_at) + '</td>'
-        + '<td style="font-size:.75rem;color:var(--muted)">' + (u.payment_ref || '—') + '</td>'
-        + '</tr>';
-    }).join('') + '</tbody></table>';
+  var awaiting = data.filter(function(u) { return u.payment_status === 'awaiting' || u.payment_status === 'pending'; });
+  var done = data.filter(function(u) { return u.payment_status === 'complete'; });
+  var html = '';
+  if (awaiting.length > 0) {
+    html += '<div class="section-header"><h2>Needs confirmation (' + awaiting.length + ')</h2>'
+      + '<button class="refresh-btn" onclick="loadUnlocks()"><i class="fa-solid fa-rotate"></i> Refresh</button></div>'
+      + '<p style="font-size:.85rem;color:var(--mid);margin-bottom:12px">Check Yoco → Activity for the R20 payment from this cell number, then tap Confirm.</p>'
+      + '<table class="admin-table"><thead><tr><th>Listing</th><th>Tenant Phone</th><th>Status</th><th>Date</th><th>Action</th></tr></thead><tbody>'
+      + awaiting.map(function(u) {
+        return '<tr>'
+          + '<td>' + (u.listings ? u.listings.title + '<br><small style="color:var(--muted)">' + u.listings.area + '</small>' : '—') + '</td>'
+          + '<td><strong>' + (u.tenant_phone || '—') + '</strong></td>'
+          + '<td><span class="badge badge-pending">' + u.payment_status + '</span></td>'
+          + '<td style="color:var(--muted);font-size:.8rem">' + fmtDate(u.unlocked_at) + '</td>'
+          + '<td><button class="act-btn btn-approve" onclick="confirmUnlock(\'' + u.id + '\')"><i class="fa-solid fa-check"></i> Confirm R20 received</button></td>'
+          + '</tr>';
+      }).join('') + '</tbody></table><br>';
+  }
+  html += '<div class="section-header"><h2>Confirmed history</h2></div>';
+  if (done.length === 0) { html += emptyState('fa-lock-open', 'No confirmed unlocks yet', 'Confirmed payments will appear here.'); }
+  else {
+    html += '<table class="admin-table"><thead><tr><th>Listing</th><th>Landlord</th><th>Tenant Phone</th><th>Amount</th><th>Date</th></tr></thead><tbody>'
+      + done.map(function(u) {
+        return '<tr>'
+          + '<td>' + (u.listings ? u.listings.title + '<br><small style="color:var(--muted)">' + u.listings.area + '</small>' : '—') + '</td>'
+          + '<td>' + (u.landlords ? u.landlords.name : '—') + '</td>'
+          + '<td>' + (u.tenant_phone || '—') + '</td>'
+          + '<td><strong style="color:var(--teal)">R' + (u.amount_paid || 10) + '</strong></td>'
+          + '<td style="color:var(--muted);font-size:.8rem">' + fmtDate(u.unlocked_at) + '</td>'
+          + '</tr>';
+      }).join('') + '</tbody></table>';
+  }
+  el.innerHTML = html;
+}
+
+async function confirmUnlock(id) {
+  if (!confirm('Confirm R20 received in Yoco Activity for this number? The tenant will instantly see the landlord number.')) return;
+  var { error } = await sb.from('unlocks').update({ payment_status: 'complete' }).eq('id', id);
+  if (error) { showToast('Error confirming: ' + error.message); return; }
+  showToast('Confirmed! Tenant can now see the number.');
+  loadStats(); loadUnlocks();
 }
 
 // ═══════════════════════════════════════════
