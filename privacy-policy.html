@@ -245,7 +245,10 @@
     listings and photos — landlord phone numbers, ID numbers and email addresses are not readable directly.
     The listing page fetches the landlord name only; the phone number is returned solely by a secure database
     function after a confirmed (`complete`) unlock. Our admin panel requires a Supabase login on an allowlisted
-    admin email, and database rules allow full management only to logged-in admins. No method of
+    admin email, and database rules allow full management only to the two allowlisted admin logins. Listing titles,
+    areas, notes and reviews are HTML-escaped before display, and photo uploads are limited to JPG/PNG/WebP
+    (5MB max each, 10 max per listing). The site also sends security headers (no framing, no MIME-sniffing,
+    content-security limited to this site plus Supabase, Yoco, fonts and CDN). No method of
     transmission or storage is 100% secure, and we cannot guarantee absolute security, but we take reasonable
     technical and organisational measures appropriate to the risk.
   </p>
@@ -253,7 +256,8 @@
   <h2 id="cookies">10. Cookies and local storage</h2>
   <p>
     Kasi24 uses your browser's local storage (not tracking cookies) to remember listings you've saved and numbers
-    you've already unlocked, so you don't have to pay twice. This information stays on your device and is lost if
+    you've already unlocked, so you don't have to pay twice, plus short-lived spam-protection timestamps and
+    daily counters (e.g. last unlock time, unlocks used today). This information stays on your device and is lost if
     you clear your browser or switch devices. We do not currently use third-party advertising or tracking cookies.
   </p>
 

@@ -1193,7 +1193,7 @@ function buildCard(l) {
   var inclIcons = { water:'fa-droplet', electricity:'fa-bolt', wifi:'fa-wifi', refuse:'fa-trash', security:'fa-shield-halved', dstv:'fa-satellite-dish' };
   var inclLabels = { water:'Water', electricity:'Electricity', wifi:'WiFi', refuse:'Refuse', security:'Security', dstv:'DStv' };
   var tags = incl.slice(0, 3).map(function(v) {
-    return '<span class="tag"><i class="fa-solid ' + (inclIcons[v] || 'fa-check') + '"></i>' + (inclLabels[v] || v) + '</span>';
+    return '<span class="tag"><i class="fa-solid ' + (inclIcons[v] || 'fa-check') + '"></i>' + escapeHtml(inclLabels[v] || v) + '</span>';
   }).join('');
   var rentFmt = 'R' + parseInt(l.rent).toLocaleString();
   var isNew = (new Date() - new Date(l.created_at)) < (3 * 24 * 60 * 60 * 1000); // under 3 days old
@@ -1204,8 +1204,8 @@ function buildCard(l) {
     + buildCardImg(l, c)
     + '<div class="lbody">'
     + '<div class="lprice">' + rentFmt + ' <span>/ month</span></div>'
-    + '<div class="ltitle">' + l.title + '</div>'
-    + '<div class="lloc"><i class="fa-solid fa-location-dot"></i> ' + l.area + ', Kwamhlanga</div>'
+    + '<div class="ltitle">' + escapeHtml(l.title) + '</div>'
+    + '<div class="lloc"><i class="fa-solid fa-location-dot"></i> ' + escapeHtml(l.area) + ', Kwamhlanga</div>'
     + '<div class="ltags">' + tags + '</div>'
     + '<div class="view-detail-hint"><i class="fa-solid fa-arrow-right"></i> View full details</div>'
     + '</div></div>';
@@ -1261,6 +1261,11 @@ document.getElementById('heroSearchBtn').addEventListener('click', function() {
 // TOAST
 // ═══════════════════════════════════════════
 var toastT;
+function escapeHtml(str) {
+  var d = document.createElement('div');
+  d.textContent = str == null ? '' : str;
+  return d.innerHTML;
+}
 function showToast(msg) {
   var e = document.getElementById('toast');
   document.getElementById('toastMsg').textContent = msg;
@@ -1537,6 +1542,10 @@ function handlePhotoSelect(event) {
   files = files.slice(0, remaining);
 
   files.forEach(function(file) {
+    if (!file.type.startsWith('image/') || !/\.(jpe?g|png|webp)$/i.test(file.name)) {
+      showToast(file.name + ' is not a supported image (JPG/PNG/WebP only)');
+      return;
+    }
     if (file.size > 5 * 1024 * 1024) {
       showToast(file.name + ' is too large (max 5MB)');
       return;

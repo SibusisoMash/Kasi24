@@ -260,9 +260,16 @@ kasi24/
    - In Supabase > SQL Editor, run `fix-rls.sql` (in this folder). This locks it down:
      `landlords` = no anon reads, `listings` = live approved only,
      `get_landlord_name()` = name only, `get_landlord_contact()` = phone only after `complete` unlock.
+   - Run `fix-reviews.sql` (creates `reviews`), `fix-storage.sql` (bucket `listing-photos`: public read, anyone can upload JPG/PNG/WebP, only logins can overwrite/delete), and `fix-admin-only.sql` (admin rules limited to your 2 UIDs).
    - No Edge Functions needed for Plan B.
 
-4. **Run it — no build step**
+4. **Uploads, spam brake, headers**
+   - Photos: JPG/PNG/WebP only, 5MB max each, 10 max per listing (checked in the form before upload).
+   - Spam brake (per device): 60s gap between paid actions; 10 unlocks / 5 reviews / 5 reports per day.
+   - All listing text is HTML-escaped before display, so markup typed into a form shows as text.
+   - `_headers` (in this folder, Netlify root): denies framing, blocks MIME-sniffing, CSP limited to self + Supabase + Yoco + fonts/CDN.
+
+5. **Run it — no build step**
    - Open `index.html` in a browser, or serve the folder statically:
    ```bash
    npx serve .

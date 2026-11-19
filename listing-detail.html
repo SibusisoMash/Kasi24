@@ -416,12 +416,12 @@ function renderListing(l, landlord, photos) {
     <!-- MAIN DETAILS -->
     <div class="detail-card">
       <div class="detail-price">${rentFmt} <span>/ month</span></div>
-      <div class="detail-title">${l.title}</div>
+      <div class="detail-title">${escapeHtml(l.title)}</div>
       <div class="detail-meta">
-        <div class="dm"><i class="fa-solid fa-location-dot"></i> ${l.area}, Kwamhlanga</div>
-        <div class="dm"><i class="fa-solid fa-bed"></i> ${l.bedrooms || '1'} bedroom${l.bedrooms === '1' || !l.bedrooms ? '' : 's'}</div>
-        <div class="dm"><i class="fa-solid fa-shower"></i> ${BATH_LABELS[l.bathroom] || l.bathroom || 'Shared bathroom'}</div>
-        <div class="dm"><i class="fa-solid fa-couch"></i> ${FURN_LABELS[l.furnished] || l.furnished || 'Unfurnished'}</div>
+        <div class="dm"><i class="fa-solid fa-location-dot"></i> ${escapeHtml(l.area)}, Kwamhlanga</div>
+        <div class="dm"><i class="fa-solid fa-bed"></i> ${escapeHtml(l.bedrooms) || '1'} bedroom${l.bedrooms === '1' || !l.bedrooms ? '' : 's'}</div>
+        <div class="dm"><i class="fa-solid fa-shower"></i> ${escapeHtml(BATH_LABELS[l.bathroom] || l.bathroom) || 'Shared bathroom'}</div>
+        <div class="dm"><i class="fa-solid fa-couch"></i> ${escapeHtml(FURN_LABELS[l.furnished] || l.furnished) || 'Unfurnished'}</div>
       </div>
 
       <!-- AVAILABILITY -->
@@ -464,7 +464,7 @@ function renderListing(l, landlord, photos) {
       ${l.notes ? `
       <div class="dsec">
         <div class="dsec-title"><i class="fa-solid fa-comment"></i> From the landlord</div>
-        <div class="detail-notes">"${l.notes}"</div>
+        <div class="detail-notes">"${escapeHtml(l.notes)}"</div>
       </div>` : ''}
     </div>
 
@@ -698,8 +698,24 @@ function confirmPhone() {
   proceedWithPayment(_pendingListingId, normalised);
 }
 
+// -- Simple spam brake: max 1 paid action per 60s, max 10 unlocks/day per device --
+function spamCheck(key, maxPerDay) {
+  try {
+    var now = Date.now();
+    var last = parseInt(localStorage.getItem('k24_last_' + key) || '0', 10);
+    if (now - last < 60000) { alert('Please wait a minute before trying again.'); return false; }
+    var dayKey = 'k24_count_' + key + '_' + new Date().toISOString().slice(0, 10);
+    var n = parseInt(localStorage.getItem(dayKey) || '0', 10);
+    if (n >= (maxPerDay || 10)) { alert('Daily limit reached. Try again tomorrow.'); return false; }
+    localStorage.setItem('k24_last_' + key, String(now));
+    localStorage.setItem(dayKey, String(n + 1));
+    return true;
+  } catch(e) { return true; }
+}
+
 // -- Start Yoco payment --
 async function startPayment(listingId) {
+  if (!spamCheck('unlock', 10)) return;
   var btn = document.getElementById('payBtn');
   if (btn) {
     btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Preparing…';
@@ -1002,6 +1018,7 @@ function setRating(n) {
 }
 
 async function submitReview(listingId, landlordId) {
+  if (!spamCheck('review', 5)) return;
   var unlock = hasAlreadyUnlocked(listingId);
   if (!unlock) { alert('Please unlock this listing\'s contact details before leaving a review.'); return; }
 
@@ -1045,6 +1062,7 @@ async function flagReview(reviewId) {
 // REPORT LISTING
 // ===========================================
 async function reportListing(listingId) {
+  if (!spamCheck('report', 5)) return;
   const reason = prompt('Why are you reporting this listing?\n\n1. Fake listing\n2. Wrong information\n3. No longer available\n4. Other\n\nType a number (1-4):');
   const reasonMap = { '1':'fake', '2':'wrong_info', '3':'no_longer_available', '4':'other' };
   const reasonVal = reasonMap[reason ? reason.trim() : ''];
