@@ -61,6 +61,30 @@ header{position:sticky;top:0;z-index:200;background:rgba(255,255,255,0.96);backd
 .hero-sub{font-size:clamp(.95rem,2.2vw,1.15rem);color:rgba(255,255,255,.85);margin-bottom:32px}
 .hero-sub strong{color:#ffd194}
 
+/* ROLE TABS — I am looking / I am renting out (same Kasi24 theme) */
+.role-wrap{max-width:600px;margin:0 auto 18px;text-align:center}
+.role-label{display:block;font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:2px;color:rgba(255,255,255,.75);margin-bottom:10px}
+.role-tabs{display:flex;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.28);border-radius:14px;padding:5px;gap:5px;backdrop-filter:blur(6px)}
+.role-tab{flex:1;border:none;background:transparent;color:#fff;border-radius:10px;padding:12px 10px;font-family:'Sora',sans-serif;font-size:.85rem;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:background .2s,color .2s,transform .15s,box-shadow .2s;line-height:1.25}
+.role-tab i{font-size:.95rem}
+.role-tab:hover{background:rgba(255,255,255,.14)}
+.role-tab.active-looking{background:#fff;color:var(--teal);box-shadow:0 4px 14px rgba(0,0,0,.2)}
+.role-tab.active-renting{background:linear-gradient(135deg,var(--orange),var(--orange-d));color:#fff;box-shadow:0 4px 14px rgba(0,0,0,.25)}
+.rent-panel{background:#fff;border-radius:var(--r-lg);padding:22px;box-shadow:0 18px 60px rgba(0,0,0,.22);text-align:left}
+.rent-panel h3{font-size:1.05rem;font-weight:800;margin-bottom:6px}
+.rent-panel p{font-size:.9rem;color:var(--mid);margin-bottom:14px}
+.rent-benefits{list-style:none;display:flex;flex-direction:column;gap:9px;margin-bottom:16px}
+.rent-benefits li{display:flex;align-items:flex-start;gap:10px;font-size:.88rem;color:var(--charcoal)}
+.rent-benefits .bchk{width:22px;height:22px;border-radius:50%;flex-shrink:0;background:var(--teal-l);border:1.5px solid rgba(8,148,161,.35);display:flex;align-items:center;justify-content:center;margin-top:1px}
+.rent-benefits .bchk i{color:var(--teal);font-size:.6rem}
+.rent-cta-row{display:flex;gap:10px;flex-wrap:wrap}
+.btn-landlord-reg{flex:2;min-width:200px;display:flex;align-items:center;justify-content:center;gap:9px;background:linear-gradient(135deg,var(--orange),var(--orange-d));color:#fff;border:none;border-radius:11px;padding:13px 20px;font-size:.95rem;font-weight:800;font-family:'Sora',sans-serif;cursor:pointer;text-decoration:none;box-shadow:0 4px 16px rgba(224,122,44,.4);transition:transform .15s,box-shadow .15s}
+.btn-landlord-reg:hover{transform:translateY(-2px);box-shadow:0 8px 22px rgba(224,122,44,.45)}
+.btn-landlord-login{flex:1;min-width:140px;display:flex;align-items:center;justify-content:center;gap:8px;background:#fff;color:var(--teal);border:2px solid var(--teal);border-radius:11px;padding:11px 18px;font-size:.9rem;font-weight:800;font-family:'Sora',sans-serif;cursor:pointer;text-decoration:none;transition:background .18s}
+.btn-landlord-login:hover{background:var(--teal-l)}
+.rent-howlink{display:block;text-align:center;margin-top:12px;font-size:.83rem;font-weight:700;color:var(--teal);text-decoration:none}
+@media(max-width:560px){.role-tabs{flex-direction:column}.rent-cta-row{flex-direction:column}.btn-landlord-reg,.btn-landlord-login{width:100%}}
+
 /* SEARCH CARD */
 .scard{background:#fff;border-radius:var(--r-lg);padding:22px;box-shadow:0 18px 60px rgba(0,0,0,.22)}
 .stop{display:grid;grid-template-columns:1fr 1fr auto;gap:12px;align-items:end;margin-bottom:16px}
@@ -554,9 +578,17 @@ select.wi{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.o
   <div class="blob b1"></div><div class="blob b2"></div>
   <div class="hero-in">
     <div class="pill"><div class="ldot"></div> KwaNdebele's Most Trusted Platform</div>
-    <h1>Find Your Next Home<br>in <span class="acc">Kwamhlanga</span></h1>
-    <p class="hero-sub">Rooms, flats &amp; houses. No agent fees.<br>Just <strong>R20</strong> to connect directly with the landlord.</p>
-    <div class="scard">
+    <h1 id="heroTitle">Find Your Next Home<br>in <span class="acc">Kwamhlanga</span></h1>
+    <p class="hero-sub" id="heroSub">Rooms, flats &amp; houses. No agent fees.<br>Just <strong>R20</strong> to connect directly with the landlord.</p>
+    <!-- ROLE SELECTOR: looking vs renting out -->
+    <div class="role-wrap">
+      <span class="role-label">I am…</span>
+      <div class="role-tabs" role="tablist" aria-label="Choose your path">
+        <button class="role-tab active-looking" id="roleLookingBtn" role="tab" aria-selected="true" onclick="setRole('looking')"><i class="fa-solid fa-magnifying-glass"></i> Looking for a room / home</button>
+        <button class="role-tab" id="roleRentingBtn" role="tab" aria-selected="false" onclick="setRole('renting')"><i class="fa-solid fa-house-chimney"></i> Renting out a room / home</button>
+      </div>
+    </div>
+    <div class="scard" id="panelLooking">
       <div class="stop">
         <div class="sf">
           <label><i class="fa-solid fa-location-dot"></i>&nbsp; Area</label>
@@ -584,6 +616,21 @@ select.wi{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.o
           <input type="range" class="ri" id="maxRange" min="500" max="8000" step="100" value="8000">
         </div>
       </div>
+    </div><!-- /panelLooking -->
+    <!-- PANEL: renting out — sends to registration page as landlord -->
+    <div class="rent-panel" id="panelRenting" hidden>
+      <h3>List your room / home for free</h3>
+      <p>No agents. No contracts. Only serious tenants — they pay R20 to call you.</p>
+      <ul class="rent-benefits">
+        <li><span class="bchk"><i class="fa-solid fa-check"></i></span> Free to list, always — reach tenants in Kwamhlanga directly</li>
+        <li><span class="bchk"><i class="fa-solid fa-check"></i></span> Your number stays hidden until a tenant unlocks it</li>
+        <li><span class="bchk"><i class="fa-solid fa-check"></i></span> Manage listings from your phone in minutes</li>
+      </ul>
+      <div class="rent-cta-row">
+        <a class="btn-landlord-reg" href="landlord-registration.html"><i class="fa-solid fa-user-plus"></i> Register as landlord</a>
+        <a class="btn-landlord-login" href="#" onclick="openAuthPanel('login');return false;"><i class="fa-solid fa-right-to-bracket"></i> Log in</a>
+      </div>
+      <a class="rent-howlink" href="#landlords">See how it works for landlords ↓</a>
     </div>
     <div class="hstats">
       <div class="hstat"><strong>120+</strong><span>Active Listings</span></div>
@@ -638,7 +685,7 @@ select.wi{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.o
         <li><span class="bchk"><i class="fa-solid fa-check"></i></span> No time-wasters — they paid to contact you</li>
         <li><span class="bchk"><i class="fa-solid fa-check"></i></span> Manage listings from your phone</li>
       </ul>
-      <button class="btn-teal" onclick="openWizard()"><i class="fa-solid fa-plus"></i> List Your Property Now</button>
+      <button class="btn-teal" onclick="requireAuthForWizard()"><i class="fa-solid fa-plus"></i> List Your Property Now</button>
     </div>
     <div class="lcards">
       <div class="lcrd"><div class="lcrd-ico"><i class="fa-solid fa-eye"></i></div><div><div class="lcrd-lbl">Avg. Views / Week</div><div class="lcrd-val">47 views</div></div></div>
@@ -696,7 +743,7 @@ select.wi{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.o
 <nav class="bnav"><div class="bnav-in">
   <button class="bb active" onclick="bnav(this,'#listings')"><i class="fa-solid fa-house"></i><span>Browse</span></button>
   <button class="bb"        onclick="bnav(this,'#listings')"><i class="fa-solid fa-magnifying-glass"></i><span>Search</span></button>
-  <button class="bb bb-cta" onclick="openWizard()"><i class="fa-solid fa-plus"></i><span>List</span></button>
+  <button class="bb bb-cta" onclick="requireAuthForWizard()"><i class="fa-solid fa-plus"></i><span>List</span></button>
   <button class="bb"        onclick="bnav(this,'#hiw')"><i class="fa-solid fa-circle-info"></i><span>How</span></button>
   <button class="bb"        onclick="openAuthPanel('login')"><i class="fa-solid fa-user"></i><span>Login</span></button>
 </div></nav>
@@ -1240,6 +1287,69 @@ function doUnlock(btn, listingId) {
   // Unlocks happen on listing-detail.html via Yoco — send the tenant there.
   window.location = 'listing-detail.html?id=' + listingId;
 }
+
+// ═══ ROLE TABS: looking vs renting out — same theme, routes to search vs registration ═══
+var HERO_COPY = {
+  looking: {
+    title: 'Find Your Next Home<br>in <span class="acc">Kwamhlanga</span>',
+    sub: 'Rooms, flats &amp; houses. No agent fees.<br>Just <strong>R20</strong> to connect directly with the landlord.'
+  },
+  renting: {
+    title: 'List Your Room.<br>Reach <span class="acc">Kwamhlanga</span> tenants.',
+    sub: 'Free to list. No agents, no contracts.<br>Only serious tenants — <strong>R20</strong> to call you.'
+  }
+};
+function setRole(role, opts) {
+  opts = opts || {};
+  var looking = role !== 'renting';
+  var bL = document.getElementById('roleLookingBtn');
+  var bR = document.getElementById('roleRentingBtn');
+  var pL = document.getElementById('panelLooking');
+  var pR = document.getElementById('panelRenting');
+  if (!bL || !bR || !pL || !pR) return;
+  bL.classList.toggle('active-looking', looking);
+  bL.classList.remove('active-renting');
+  bR.classList.toggle('active-renting', !looking);
+  bR.classList.remove('active-looking');
+  bL.setAttribute('aria-selected', looking ? 'true' : 'false');
+  bR.setAttribute('aria-selected', !looking ? 'true' : 'false');
+  pL.hidden = !looking;
+  pR.hidden = looking;
+  var copy = looking ? HERO_COPY.looking : HERO_COPY.renting;
+  document.getElementById('heroTitle').innerHTML = copy.title;
+  document.getElementById('heroSub').innerHTML = copy.sub;
+  try { localStorage.setItem('k24_role', looking ? 'looking' : 'renting'); } catch (e) {}
+  // renting tab = landlord path: second click goes straight to registration
+  if (!looking && opts.go && !opts.init) { window.location = 'landlord-registration.html'; return; }
+  // looking tab with go = scroll to search
+  if (looking && opts.go && !opts.init) {
+    document.getElementById('listings').scrollIntoView({ behavior: 'smooth' });
+  }
+}
+// landlord entry points must not open the wizard for strangers — registration first
+async function requireAuthForWizard() {
+  try {
+    var s = await sb.auth.getSession();
+    if (s && s.data && s.data.session) { openWizard(); return; }
+  } catch (e) {}
+  window.location = 'landlord-registration.html';
+}
+// init: remember choice, support ?role=renting and #landlords deep link
+(function initRole() {
+  var role = 'looking';
+  try {
+    var q = new URLSearchParams(window.location.search).get('role');
+    if (q === 'renting' || q === 'looking') role = q;
+    else if (window.location.hash === '#landlords') role = 'renting';
+    else role = localStorage.getItem('k24_role') || 'looking';
+  } catch (e) {}
+  setRole(role, { init: true });
+  // if landlord section links are clicked, keep tab in sync
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest && e.target.closest('a[href="#landlords"]');
+    if (a) setRole('renting', { init: true });
+  });
+})();
 
 document.getElementById('heroSearchBtn').addEventListener('click', function() {
   var tab = document.getElementById('heroType').value;

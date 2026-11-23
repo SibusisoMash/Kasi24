@@ -55,12 +55,18 @@ Finding a room, back room, flat, or house to rent in Kwamhlanga is broken:
 
 ```
 kasi24/
-├── index.html            # Homepage (browse, search, landlord section)
-├── listing-detail.html   # Listing page + Yoco Plan B unlock flow
-├── admin.html            # Admin panel (approvals, confirm payments)
-├── privacy-policy.html   # POPIA privacy policy
-└── README.md             # This file
+├── index.html                  # Homepage (role tabs, browse/search, landlord section, auth + wizard)
+├── landlord-registration.html   # Standalone landlord registration (Account → Verify → Profile, POPIA-safe)
+├── listing-detail.html         # Listing page + Yoco Plan B unlock flow
+├── admin.html                  # Admin panel (approvals, confirm payments)
+├── privacy-policy.html         # POPIA privacy policy
+├── fix-rls-secure.sql          # Secure RLS: owner-only + admin-only, no anon landlords reads
+├── SECURITY-REVIEW.md          # Leak audit: what could expose landlord PII + fixes
+├── INDEX-PATCHES.md            # Minimal edits wiring index.html wizard to auth.uid
+└── README.md                   # This file
 ```
+
+> `index.html` hero now starts with role tabs — **Looking for a room / home** (search card → `#listings`) vs **Renting out a room / home** (panel → `landlord-registration.html`). Same teal/orange theme, remembers choice (`k24_role`), supports `?role=renting` and `#landlords`.
 
 ---
 
@@ -80,7 +86,12 @@ kasi24/
 
 ### For Landlords (Account Required)
 
-- ✅ Register with email + phone number
+- ✅ Role tabs on homepage: Looking vs Renting out (renting routes to `landlord-registration.html`)
+- ✅ Register on dedicated page with POPIA consent (no phone-number lookup, everything bound to `auth.uid()`)
+  1. Account (full name, email, SA cell normalised to `27…`, password 8+ with strength, POPIA checkbox)
+  2. Email verification via Supabase Auth
+  3. Profile (WhatsApp optional, SA ID optional with Luhn checksum, write-only, masked `…123`)
+- ✅ Login gates the List Property wizard (`requireAuthForWizard()`); contact step prefills from your own row and locks email read-only
 - ✅ Email verification via Supabase Auth
 - ✅ 6-step listing wizard:
   1. Basics (property type, area, available date)
@@ -95,6 +106,7 @@ kasi24/
   - Delete listing
   - View unlock counts
 - ✅ Listings require admin approval before going live
+- 🔒 Landlord PII stays hidden: anon gets live-approved listings only; phone/WhatsApp only via `get_landlord_contact()` after `complete` unlock; SA ID never returned to browsers in full (see `SECURITY-REVIEW.md` + `fix-rls-secure.sql`)
 
 ### For Admin
 
@@ -185,20 +197,24 @@ kasi24/
 
 | Risk | Mitigation |
 |------|-------------|
-| Landlord fraud / fake listings | SMS verification (planned), ID collection, tenant comments (planned), listing expiry (30 days planned) |
+| Landlord fraud / fake listings | Registration + email verification + SA ID checksum (Luhn) on `landlord-registration.html`, ID write-only + masked, SMS verification (planned), tenant comments, listing expiry (30 days planned). Wizard no longer matches landlords by phone — everything bound to `auth.uid()` so knowing a number buys nothing. |
+| Landlord PII leak (phone/email/SA ID to strangers) | `fix-rls-secure.sql`: no anon `landlords` reads, owner-only (`id = auth.uid()`), admin-only via 2 UIDs. Anon gets live-approved listings only. Phone/WhatsApp only via `get_landlord_contact()` after `complete` unlock; name only via `get_landlord_name()`. Never `select *` on landlords from browsers; admin view excludes `id_number`. See `SECURITY-REVIEW.md`. |
 | Tenant shares unlocked number | Accept some sharing; encourage sharing listing link instead; temporary numbers (future) |
 | Stale / already-taken listings | Admin approval, tenant reports, expiry system (planned) |
 | No landlord incentive | Free listings expire; boosts cost R20; good reviews earn "Verified" badge (planned) |
 | Tenant pays but owner is slow to confirm | Tenant page polls automatically; WhatsApp fallback number on the waiting screen |
 | Manual admin approval bottleneck | Automated flagging (planned); community manager (future) |
 | Free competitors (Facebook, Gumtree) | R20 = quality filter, not cost; local focus; tenant feedback loop |
-| Legal compliance (POPIA, CPA) | Privacy policy; consent checkboxes; minimal data collection |
+| Legal compliance (POPIA, CPA) | Privacy policy + POPIA consent checkbox on registration (required), minimal data collection, SA ID minimisation/redaction plan (Privacy Policy §7) |
 
 ---
 
 ## 🚦 Roadmap
 
 ### Phase 1 – Completed (MVP)
+- ✅ Role tabs on homepage (Looking vs Renting out → search vs `landlord-registration.html`)
+- ✅ Dedicated landlord registration page (POPIA consent, `auth.uid()`-bound, SA phone/ID validation)
+- ✅ Secure RLS (`fix-rls-secure.sql`) + leak audit (`SECURITY-REVIEW.md`)
 - ✅ Listing creation wizard (6 steps)
 - ✅ Photo upload (up to 10 images)
 - ✅ Browse + filter listings
@@ -256,16 +272,17 @@ kasi24/
 
 3. **Configure Supabase**
    - Create the tables in `🗄️ Database Schema` above (or import your existing project).
-   - Set the anon key in the frontend files.
-   - In Supabase > SQL Editor, run `fix-rls.sql` (in this folder). This locks it down:
-     `landlords` = no anon reads, `listings` = live approved only,
+   - Set the anon key in the frontend files (`index.html`, `landlord-registration.html`, `listing-detail.html`, `admin.html` — same `SUPABASE_URL` + `SUPABASE_KEY`).
+   - In Supabase > SQL Editor, run `fix-rls-secure.sql` (in this folder — replaces the old `fix-rls.sql`). Admin emails are prefilled (`backroomrentals24@gmail.com`, `tribalclash@gmail.com` from your `admin.html`) — just run it. This locks it down:
+     `landlords` = no anon reads, owner-only + admin-only, no `id_number` reads from browsers; `listings` = live approved only for anon, owner-only insert/update;
      `get_landlord_name()` = name only, `get_landlord_contact()` = phone only after `complete` unlock.
-   - Run `fix-reviews.sql` (creates `reviews`), `fix-storage.sql` (bucket `listing-photos`: public read, anyone can upload JPG/PNG/WebP, only logins can overwrite/delete), and `fix-admin-only.sql` (admin rules limited to your 2 UIDs).
+   - Run `fix-reviews.sql` (creates `reviews`), then tighten storage per `fix-rls-secure.sql` §4 (bucket `listing-photos`: public read, authenticated uploads to `<uid>/…` only, JPG/PNG/WebP), and `fix-admin-only.sql` (admin rules limited to your 2 UIDs).
    - No Edge Functions needed for Plan B.
+   - Verify: as anon, `select * from landlords` must be denied/empty; wizard without session redirects to `landlord-registration.html`.
 
 4. **Uploads, spam brake, headers**
-   - Photos: JPG/PNG/WebP only, 5MB max each, 10 max per listing (checked in the form before upload).
-   - Spam brake (per device): 60s gap between paid actions; 10 unlocks / 5 reviews / 5 reports per day.
+   - Photos: JPG/PNG/WebP only, 5MB max each, 10 max per listing (checked in the form before upload; storage policy enforces auth + `<uid>/…` paths).
+   - Spam brake (per device): 60s gap between paid actions; 10 unlocks / 5 reviews / 5 reports per day; registration + listing submit: 60s gap, 5/day.
    - All listing text is HTML-escaped before display, so markup typed into a form shows as text.
    - `_headers` (in this folder, Netlify root): denies framing, blocks MIME-sniffing, CSP limited to self + Supabase + Yoco + fonts/CDN.
 
@@ -274,4 +291,5 @@ kasi24/
    ```bash
    npx serve .
    ```
-   - Upload the four `.html` files to Netlify (or any static host) to go live. Replace `your-netlify-url` in the badge above with your real URL.
+   - Upload all five `.html` files (`index.html`, `landlord-registration.html`, `listing-detail.html`, `admin.html`, `privacy-policy.html`) + `_headers` to Netlify (same folder — role tabs link relatively). Replace `your-netlify-url` in the badge above with your real URL.
+   - Smoke test: Looking tab → Search → `#listings`; Renting tab → Register → verify → profile → wizard prefills + locks email.

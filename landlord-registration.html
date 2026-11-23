@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Landlord Registration — Kasi24</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800;900&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{--teal:#0894A1;--teal-d:#06737d;--teal-l:#e0f6f8;--teal-xl:#f0fbfc;--orange:#E07A2C;--orange-d:#c4661d;--charcoal:#2D2D2A;--mid:#6b6b67;--muted:#9a9a96;--light:#f6fafb;--border:#e4ecee;--r:16px}
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:'Nunito',sans-serif;color:var(--charcoal);background:var(--light);line-height:1.6}
+h1,h2,h3{font-family:'Sora',sans-serif}header{background:#fff;border-bottom:1.5px solid var(--border);padding:0 5vw;position:sticky;top:0;z-index:10}
+.hdr{max-width:860px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:62px}
+.logo{display:flex;align-items:center;gap:8px;text-decoration:none}.logo-badge{width:34px;height:34px;border-radius:10px;background:var(--teal-d);display:flex;align-items:center;justify-content:center;color:#fff}
+.logo-text{font-family:'Sora';font-size:1.35rem;font-weight:900;color:var(--teal)}.logo-text span{color:var(--orange)}
+.back{font-size:.86rem;font-weight:700;color:var(--mid);text-decoration:none;border:1.5px solid var(--border);padding:8px 14px;border-radius:9px;background:#fff}
+.page{max-width:860px;margin:0 auto;padding:26px 5vw 90px}
+.hero{background:linear-gradient(150deg,#074f56,#0894A1 60%,#0aabb9);border-radius:22px;color:#fff;padding:30px 26px;margin-bottom:18px}
+.hero h1{font-size:clamp(1.5rem,4vw,2.1rem);letter-spacing:-.5px;margin-bottom:8px}.hero p{color:rgba(255,255,255,.85);max-width:60ch}
+.pills{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}.pill{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);border-radius:100px;padding:5px 13px;font-size:.76rem;font-weight:800}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}@media(max-width:640px){.grid{grid-template-columns:1fr}}
+.card{background:#fff;border:1.5px solid var(--border);border-radius:20px;padding:24px;margin-bottom:16px}
+.card h2{font-size:1.15rem;margin-bottom:4px}.sub{color:var(--mid);font-size:.9rem;margin-bottom:16px}
+label.f{font-size:.8rem;font-weight:800;display:block;margin:14px 0 6px}label.f .req{color:var(--orange)}
+.wi{width:100%;border:1.5px solid var(--border);border-radius:10px;padding:11px 14px;font-size:.93rem;font-family:inherit;outline:none;background:#fff}
+.wi:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(8,148,161,.12)}.wi.err{border-color:#e74c3c}
+.ferr{font-size:.76rem;color:#e74c3c;font-weight:700;display:none;margin-top:4px}.ferr.show{display:block}
+.hint{font-size:.76rem;color:var(--muted);margin-top:4px}.hint i{color:var(--teal)}
+.ipw{display:flex;align-items:center;border:1.5px solid var(--border);border-radius:10px;overflow:hidden;background:#fff}.ipw.err{border-color:#e74c3c}
+.ipfx{padding:11px 10px 11px 14px;background:var(--light);border-right:1.5px solid var(--border);font-weight:800;color:var(--teal);font-family:'Sora';font-size:.88rem;white-space:nowrap}
+.wi.pre{border:none;box-shadow:none}.strength{height:6px;border-radius:99px;background:#eee;margin-top:6px;overflow:hidden}.strength>div{height:100%;width:0;background:#e74c3c;transition:width .2s}
+.consent{display:flex;gap:10px;align-items:flex-start;border:1.5px solid var(--border);border-radius:12px;padding:13px 14px;margin-top:14px;font-size:.85rem;background:var(--teal-xl)}
+.consent input{margin-top:3px;accent-color:var(--teal);width:16px;height:16px}.consent a{color:var(--teal);font-weight:800}
+.btn{display:flex;align-items:center;justify-content:center;gap:9px;width:100%;background:var(--teal);color:#fff;border:none;border-radius:11px;padding:14px;font-size:.96rem;font-weight:800;font-family:'Sora';cursor:pointer;margin-top:16px}
+.btn:hover{background:var(--teal-d)}.btn:disabled{opacity:.6;cursor:wait}.btn.orange{background:linear-gradient(135deg,var(--orange),var(--orange-d))}
+.steps{display:flex;gap:0;margin:0 0 16px}.st{flex:1;text-align:center;font-size:.7rem;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);padding-bottom:8px;border-bottom:2px solid var(--border)}
+.st.on{color:var(--teal);border-color:var(--teal)}
+.shield{background:#fff;border:1.5px solid var(--border);border-radius:16px;padding:16px 18px;font-size:.85rem;color:var(--mid)}
+.shield b{color:var(--charcoal)}.shield li{margin:6px 0 6px 18px}
+.ok{background:#e0f8ec;border:1.5px solid #8fdcb0;border-radius:14px;padding:16px;font-size:.9rem;margin-top:12px;display:none}
+.ok.show{display:block}.toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:var(--charcoal);color:#fff;padding:10px 20px;border-radius:100px;font-size:.85rem;font-weight:700;display:none;z-index:99}
+.masked{font-family:ui-monospace,monospace;background:var(--light);border:1px dashed var(--border);border-radius:8px;padding:6px 10px;display:inline-block}
+</style>
+</head>
+<body>
+<header><div class="hdr">
+<a class="back" href="index.html"><i class="fa-solid fa-arrow-left"></i> Back to Kasi24</a>
+<a href="index.html" class="logo"><div class="logo-badge"><i class="fa-solid fa-house"></i></div><span class="logo-text">Kasi<span>24</span></span></a>
+</div></header>
+
+<div class="page">
+<div class="hero">
+<h1>Landlord registration</h1>
+<p>One account for all your listings. Your number stays hidden until a tenant pays R20 and you are confirmed — ID numbers are never shown to anyone.</p>
+<div class="pills"><span class="pill"><i class="fa-solid fa-lock"></i> auth.uid-bound</span><span class="pill">POPIA consent</span><span class="pill">No phone lookup</span></div>
+</div>
+
+<div class="steps"><div class="st on" id="st1">1 · Account</div><div class="st" id="st2">2 · Verify</div><div class="st" id="st3">3 · Profile</div></div>
+
+<!-- STEP 1 -->
+<div class="card" id="cardAccount">
+<h2><i class="fa-solid fa-user-plus" style="color:var(--teal)"></i> Create your account</h2>
+<p class="sub">This creates your secure login. Listing details come afterwards in the List Property wizard.</p>
+<label class="f">Full name <span class="req">*</span></label>
+<input class="wi" id="fName" placeholder="e.g. Thembi Dlamini" autocomplete="name">
+<div class="ferr" id="eName">Enter your full name.</div>
+<div class="grid">
+<div><label class="f">Email <span class="req">*</span></label>
+<input class="wi" id="fEmail" type="email" placeholder="you@email.com" autocomplete="email">
+<div class="ferr" id="eEmail">Enter a valid email.</div></div>
+<div><label class="f">SA cell number <span class="req">*</span></label>
+<div class="ipw" id="phoneWrap"><span class="ipfx">+27</span><input class="wi pre" id="fPhone" inputmode="tel" placeholder="81 352 8749" maxlength="12"></div>
+<div class="ferr" id="ePhone">Enter a valid 10-digit SA number.</div>
+<p class="hint"><i class="fa-solid fa-shield-halved"></i> Stored as 27… so duplicates can't happen. Never searchable by strangers.</p></div>
+</div>
+<label class="f">Password <span class="req">*</span></label>
+<input class="wi" id="fPass" type="password" placeholder="At least 8 characters" autocomplete="new-password">
+<div class="strength"><div id="pwBar"></div></div>
+<div class="ferr" id="ePass">Use at least 8 characters.</div>
+<label class="consent"><input type="checkbox" id="fConsent"><span>I agree to Kasi24 processing my name, phone and email to run my landlord account, as described in the <a href="privacy-policy.html" target="_blank">Privacy Policy</a>. I can withdraw consent by deleting my account. <b>Required.</b></span></label>
+<div class="ferr" id="eConsent">POPIA consent is required.</div>
+<div class="ferr" id="eForm" style="margin-top:8px"></div>
+<button class="btn" id="btnReg"><i class="fa-solid fa-user-plus"></i> Create secure account</button>
+<p class="hint" style="margin-top:10px">Already registered? <a href="#" id="toLogin" style="color:var(--teal);font-weight:800">Sign in</a> · Protected by 60-second + daily attempt limits on this device.</p>
+</div>
+
+<!-- STEP 2 -->
+<div class="card" id="cardVerify" hidden>
+<h2><i class="fa-solid fa-envelope-circle-check" style="color:var(--teal)"></i> Check your email</h2>
+<p class="sub" id="verifyText">We sent a verification link. Click it, then come back and sign in below.</p>
+<div class="grid">
+<div><label class="f">Email</label><input class="wi" id="lEmail" type="email" placeholder="you@email.com"></div>
+<div><label class="f">Password</label><input class="wi" id="lPass" type="password" placeholder="Your password"></div>
+</div>
+<div class="ferr" id="eLogin"></div>
+<button class="btn" id="btnLogin"><i class="fa-solid fa-right-to-bracket"></i> Sign in</button>
+<button class="btn" id="btnResend" style="background:#fff;color:var(--teal);border:2px solid var(--teal);margin-top:10px"><i class="fa-solid fa-paper-plane"></i> Resend verification email</button>
+</div>
+
+<!-- STEP 3 -->
+<div class="card" id="cardProfile" hidden>
+<h2><i class="fa-solid fa-id-card" style="color:var(--teal)"></i> Complete your landlord profile</h2>
+<p class="sub">Signed in as <b id="profEmail">—</b>. These details attach to <b>your login ID only</b> — never by phone-number matching, so nobody can claim your number.</p>
+<label class="f">WhatsApp number <span style="color:var(--muted)">(if different from cell)</span></label>
+<div class="ipw"><span class="ipfx"><i class="fa-brands fa-whatsapp" style="color:#25d366"></i></span><input class="wi pre" id="pWa" inputmode="tel" placeholder="Same as cell if empty" maxlength="12"></div>
+<div class="ferr" id="eWa">That WhatsApp number looks invalid — leave empty to use your cell.</div>
+<label class="f">SA ID number <span style="color:var(--muted)">(private — used once for accountability, never shown)</span></label>
+<input class="wi" id="pId" inputmode="numeric" placeholder="13 digits — optional for now" maxlength="13">
+<p class="hint" id="idHint"><i class="fa-solid fa-lock"></i> Validated with checksum. Stored write-only; admin sees it only during fraud review. <span id="idCurrent"></span></p>
+<div class="ferr" id="eId">That ID number fails the checksum — check the 13 digits.</div>
+<label class="consent"><input type="checkbox" id="pConfirm"><span>I confirm I own this property or have permission to list it, and the details are accurate.</span></label>
+<div class="ferr" id="eConfirm">Please confirm this to continue.</div>
+<div class="ok" id="profOk"></div>
+<button class="btn orange" id="btnProfile"><i class="fa-solid fa-check"></i> Save profile & continue to listing</button>
+<button class="btn" id="btnToWizard" style="background:#fff;color:var(--teal);border:2px solid var(--teal);display:none"><i class="fa-solid fa-plus"></i> Open List Property wizard</button>
+</div>
+
+<div class="shield">
+<b><i class="fa-solid fa-shield-halved" style="color:var(--teal)"></i> What stays private here (by design)</b>
+<ul>
+<li>Phone / WhatsApp / email / SA ID are <b>never</b> readable by strangers. Listings expose only area, rent and photos.</li>
+<li>Tenant sees your number only after paying R20 <b>and</b> admin confirms, via <span class="masked">get_landlord_contact()</span> — never via a table select.</li>
+<li>We bind everything to your login ID (<span class="masked">auth.uid()</span>), not your phone number, so knowing your number buys an attacker nothing.</li>
+<li>SA ID is validated, stored once, never displayed back in full, and slated for redaction after verification (see Privacy Policy §7).</li>
+</ul>
+</div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+// ===== CONFIG (same Supabase project as index.html) =====
+const SUPABASE_URL = 'https://fxoaqzclszjvkwupkdiv.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_I5JH_smIkSc7oEWN-gjjNQ_2Lv7onsm';
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+// ===== helpers: phone (27…), SA ID Luhn, rate limit, UI =====
+function normPhone(raw){
+  const d = String(raw||'').replace(/\D/g,'');
+  if(/^27\d{9}$/.test(d)) return d;                 // already 27XXXXXXXXX
+  if(/^0\d{9}$/.test(d)) return '27'+d.slice(1);     // 0XXXXXXXXX
+  if(/^\d{9}$/.test(d)) return '27'+d;               // missing leading 0
+  return null;
+}
+function fmtPhoneLive(input){
+  let d = input.value.replace(/\D/g,'').replace(/^27/,'').slice(0,9);
+  if(d.startsWith('0')) d = d.slice(1).slice(0,9);
+  let out = d;
+  if(d.length>6) out = d.slice(0,2)+' '+d.slice(2,5)+' '+d.slice(5);
+  else if(d.length>2) out = d.slice(0,2)+' '+d.slice(2);
+  input.value = out;
+}
+function saIdValid(id){
+  if(!/^\d{13}$/.test(id)) return false;
+  // Luhn on SA ID
+  let sum=0;
+  for(let i=0;i<13;i++){let n=+id[i];if(i%2===1){n*=2;if(n>9)n-=9;}sum+=n;}
+  if(sum%10!==0) return false;
+  const yy=+id.slice(0,2),mm=+id.slice(2,4),dd=+id.slice(4,6);
+  if(mm<1||mm>12||dd<1||dd>31) return false;
+  return true;
+}
+function spamOk(key,maxPerDay){
+  try{
+    const now=Date.now(),last=parseInt(localStorage.getItem('k24_last_'+key)||'0',10);
+    if(now-last<60000){toast('Wait a minute before retrying.');return false;}
+    const dk='k24_count_'+key+'_'+new Date().toISOString().slice(0,10);
+    const n=parseInt(localStorage.getItem(dk)||'0',10);
+    if(n>=(maxPerDay||5)){toast('Daily limit reached. Try tomorrow.');return false;}
+    localStorage.setItem('k24_last_'+key,String(now));localStorage.setItem(dk,String(n+1));
+    return true;
+  }catch(e){return true;}
+}
+function toast(m){const t=document.getElementById('toast');t.textContent=m;t.style.display='block';clearTimeout(t._t);t._t=setTimeout(()=>t.style.display='none',2600);}
+function setStep(n){[1,2,3].forEach(i=>document.getElementById('st'+i).classList.toggle('on',i<=n));}
+function show(id){['cardAccount','cardVerify','cardProfile'].forEach(c=>document.getElementById(c).hidden=(c!==id));}
+
+document.getElementById('fPhone').addEventListener('input',e=>fmtPhoneLive(e.target));
+document.getElementById('pWa').addEventListener('input',e=>fmtPhoneLive(e.target));
+const pw=document.getElementById('fPass'),bar=document.getElementById('pwBar');
+pw.addEventListener('input',()=>{let s=0;const v=pw.value;if(v.length>=8)s+=35;if(/[A-Z]/.test(v))s+=20;if(/[0-9]/.test(v))s+=20;if(/[^A-Za-z0-9]/.test(v))s+=25;bar.style.width=Math.min(100,s)+'%';bar.style.background=s<40?'#e74c3c':s<70?'#E07A2C':'#1a8c4a';});
+document.getElementById('toLogin').onclick=e=>{e.preventDefault();show('cardVerify');setStep(2);};
+
+// ===== STEP 1: secure registration (auth.uid-bound, no phone lookup) =====
+document.getElementById('btnReg').onclick = async ()=>{
+  ['eName','eEmail','ePhone','ePass','eConsent','eForm'].forEach(id=>document.getElementById(id).classList.remove('show'));
+  const name=document.getElementById('fName').value.trim();
+  const email=document.getElementById('fEmail').value.trim();
+  const phoneN=normPhone(document.getElementById('fPhone').value);
+  const pass=pw.value, consent=document.getElementById('fConsent').checked;
+  let ok=true;
+  if(name.length<3){document.getElementById('eName').classList.add('show');ok=false;}
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){document.getElementById('eEmail').classList.add('show');ok=false;}
+  if(!phoneN){document.getElementById('phoneWrap').classList.add('err');document.getElementById('ePhone').classList.add('show');ok=false;}
+  else document.getElementById('phoneWrap').classList.remove('err');
+  if(pass.length<8){document.getElementById('ePass').classList.add('show');ok=false;}
+  if(!consent){document.getElementById('eConsent').classList.add('show');ok=false;}
+  if(!ok) return;
+  if(!spamOk('reg',5)) return;
+  const btn=document.getElementById('btnReg');btn.disabled=true;btn.innerHTML='<i class="fa-solid fa-spinner fa-spin"></i> Creating…';
+  try{
+    const {data,error} = await sb.auth.signUp({email,password:pass,options:{data:{name,phone:phoneN}}});
+    if(error) throw error;
+    // Bind landlord row to auth.uid ONLY (never by phone). If email confirmation is on, session may be null until verify.
+    const user = data.user || (await sb.auth.getSession()).data.session?.user;
+    if(user){
+      const {error:upErr} = await sb.from('landlords').upsert({id:user.id,name,phone:phoneN,email},{onConflict:'id'});
+      if(upErr) throw upErr;
+    }
+    document.getElementById('verifyText').innerHTML='We sent a verification link to <b>'+email.replace(/</g,'&lt;')+'</b>. Click it, then sign in below to finish your profile.';
+    document.getElementById('lEmail').value=email;
+    show('cardVerify');setStep(2);toast('Account created — verify your email.');
+  }catch(err){
+    const m=String(err.message||err);
+    document.getElementById('eForm').textContent = /already|exists|duplicate/i.test(m) ? 'That email is already registered — try Sign in.' : m;
+    document.getElementById('eForm').classList.add('show');
+  }finally{btn.disabled=false;btn.innerHTML='<i class="fa-solid fa-user-plus"></i> Create secure account';}
+};
+
+// ===== STEP 2: login / resend =====
+document.getElementById('btnLogin').onclick = async ()=>{
+  const el=document.getElementById('eLogin');el.classList.remove('show');
+  const email=document.getElementById('lEmail').value.trim(),pass=document.getElementById('lPass').value;
+  if(!email||!pass){el.textContent='Enter email + password.';el.classList.add('show');return;}
+  const btn=document.getElementById('btnLogin');btn.disabled=true;
+  const {data,error}=await sb.auth.signInWithPassword({email,password:pass});
+  btn.disabled=false;
+  if(error){el.textContent=error.message;el.classList.add('show');return;}
+  await afterLogin(data.user);
+};
+document.getElementById('btnResend').onclick = async ()=>{
+  const email=document.getElementById('lEmail').value.trim()||document.getElementById('fEmail').value.trim();
+  if(!email){toast('Enter your email first.');return;}
+  await sb.auth.resend({type:'signup',email});toast('Verification email resent.');
+};
+
+// ===== STEP 3: profile (owner-only read, write-only ID pattern) =====
+async function afterLogin(user){
+  document.getElementById('profEmail').textContent=user.email||'';
+  // Owner-only read: id = auth.uid(). Never query by phone.
+  const {data} = await sb.from('landlords').select('phone,whatsapp,id_number').eq('id',user.id).maybeSingle();
+  if(data?.whatsapp && data.whatsapp!==data?.phone){
+    const d=data.whatsapp.replace(/^27/,'');
+    document.getElementById('pWa').value=(d.slice(0,2)+' '+d.slice(2,5)+' '+d.slice(5)).trim();
+  }
+  if(data?.id_number) document.getElementById('idCurrent').innerHTML='Currently on file ending <span class="masked">…'+String(data.id_number).slice(-3)+'</span> (leave empty to keep it).';
+  show('cardProfile');setStep(3);
+}
+document.getElementById('btnProfile').onclick = async ()=>{
+  ['eWa','eId','eConfirm'].forEach(id=>document.getElementById(id).classList.remove('show'));
+  const waRaw=document.getElementById('pWa').value.trim();
+  const idRaw=document.getElementById('pId').value.trim();
+  const confirm=document.getElementById('pConfirm').checked;
+  let ok=true, waNorm=null;
+  if(waRaw){waNorm=normPhone(waRaw);if(!waNorm){document.getElementById('eWa').classList.add('show');ok=false;}}
+  if(idRaw && !saIdValid(idRaw)){document.getElementById('eId').classList.add('show');ok=false;}
+  if(!confirm){document.getElementById('eConfirm').classList.add('show');ok=false;}
+  if(!ok) return;
+  const {data:{session}} = await sb.auth.getSession();
+  if(!session){toast('Please sign in first.');show('cardVerify');setStep(2);return;}
+  const btn=document.getElementById('btnProfile');btn.disabled=true;btn.innerHTML='<i class="fa-solid fa-spinner fa-spin"></i> Saving…';
+  try{
+    const patch={id:session.user.id};
+    if(waNorm) patch.whatsapp=waNorm;
+    if(idRaw) patch.id_number=idRaw; // write-only: we never read it back in full
+    const {error}=await sb.from('landlords').upsert(patch,{onConflict:'id'});
+    if(error) throw error;
+    const okBox=document.getElementById('profOk');
+    okBox.innerHTML='<b><i class="fa-solid fa-circle-check"></i> Profile saved.</b> Your contact stays hidden until a tenant unlocks it. You can now list a property.';
+    okBox.classList.add('show');
+    const w=document.getElementById('btnToWizard');w.style.display='flex';
+    w.onclick=()=>{window.location='index.html#landlords';};
+    toast('Profile saved.');
+  }catch(err){toast('Save failed: '+(err.message||err));}
+  finally{btn.disabled=false;btn.innerHTML='<i class="fa-solid fa-check"></i> Save profile & continue to listing';}
+};
+
+// if already logged in, skip to profile
+(async()=>{const {data:{session}}=await sb.auth.getSession();if(session) await afterLogin(session.user);})();
+</script>
+</body>
+</html>
