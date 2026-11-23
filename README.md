@@ -59,7 +59,8 @@ kasi24/
 ├── landlord-registration.html   # Standalone landlord registration (Account → Verify → Profile, POPIA-safe)
 ├── listing-detail.html         # Listing page + Yoco Plan B unlock flow
 ├── admin.html                  # Admin panel (approvals, confirm payments)
-├── privacy-policy.html         # POPIA privacy policy
+├── privacy-policy.html         # POPIA privacy policy (filled, no blanks — 18 Nov 2026)
+├── terms.html                  # Terms of Use (R20 unlock, refunds, safety, landlord warranty — 18 Nov 2026)
 ├── fix-rls-secure.sql          # Secure RLS: owner-only + admin-only, no anon landlords reads
 ├── SECURITY-REVIEW.md          # Leak audit: what could expose landlord PII + fixes
 ├── INDEX-PATCHES.md            # Minimal edits wiring index.html wizard to auth.uid
@@ -291,5 +292,5 @@ kasi24/
    ```bash
    npx serve .
    ```
-   - Upload all five `.html` files (`index.html`, `landlord-registration.html`, `listing-detail.html`, `admin.html`, `privacy-policy.html`) + `_headers` to Netlify (same folder — role tabs link relatively). Replace `your-netlify-url` in the badge above with your real URL.
+   - Upload all six `.html` files (`index.html`, `landlord-registration.html`, `listing-detail.html`, `admin.html`, `privacy-policy.html`, `terms.html`) + `_headers` to Netlify (same folder — role tabs + footer link relatively). Replace `your-netlify-url` in the badge above with your real URL.
    - Smoke test: Looking tab → Search → `#listings`; Renting tab → Register → verify → profile → wizard prefills + locks email.
