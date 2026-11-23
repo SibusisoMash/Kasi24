@@ -1885,22 +1885,56 @@ async function doLogin() {
   var email = document.getElementById('loginEmail').value.trim();
   var pass  = document.getElementById('loginPassword').value;
   if (!email || !pass) { showAuthErr('loginErr', 'Please fill in both fields.'); return; }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showAuthErr('loginErr', 'That email doesn’t look right — check for typos.'); return; }
   setAuthLoading('loginBtn', true, '<i class="fa-solid fa-right-to-bracket"></i> Sign In');
   var { data, error } = await sb.auth.signInWithPassword({ email: email, password: pass });
   setAuthLoading('loginBtn', false, '<i class="fa-solid fa-right-to-bracket"></i> Sign In');
-  if (error) { showAuthErr('loginErr', error.message); return; }
+  if (error) {
+    var m = error.message || '';
+    if (/email not confirmed/i.test(m)) { showAuthErr('loginErr', 'Check your email to verify first, then sign in. Use Resend if the mail never arrived.'); return; }
+    if (/invalid login credentials/i.test(m)) { showAuthErr('loginErr', 'Wrong email or password. Try again, or use Forgot password to reset it.'); return; }
+    showAuthErr('loginErr', m);
+    return;
+  }
   closeAuthPanel();
   showToast('Welcome back!');
   await onLogin(data.user);
+}
+
+function normPhoneK24(raw) {
+  var d = String(raw || '').replace(/\D/g, '');
+  if (/^27\d{9}$/.test(d)) return d;
+  if (/^0\d{9}$/.test(d)) return '27' + d.slice(1);
+  if (/^\d{9}$/.test(d)) return '27' + d;
+  return null;
+}
+
+async function ensureLandlordRow(user) {
+  // Creates the owner row if missing (binds to auth.uid only — never by phone).
+  // Called after every login so a row missed at signup (no session before verify) still gets created.
+  try {
+    var meta = (user && user.user_metadata) || {};
+    var name = meta.name || (document.getElementById('regName') ? document.getElementById('regName').value.trim() : '') || '';
+    var phoneRaw = meta.phone || (document.getElementById('regPhone') ? document.getElementById('regPhone').value.trim() : '');
+    var phoneN = normPhoneK24(phoneRaw);
+    var row = { id: user.id, email: user.email };
+    if (name) row.name = name;
+    if (phoneN) row.phone = phoneN;
+    var res = await sb.from('landlords').upsert(row, { onConflict: 'id' });
+    if (res.error) console.warn('landlord upsert deferred:', res.error.message);
+  } catch (e) { console.warn('landlord upsert deferred:', e); }
 }
 
 async function doRegister() {
   clearAuthErr('regErr');
   var name  = document.getElementById('regName').value.trim();
   var email = document.getElementById('regEmail').value.trim();
-  var phone = document.getElementById('regPhone').value.trim();
+  var phoneRaw = document.getElementById('regPhone').value.trim();
   var pass  = document.getElementById('regPassword').value;
-  if (!name || !email || !phone || !pass) { showAuthErr('regErr', 'Please fill in all fields.'); return; }
+  if (name.length < 3) { showAuthErr('regErr', 'Please enter your full name.'); return; }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showAuthErr('regErr', 'Enter a valid email — we send the verification link there.'); return; }
+  var phoneN = normPhoneK24(phoneRaw);
+  if (!phoneN) { showAuthErr('regErr', 'Enter a valid 10-digit SA number, e.g. 081 352 8749.'); return; }
   if (pass.length < 8) { showAuthErr('regErr', 'Password must be at least 8 characters.'); return; }
   setAuthLoading('regBtn', true, '<i class="fa-solid fa-user-plus"></i> Create Account');
 
@@ -1908,20 +1942,26 @@ async function doRegister() {
   var { data, error } = await sb.auth.signUp({
     email: email,
     password: pass,
-    options: { data: { name: name, phone: phone } }
+    options: { data: { name: name, phone: phoneN } }
   });
   setAuthLoading('regBtn', false, '<i class="fa-solid fa-user-plus"></i> Create Account');
-  if (error) { showAuthErr('regErr', error.message); return; }
-
-  // 2. Insert landlord record
-  if (data.user) {
-    await sb.from('landlords').upsert({
-      id:    data.user.id,
-      name:  name,
-      phone: phone,
-      email: email,
-    }, { onConflict: 'id' });
+  if (error) {
+    var m = error.message || '';
+    if (/already|exists|duplicate/i.test(m)) { showAuthErr('regErr', 'That email is already registered — click Sign in below, or Forgot password to reset it.'); return; }
+    showAuthErr('regErr', m || 'Could not create account. Check your connection and try again.');
+    return;
   }
+
+  // 2. Landlord row: only possible with a session. With Confirm-email ON there is no
+  // session yet, so skip here — onLogin() creates it after first sign-in. Never fail signup for this.
+  try {
+    var sess = await sb.auth.getSession();
+    if (sess && sess.data && sess.data.session && data.user) {
+      await sb.from('landlords').upsert({ id: data.user.id, name: name, phone: phoneN, email: email }, { onConflict: 'id' });
+    } else if (data.user && !data.session) {
+      console.log('No session yet (email confirmation on) — landlord row will be created on first sign-in.');
+    }
+  } catch (e) { console.warn('landlord row deferred:', e); }
 
   // Show verify screen
   document.getElementById('verifyEmailDisplay').textContent = email;
@@ -1943,8 +1983,10 @@ async function doResendVerify() {
   var email = document.getElementById('regEmail').value.trim()
            || document.getElementById('loginEmail').value.trim();
   if (!email) { showToast('Please enter your email first.'); return; }
-  await sb.auth.resend({ type: 'signup', email: email });
-  showToast('Verification email resent!');
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showToast('That email doesn’t look right.'); return; }
+  var { error } = await sb.auth.resend({ type: 'signup', email: email });
+  if (error) { showToast('Resend failed: ' + error.message); return; }
+  showToast('Verification email resent — check Spam too!');
 }
 
 async function signOut() {
@@ -1955,6 +1997,8 @@ async function signOut() {
 
 // Called when user is confirmed logged in
 async function onLogin(user) {
+  // Ensure owner row exists (fixes signups made before email verify, when no session existed)
+  await ensureLandlordRow(user);
   // Fetch their landlord record
   var { data: landlord } = await sb
     .from('landlords')

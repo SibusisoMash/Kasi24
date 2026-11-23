@@ -203,12 +203,17 @@ document.getElementById('btnReg').onclick = async ()=>{
   try{
     const {data,error} = await sb.auth.signUp({email,password:pass,options:{data:{name,phone:phoneN}}});
     if(error) throw error;
-    // Bind landlord row to auth.uid ONLY (never by phone). If email confirmation is on, session may be null until verify.
-    const user = data.user || (await sb.auth.getSession()).data.session?.user;
-    if(user){
-      const {error:upErr} = await sb.from('landlords').upsert({id:user.id,name,phone:phoneN,email},{onConflict:'id'});
-      if(upErr) throw upErr;
-    }
+    // Landlord row needs a session. With Confirm-email ON there is none yet — skip now, afterLogin() creates it.
+    try{
+      const {data:sessData} = await sb.auth.getSession();
+      const sessUser = sessData && sessData.session ? sessData.session.user : null;
+      if(sessUser && data.user){
+        const {error:upErr} = await sb.from('landlords').upsert({id:sessUser.id,name,phone:phoneN,email},{onConflict:'id'});
+        if(upErr) console.warn('landlord row deferred:', upErr.message);
+      } else {
+        console.log('No session yet (email confirmation on) — landlord row will be created on first sign-in.');
+      }
+    }catch(e){ console.warn('landlord row deferred:', e); }
     document.getElementById('verifyText').innerHTML='We sent a verification link to <b>'+email.replace(/</g,'&lt;')+'</b>. Click it, then sign in below to finish your profile.';
     document.getElementById('lEmail').value=email;
     show('cardVerify');setStep(2);toast('Account created — verify your email.');
@@ -239,6 +244,17 @@ document.getElementById('btnResend').onclick = async ()=>{
 // ===== STEP 3: profile (owner-only read, write-only ID pattern) =====
 async function afterLogin(user){
   document.getElementById('profEmail').textContent=user.email||'';
+  // Ensure owner row exists (fixes signups made before email verify, when no session existed)
+  try{
+    const meta = user.user_metadata || {};
+    const fbName = (document.getElementById('fName') && document.getElementById('fName').value.trim()) || '';
+    const fbPhone = normPhone(document.getElementById('fPhone') ? document.getElementById('fPhone').value : '');
+    const row = {id:user.id, email:user.email||''};
+    if(meta.name || fbName) row.name = meta.name || fbName;
+    if(meta.phone || fbPhone) row.phone = meta.phone || fbPhone;
+    const {error:ensErr} = await sb.from('landlords').upsert(row,{onConflict:'id'});
+    if(ensErr) console.warn('landlord ensure failed:', ensErr.message);
+  }catch(e){ console.warn('landlord ensure failed:', e); }
   // Owner-only read: id = auth.uid(). Never query by phone.
   const {data} = await sb.from('landlords').select('phone,whatsapp,id_number').eq('id',user.id).maybeSingle();
   if(data?.whatsapp && data.whatsapp!==data?.phone){
